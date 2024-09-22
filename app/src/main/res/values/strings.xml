@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Brain Voyage</string>
+
+    <string name="register_new_account">Register new account</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="quiz_catalog">Quiz catalog</string>
+    <string name="quiz_with_leading_param">%1$s Quiz</string>
+    <string name="question_with_leading_param">%1$d questions</string>
+    <string name="quiz_catalog_preview">Every correct answer is a step towards the top, and every question is a step towards new knowledge.</string>
+    <string name="play">Play</string>
+    <string name="register">Register</string>
+    <string name="enter_here">Enter here…</string>
+    <string name="registration">Registration</string>
+    
+</resources>

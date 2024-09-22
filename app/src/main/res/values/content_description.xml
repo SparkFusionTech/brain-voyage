@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="login_password_trailing_icon_description">Trailing icon of password text field</string>
+    <string name="login_password_leading_icon_description">Leading icon of password text field</string>
+    <string name="login_email_leading_icon_description">Leading icon of email text field</string>
+    <string name="login_screen_preview_image_description">Preview image on login screen</string>
+    <string name="registration_back_button_icon_description">Right arrow icon of back navigation button</string>
+    <string name="check_email_existence_button_icon_description">Icon of button to check email existence</string>
+    <string name="registration_leading_icon_of_password_text_field_description">Icon of registration text field to show or hide symbols</string>
+
+</resources>

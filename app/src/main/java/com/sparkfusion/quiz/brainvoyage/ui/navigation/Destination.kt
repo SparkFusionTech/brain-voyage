@@ -1,0 +1,21 @@
+package com.sparkfusion.quiz.brainvoyage.ui.navigation
+
+import kotlinx.serialization.Serializable
+
+sealed class Destination {
+
+    @Serializable
+    data object LoginDestination : Destination()
+
+    @Serializable
+    data object RegistrationDestination : Destination()
+
+    @Serializable
+    data object CatalogDestination : Destination()
+
+    @Serializable
+    data object CatalogItemDestination : Destination()
+
+    @Serializable
+    data object QuizItemDestination : Destination()
+}
