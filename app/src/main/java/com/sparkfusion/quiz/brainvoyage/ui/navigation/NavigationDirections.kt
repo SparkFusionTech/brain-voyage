@@ -1,7 +1,14 @@
 package com.sparkfusion.quiz.brainvoyage.ui.navigation
 
+import android.graphics.Bitmap
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.sparkfusion.quiz.brainvoyage.image_crop.common.CROPPED_KEY
+import com.sparkfusion.quiz.brainvoyage.image_crop.screen.FailedOpenImageScreen
+import com.sparkfusion.quiz.brainvoyage.image_crop.common.IMAGE_CROP_KEY
+import com.sparkfusion.quiz.brainvoyage.image_crop.screen.ImageCropScreen
+import com.sparkfusion.quiz.brainvoyage.image_crop.common.ImageCropType
 import com.sparkfusion.quiz.brainvoyage.ui.screen.CatalogItemScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.CatalogScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.login.LoginScreen
@@ -18,10 +25,17 @@ fun NavGraphBuilder.loginDirection(
     }
 }
 
-fun NavGraphBuilder.registrationDirection(onBackClick: () -> Unit) {
+fun NavGraphBuilder.registrationDirection(navController: NavController) {
     composable<Destination.RegistrationDestination> {
         RegistrationScreen(
-            onBackClick = onBackClick
+            onBackClick = navController::popBackStack,
+            navigateToImageCrop = { bitmap ->
+                navController.currentBackStackEntry?.savedStateHandle?.set(IMAGE_CROP_KEY, bitmap)
+                navController.navigate(Destination.ImageCropDestination)
+            },
+            getCroppedImageBitmap = {
+                navController.currentBackStackEntry?.savedStateHandle?.get(CROPPED_KEY)
+            }
         )
     }
 }
@@ -43,3 +57,35 @@ fun NavGraphBuilder.quizItemDirection() {
         QuizItemScreen()
     }
 }
+
+fun NavGraphBuilder.imageCropDirection(navController: NavController) {
+    composable<Destination.ImageCropDestination> {
+        val bitmap: Bitmap? = navController.previousBackStackEntry?.savedStateHandle?.get<Bitmap>(IMAGE_CROP_KEY)
+        if (bitmap != null) {
+            ImageCropScreen(
+                cropType = ImageCropType.CircleCrop,
+                bitmap = bitmap,
+                onCropClickHandler = {
+                    navController.previousBackStackEntry?.savedStateHandle?.set(CROPPED_KEY, it)
+                    navController.popBackStack()
+                }
+            )
+        } else {
+            FailedOpenImageScreen()
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

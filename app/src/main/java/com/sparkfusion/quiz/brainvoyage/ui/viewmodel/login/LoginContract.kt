@@ -1,7 +1,7 @@
 package com.sparkfusion.quiz.brainvoyage.ui.viewmodel.login
 
-import com.sparkfusion.quiz.brainvoyage.utils.Intent
-import com.sparkfusion.quiz.brainvoyage.utils.UIState
+import com.sparkfusion.quiz.brainvoyage.utils.common.Intent
+import com.sparkfusion.quiz.brainvoyage.utils.common.UIState
 
 interface LoginContract {
 

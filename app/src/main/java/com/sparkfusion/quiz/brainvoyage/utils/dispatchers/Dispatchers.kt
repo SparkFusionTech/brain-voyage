@@ -12,8 +12,12 @@ class Dispatchers @Inject constructor(
     private val _ioDispatcher: CoroutineDispatcher,
 
     @MainDispatcher
-    private val _mainDispatcher: MainCoroutineDispatcher
+    private val _mainDispatcher: MainCoroutineDispatcher,
+
+    @DefaultDispatcher
+    private val _defaultDispatcher: CoroutineDispatcher
 ) {
+    val defaultDispatcher: CoroutineDispatcher get() = _defaultDispatcher
     val ioDispatcher: CoroutineDispatcher get() = _ioDispatcher
     val mainDispatcher: MainCoroutineDispatcher get() = _mainDispatcher
 }

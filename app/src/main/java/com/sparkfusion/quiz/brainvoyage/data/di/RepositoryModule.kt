@@ -1,7 +1,7 @@
 package com.sparkfusion.quiz.brainvoyage.data.di
 
 import com.sparkfusion.quiz.brainvoyage.data.LoginRepository
-import com.sparkfusion.quiz.brainvoyage.ui.repository.ILoginRepository
+import com.sparkfusion.quiz.brainvoyage.domain.repository.ILoginRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

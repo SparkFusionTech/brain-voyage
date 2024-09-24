@@ -8,5 +8,7 @@
     <string name="registration_back_button_icon_description">Right arrow icon of back navigation button</string>
     <string name="check_email_existence_button_icon_description">Icon of button to check email existence</string>
     <string name="registration_leading_icon_of_password_text_field_description">Icon of registration text field to show or hide symbols</string>
+    <string name="image_crop_icon_description">Icon of button to crop selected image</string>
+    <string name="register_account_image_description">Image of account for registration</string>
 
 </resources>

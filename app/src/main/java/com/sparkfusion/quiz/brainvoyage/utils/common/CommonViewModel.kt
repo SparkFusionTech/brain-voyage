@@ -1,4 +1,4 @@
-package com.sparkfusion.quiz.brainvoyage.utils
+package com.sparkfusion.quiz.brainvoyage.utils.common
 
 import androidx.lifecycle.ViewModel
 

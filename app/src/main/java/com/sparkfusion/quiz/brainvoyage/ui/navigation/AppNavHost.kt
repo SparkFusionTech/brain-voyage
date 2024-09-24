@@ -23,13 +23,10 @@ fun AppNavHost(
                 navController.navigate(Destination.RegistrationDestination)
             }
         )
-        registrationDirection(
-            onBackClick = {
-                navController.popBackStack()
-            }
-        )
+        registrationDirection(navController)
         catalogDirection()
         catalogItemDirection()
         quizItemDirection()
+        imageCropDirection(navController)
     }
 }

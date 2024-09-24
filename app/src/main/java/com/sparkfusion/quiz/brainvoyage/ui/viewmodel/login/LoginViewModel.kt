@@ -3,8 +3,8 @@ package com.sparkfusion.quiz.brainvoyage.ui.viewmodel.login
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.sparkfusion.quiz.brainvoyage.ui.repository.ILoginRepository
-import com.sparkfusion.quiz.brainvoyage.utils.CommonViewModel
+import com.sparkfusion.quiz.brainvoyage.domain.repository.ILoginRepository
+import com.sparkfusion.quiz.brainvoyage.utils.common.CommonViewModel
 import com.sparkfusion.quiz.brainvoyage.utils.dispatchers.IODispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher

@@ -15,6 +15,11 @@ object DispatchersModule {
 
     @Singleton
     @Provides
+    @DefaultDispatcher
+    fun provideDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
+
+    @Singleton
+    @Provides
     @IODispatcher
     fun provideIODispatcher(): CoroutineDispatcher = Dispatchers.IO
 
