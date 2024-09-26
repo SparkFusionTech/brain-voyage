@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -23,6 +24,7 @@ fun RegistrationTextField(
     keyboardType: KeyboardType,
     title: String,
     textFieldValue: String,
+    isError: Boolean = false,
     textFieldValueChanged: (String) -> Unit,
     trailingIcon: @Composable () -> Unit
 ) {
@@ -43,6 +45,17 @@ fun RegistrationTextField(
         onValueChange = textFieldValueChanged,
         placeholder = {
             SFProRoundedText(content = stringResource(id = R.string.enter_here))
+        },
+        isError = isError,
+        supportingText = {
+            if (isError) {
+                SFProRoundedText(
+                    content = stringResource(id = R.string.user_already_exists),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
         },
         trailingIcon = trailingIcon,
         colors = getRegistrationTextFieldContainerColors(),

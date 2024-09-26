@@ -9,6 +9,7 @@ interface RegistrationContract {
     sealed interface RegistrationIntent : Intent {
         data object Register : RegistrationIntent
         data object ChangePasswordVisibility : RegistrationIntent
+        data object ClearRegistrationState: RegistrationIntent
         data class ChangeAccountIcon(val value: Bitmap?) : RegistrationIntent
         data class ChangeEmail(val value: String) : RegistrationIntent
         data class ChangePassword(val value: String) : RegistrationIntent

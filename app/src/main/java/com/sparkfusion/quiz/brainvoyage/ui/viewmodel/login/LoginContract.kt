@@ -6,16 +6,10 @@ import com.sparkfusion.quiz.brainvoyage.utils.common.UIState
 interface LoginContract {
 
     sealed interface LoginIntent : Intent {
-
         data object Login : LoginIntent
-
-        class ChangeEmail(private val _email: String) : LoginIntent {
-            val email: String get() = _email
-        }
-
-        class ChangePassword(private val _password: String) : LoginIntent {
-            val password: String get() = _password
-        }
+        data class HandleRegistrationData(val pair: Pair<String?, String?>) : LoginIntent
+        data class ChangeEmail(val email: String) : LoginIntent
+        data class ChangePassword(val password: String) : LoginIntent
     }
 
     data class LoginUIState(

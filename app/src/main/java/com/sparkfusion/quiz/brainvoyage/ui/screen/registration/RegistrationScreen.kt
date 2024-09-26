@@ -13,8 +13,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,27 +34,42 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.sparkfusion.quiz.brainvoyage.R
+import com.sparkfusion.quiz.brainvoyage.ui.launcher.rememberLauncherForImageCropping
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.registration.RegistrationContract
+import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.registration.RegistrationState
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.registration.RegistrationViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
-import com.sparkfusion.quiz.brainvoyage.ui.launcher.rememberLauncherForImageCropping
 
 @Composable
 fun RegistrationScreen(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
     navigateToImageCrop: (Bitmap) -> Unit,
+    saveRegistrationDataAndExit: (email: String, password: String) -> Unit,
     getCroppedImageBitmap: () -> Bitmap?,
     viewModel: RegistrationViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.initialState()
-    viewModel.handleIntent(RegistrationContract.RegistrationIntent.ChangeAccountIcon(getCroppedImageBitmap()))
+    viewModel.handleIntent(
+        RegistrationContract.RegistrationIntent.ChangeAccountIcon(
+            getCroppedImageBitmap()
+        )
+    )
 
     val context = LocalContext.current
     val galleryLauncher = rememberLauncherForImageCropping(
         context = context,
         navigateToImageCrop = navigateToImageCrop
     )
+
+    if (uiState.registrationState is RegistrationState.Success) {
+        saveRegistrationDataAndExit(
+            uiState.registrationState.model.email,
+            uiState.password
+        )
+    }
+
+    RegistrationErrorStateHandler(state = uiState.registrationState, context = context)
 
     Column(modifier = modifier.fillMaxWidth()) {
         TopBar(onBackClick = onBackClick)
@@ -65,8 +82,12 @@ fun RegistrationScreen(
                 .size(156.dp)
                 .fillMaxSize()
                 .align(Alignment.CenterHorizontally)
-                .clickable { galleryLauncher.launch("image/*") },
-            model = uiState.accountIcon ?: R.drawable.empty_account_icon,
+                .clickable {
+                    viewModel.handleIntent(RegistrationContract.RegistrationIntent.ClearRegistrationState)
+                    galleryLauncher.launch("image/*")
+                },
+            model = if (uiState.registrationState == RegistrationState.FailedImageHandling) R.drawable.empty_account_icon
+            else uiState.accountIcon ?: R.drawable.empty_account_icon,
             contentDescription = stringResource(id = R.string.register_account_image_description),
             onError = {
                 Log.i("TAGTAG", it.result.throwable.message ?: "Unknown error")
@@ -80,11 +101,10 @@ fun RegistrationScreen(
             textFieldValue = uiState.email,
             textFieldValueChanged = {
                 viewModel.handleIntent(
-                    RegistrationContract.RegistrationIntent.ChangeEmail(
-                        it
-                    )
+                    RegistrationContract.RegistrationIntent.ChangeEmail(it)
                 )
             },
+            isError = uiState.registrationState == RegistrationState.UserAlreadyExists,
             keyboardType = KeyboardType.Email,
             trailingIcon = {
                 IconButton(
@@ -137,11 +157,18 @@ fun RegistrationScreen(
                 .width(190.dp),
             onClick = { viewModel.handleIntent(RegistrationContract.RegistrationIntent.Register) }
         ) {
-            SFProRoundedText(
-                content = stringResource(id = R.string.register),
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold
-            )
+            if (uiState.registrationState == RegistrationState.Loading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.CenterVertically).size(32.dp),
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            } else {
+                SFProRoundedText(
+                    content = stringResource(id = R.string.register),
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
         }
     }
 }
@@ -152,6 +179,7 @@ private fun RegistrationScreenPreview() {
     RegistrationScreen(
         onBackClick = {},
         navigateToImageCrop = {},
-        getCroppedImageBitmap = { null }
+        getCroppedImageBitmap = { null },
+        saveRegistrationDataAndExit = { _, _ -> }
     )
 }

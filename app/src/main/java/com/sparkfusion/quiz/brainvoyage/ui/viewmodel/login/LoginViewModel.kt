@@ -19,12 +19,19 @@ class LoginViewModel @Inject constructor(
     override fun initialState(): LoginContract.LoginUIState = uiState
 
     override fun handleIntent(intent: LoginContract.LoginIntent) = when (intent) {
-        LoginContract.LoginIntent.Login -> {  }
+        LoginContract.LoginIntent.Login -> {}
+        is LoginContract.LoginIntent.HandleRegistrationData -> handleRegistrationData(intent.pair)
         is LoginContract.LoginIntent.ChangeEmail -> changeEmail(intent.email)
         is LoginContract.LoginIntent.ChangePassword -> changePassword(intent.password)
     }
 
     private var uiState: LoginContract.LoginUIState by mutableStateOf(LoginContract.LoginUIState())
+
+    private fun handleRegistrationData(pair: Pair<String?, String?>) {
+        val (email, password) = pair
+        if (email == null || password == null) return
+        uiState = uiState.copy(email = email, password = password)
+    }
 
     private fun changeEmail(email: String) {
         uiState = uiState.copy(email = email)

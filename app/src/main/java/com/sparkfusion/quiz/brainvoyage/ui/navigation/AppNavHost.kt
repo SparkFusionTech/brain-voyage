@@ -18,11 +18,7 @@ fun AppNavHost(
         navController = navController,
         startDestination = startDestination
     ) {
-        loginDirection(
-            navigateToRegistrationScreen = {
-                navController.navigate(Destination.RegistrationDestination)
-            }
-        )
+        loginDirection(navController)
         registrationDirection(navController)
         catalogDirection()
         catalogItemDirection()

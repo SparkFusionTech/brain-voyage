@@ -5,22 +5,33 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.sparkfusion.quiz.brainvoyage.image_crop.common.CROPPED_KEY
-import com.sparkfusion.quiz.brainvoyage.image_crop.screen.FailedOpenImageScreen
 import com.sparkfusion.quiz.brainvoyage.image_crop.common.IMAGE_CROP_KEY
-import com.sparkfusion.quiz.brainvoyage.image_crop.screen.ImageCropScreen
 import com.sparkfusion.quiz.brainvoyage.image_crop.common.ImageCropType
+import com.sparkfusion.quiz.brainvoyage.image_crop.screen.FailedOpenImageScreen
+import com.sparkfusion.quiz.brainvoyage.image_crop.screen.ImageCropScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.CatalogItemScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.CatalogScreen
-import com.sparkfusion.quiz.brainvoyage.ui.screen.login.LoginScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.QuizItemScreen
+import com.sparkfusion.quiz.brainvoyage.ui.screen.login.LoginRegistrationData
+import com.sparkfusion.quiz.brainvoyage.ui.screen.login.LoginScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.registration.RegistrationScreen
 
-fun NavGraphBuilder.loginDirection(
-    navigateToRegistrationScreen: () -> Unit
-) {
+fun NavGraphBuilder.loginDirection(navController: NavController) {
     composable<Destination.LoginDestination> {
         LoginScreen(
-            navigateToRegistrationScreen = navigateToRegistrationScreen
+            navigateToRegistrationScreen = {
+                navController.navigate(Destination.RegistrationDestination)
+            },
+            fetchRegistrationData = {
+                Pair(
+                    navController.currentBackStackEntry?.savedStateHandle?.get(
+                        LoginRegistrationData.EMAIL.value
+                    ),
+                    navController.currentBackStackEntry?.savedStateHandle?.get(
+                        LoginRegistrationData.PASSWORD.value
+                    )
+                )
+            }
         )
     }
 }
@@ -35,6 +46,17 @@ fun NavGraphBuilder.registrationDirection(navController: NavController) {
             },
             getCroppedImageBitmap = {
                 navController.currentBackStackEntry?.savedStateHandle?.get(CROPPED_KEY)
+            },
+            saveRegistrationDataAndExit = { email, password ->
+                navController.previousBackStackEntry?.savedStateHandle?.set(
+                    LoginRegistrationData.EMAIL.value,
+                    email
+                )
+                navController.previousBackStackEntry?.savedStateHandle?.set(
+                    LoginRegistrationData.PASSWORD.value,
+                    password
+                )
+                navController.popBackStack()
             }
         )
     }
@@ -60,7 +82,8 @@ fun NavGraphBuilder.quizItemDirection() {
 
 fun NavGraphBuilder.imageCropDirection(navController: NavController) {
     composable<Destination.ImageCropDestination> {
-        val bitmap: Bitmap? = navController.previousBackStackEntry?.savedStateHandle?.get<Bitmap>(IMAGE_CROP_KEY)
+        val bitmap: Bitmap? =
+            navController.previousBackStackEntry?.savedStateHandle?.get<Bitmap>(IMAGE_CROP_KEY)
         if (bitmap != null) {
             ImageCropScreen(
                 cropType = ImageCropType.CircleCrop,

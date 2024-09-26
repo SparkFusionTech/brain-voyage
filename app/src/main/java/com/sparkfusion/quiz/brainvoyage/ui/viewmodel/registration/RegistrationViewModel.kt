@@ -1,15 +1,19 @@
 package com.sparkfusion.quiz.brainvoyage.ui.viewmodel.registration
 
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
+import com.sparkfusion.quiz.brainvoyage.domain.model.LoginUserModel
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ILoginRepository
 import com.sparkfusion.quiz.brainvoyage.utils.common.CommonViewModel
 import com.sparkfusion.quiz.brainvoyage.utils.common.StringToMultipartWorker
 import com.sparkfusion.quiz.brainvoyage.utils.dispatchers.IODispatcher
+import com.sparkfusion.quiz.brainvoyage.utils.exception.BrainVoyageException
+import com.sparkfusion.quiz.brainvoyage.utils.exception.network.AlreadyExistsException
+import com.sparkfusion.quiz.brainvoyage.utils.exception.network.NetworkException
+import com.sparkfusion.quiz.brainvoyage.utils.image.ApiImageSerializeNames
 import com.sparkfusion.quiz.brainvoyage.utils.image.BitmapToFileWorker
 import com.sparkfusion.quiz.brainvoyage.utils.image.FailedBitmapToFileConversionException
 import com.sparkfusion.quiz.brainvoyage.utils.image.ImageChildren
@@ -35,6 +39,7 @@ class RegistrationViewModel @Inject constructor(
         when (intent) {
             RegistrationContract.RegistrationIntent.Register -> register()
             RegistrationContract.RegistrationIntent.ChangePasswordVisibility -> changePasswordVisibility()
+            RegistrationContract.RegistrationIntent.ClearRegistrationState -> clearRegistrationState()
             is RegistrationContract.RegistrationIntent.ChangeEmail -> changeEmail(intent.value)
             is RegistrationContract.RegistrationIntent.ChangePassword -> changePassword(intent.value)
             is RegistrationContract.RegistrationIntent.ChangeAccountIcon -> changeAccountIcon(intent.value)
@@ -44,6 +49,7 @@ class RegistrationViewModel @Inject constructor(
     private var uiState by mutableStateOf(RegistrationContract.RegistrationUIState())
 
     private fun register() {
+        if (uiState.registrationState == RegistrationState.Loading) return
         uiState = uiState.copy(registrationState = RegistrationState.Loading)
         viewModelScope.launch(ioDispatcher) {
             try {
@@ -51,13 +57,11 @@ class RegistrationViewModel @Inject constructor(
                     stringToMultipartWorker(uiState.email),
                     stringToMultipartWorker(uiState.password),
                     getImageMultipart(uiState.accountIcon)
-                ).onSuccess {
-                    uiState = uiState.copy(registrationState = RegistrationState.Success(it))
-                }.onFailure {
-                    Log.i("TAGTAG", "ERROR - ${it.message}")
-                }
+                )
+                    .onSuccess(::onSuccessRegistrationResponse)
+                    .onFailure(::onFailureRegistrationResponse)
             } catch (exception: FailedBitmapToFileConversionException) {
-                Log.i("TAGTAG", "ERROR - $exception")
+                uiState = uiState.copy(registrationState = RegistrationState.FailedImageHandling)
             }
         }
     }
@@ -65,7 +69,25 @@ class RegistrationViewModel @Inject constructor(
     private suspend fun getImageMultipart(bitmap: Bitmap?): MultipartBody.Part? {
         if (bitmap == null) return null
         val file = bitmapToFileWorker(bitmap, ImageChildren.PROFILE_ICON)
-        return imageFileToMultipartWorker(file, "accountIcon")
+        return imageFileToMultipartWorker(file, ApiImageSerializeNames.ACCOUNT_ICON.value)
+    }
+
+    private fun onSuccessRegistrationResponse(model: LoginUserModel) {
+        uiState = uiState.copy(registrationState = RegistrationState.Success(model))
+    }
+
+    private fun onFailureRegistrationResponse(exception: BrainVoyageException) {
+        uiState = uiState.copy(
+            registrationState = when (exception) {
+                is AlreadyExistsException -> RegistrationState.UserAlreadyExists
+                is NetworkException -> RegistrationState.NetworkError
+                else -> RegistrationState.Error
+            }
+        )
+    }
+
+    private fun clearRegistrationState() {
+        uiState = uiState.copy(registrationState = RegistrationState.Empty)
     }
 
     private fun changeAccountIcon(newValue: Bitmap?) {
@@ -87,27 +109,3 @@ class RegistrationViewModel @Inject constructor(
         uiState = uiState.copy(showPassword = !uiState.showPassword)
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

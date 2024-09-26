@@ -14,5 +14,9 @@
     <string name="enter_here">Enter here…</string>
     <string name="registration">Registration</string>
     <string name="crop">Crop</string>
+    <string name="error">Error</string>
+    <string name="network_error">Network error</string>
+    <string name="image_handle_error">Failed handle image</string>
+    <string name="user_already_exists">User already exists</string>
     
 </resources>

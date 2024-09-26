@@ -36,9 +36,11 @@ import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
 fun LoginScreen(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = hiltViewModel(),
-    navigateToRegistrationScreen: () -> Unit
+    navigateToRegistrationScreen: () -> Unit,
+    fetchRegistrationData: () -> Pair<String?, String?>
 ) {
     val uiState = viewModel.initialState()
+    viewModel.handleIntent(LoginContract.LoginIntent.HandleRegistrationData(fetchRegistrationData()))
 
     Box(
         modifier = modifier.fillMaxSize()
@@ -109,7 +111,10 @@ fun LoginScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun LoginScreenPreview() {
-    LoginScreen {}
+    LoginScreen(
+        navigateToRegistrationScreen = {},
+        fetchRegistrationData = { Pair(null, null) }
+    )
 }
 
 

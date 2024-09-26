@@ -3,6 +3,7 @@ package com.sparkfusion.quiz.brainvoyage.data.common
 import com.sparkfusion.quiz.brainvoyage.utils.common.Answer
 import com.sparkfusion.quiz.brainvoyage.utils.exception.BrainVoyageException
 import com.sparkfusion.quiz.brainvoyage.utils.exception.UnexpectedException
+import com.sparkfusion.quiz.brainvoyage.utils.exception.network.AlreadyExistsException
 import com.sparkfusion.quiz.brainvoyage.utils.exception.network.NotFoundException
 import retrofit2.Response
 
@@ -21,6 +22,7 @@ class ApiResponseHandler<R>(private val response: Response<R>) {
     private fun handleExceptionCode(code: Int): BrainVoyageException {
         return when (code) {
             404 -> NotFoundException()
+            409 -> AlreadyExistsException()
             else -> UnexpectedException()
         }
     }
