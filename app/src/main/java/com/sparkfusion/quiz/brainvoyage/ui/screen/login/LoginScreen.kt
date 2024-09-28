@@ -8,10 +8,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -19,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,6 +32,7 @@ import coil.compose.AsyncImage
 import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.ui.theme.arcoFamily
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.login.LoginContract
+import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.login.LoginState
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.login.LoginViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
 
@@ -37,10 +41,16 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = hiltViewModel(),
     navigateToRegistrationScreen: () -> Unit,
+    navigateToQuizCatalogScreen: () -> Unit,
     fetchRegistrationData: () -> Pair<String?, String?>
 ) {
     val uiState = viewModel.initialState()
     viewModel.handleIntent(LoginContract.LoginIntent.HandleRegistrationData(fetchRegistrationData()))
+
+    val context = LocalContext.current
+    LoginErrorStateHandler(state = uiState.loginState, context = context)
+
+    if (uiState.loginState == LoginState.Success) navigateToQuizCatalogScreen()
 
     Box(
         modifier = modifier.fillMaxSize()
@@ -84,13 +94,20 @@ fun LoginScreen(
                     .width(180.dp)
                     .height(46.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                onClick = { }
+                onClick = { viewModel.handleIntent(LoginContract.LoginIntent.Login) }
             ) {
-                SFProRoundedText(
-                    content = stringResource(id = R.string.login),
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
+                if (uiState.loginState == LoginState.Loading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.CenterVertically).size(32.dp),
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                } else {
+                    SFProRoundedText(
+                        content = stringResource(id = R.string.login),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.weight(1f))
@@ -113,28 +130,7 @@ fun LoginScreen(
 private fun LoginScreenPreview() {
     LoginScreen(
         navigateToRegistrationScreen = {},
-        fetchRegistrationData = { Pair(null, null) }
+        fetchRegistrationData = { Pair(null, null) },
+        navigateToQuizCatalogScreen = {}
     )
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -2,6 +2,7 @@ package com.sparkfusion.quiz.brainvoyage.ui.navigation
 
 import kotlinx.serialization.Serializable
 
+@Serializable
 sealed interface Destination {
 
     @Serializable

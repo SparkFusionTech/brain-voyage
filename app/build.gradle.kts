@@ -69,6 +69,8 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.datastore)
+
     implementation(libs.squareup.retrofit)
     implementation(libs.converter.gson)
 

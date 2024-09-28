@@ -12,6 +12,7 @@ import com.sparkfusion.quiz.brainvoyage.ui.navigation.AppNavHost
 import com.sparkfusion.quiz.brainvoyage.ui.navigation.Destination
 import com.sparkfusion.quiz.brainvoyage.ui.theme.BrainVoyageTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.serialization.json.Json
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -19,18 +20,30 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val startDestination = getStartDestination()
         setContent {
             val navController = rememberNavController()
-
             BrainVoyageTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     AppNavHost(
                         innerPadding = innerPadding,
                         navController = navController,
-                        startDestination = Destination.LoginDestination
+                        startDestination = startDestination
                     )
                 }
             }
         }
+    }
+
+    private fun getStartDestination(): Destination {
+        val jsonNavigationDestinationString = intent.getStringExtra(START_NAVIGATION_DESTINATION)
+        return jsonNavigationDestinationString?.let {
+            Json.decodeFromString<Destination>(jsonNavigationDestinationString)
+        } ?: Destination.LoginDestination
+    }
+
+    companion object {
+        const val START_NAVIGATION_DESTINATION = "start_navigation_destination"
     }
 }

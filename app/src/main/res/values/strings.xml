@@ -18,5 +18,6 @@
     <string name="network_error">Network error</string>
     <string name="image_handle_error">Failed handle image</string>
     <string name="user_already_exists">User already exists</string>
+    <string name="loading_with_ellipsis">Loading…</string>
     
 </resources>

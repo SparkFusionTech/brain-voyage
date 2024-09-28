@@ -2,4 +2,10 @@
 <resources>
 
     <style name="Theme.BrainVoyage" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.SplashScreen" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
 </resources>

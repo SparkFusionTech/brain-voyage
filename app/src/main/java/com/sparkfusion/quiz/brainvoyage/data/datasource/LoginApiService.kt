@@ -1,9 +1,13 @@
 package com.sparkfusion.quiz.brainvoyage.data.datasource
 
 import com.sparkfusion.quiz.brainvoyage.data.entity.LoginUserDataEntity
+import com.sparkfusion.quiz.brainvoyage.data.entity.TokenDataEntity
+import com.sparkfusion.quiz.brainvoyage.data.entity.TokenValidationDataEntity
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
@@ -17,4 +21,10 @@ interface LoginApiService {
         @Part("password") password: RequestBody,
         @Part accountIcon: MultipartBody.Part?
     ): Response<LoginUserDataEntity>
+
+    @POST("/users/authentication")
+    suspend fun authenticate(@Body getUserDto: LoginUserDataEntity): Response<TokenDataEntity>
+
+    @GET("/users/check-token")
+    suspend fun checkTokenValidation(): Response<TokenValidationDataEntity>
 }

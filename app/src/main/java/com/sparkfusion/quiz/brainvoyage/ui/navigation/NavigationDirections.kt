@@ -22,6 +22,10 @@ fun NavGraphBuilder.loginDirection(navController: NavController) {
             navigateToRegistrationScreen = {
                 navController.navigate(Destination.RegistrationDestination)
             },
+            navigateToQuizCatalogScreen = {
+                navController.popBackStack()
+                navController.navigate(Destination.CatalogDestination)
+            },
             fetchRegistrationData = {
                 Pair(
                     navController.currentBackStackEntry?.savedStateHandle?.get(

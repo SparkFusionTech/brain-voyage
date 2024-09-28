@@ -13,8 +13,8 @@ interface LoginContract {
     }
 
     data class LoginUIState(
-        val isLoginInProcess: Boolean = false,
         val email: String = "",
-        val password: String = ""
+        val password: String = "",
+        val loginState: LoginState = LoginState.Empty
     ) : UIState
 }

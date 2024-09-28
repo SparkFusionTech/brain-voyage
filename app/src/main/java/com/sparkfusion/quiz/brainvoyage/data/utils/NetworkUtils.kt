@@ -1,4 +1,4 @@
-package com.sparkfusion.quiz.brainvoyage.data
+package com.sparkfusion.quiz.brainvoyage.data.utils
 
 import com.sparkfusion.quiz.brainvoyage.BuildConfig
 

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="splash_screen_text_x_offset">Splash label animation x offset</string>
+    <string name="splash_screen_text_alpha">Splash label animation alpha</string>
+</resources>
