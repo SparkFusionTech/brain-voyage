@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.quiz_catalog.QuizCatalogLoadingState
@@ -37,10 +39,11 @@ fun CatalogScreen(
     viewModel: QuizCatalogViewModel = hiltViewModel()
 ) {
     val isDarkModeEnabled = isSystemInDarkTheme()
-    val state = viewModel.initialState()
-    val quizCatalog =
-        if (state.catalogLoadingState is QuizCatalogLoadingState.Success) state.catalogLoadingState.data
-        else emptyList()
+    val state by viewModel.initialState().collectAsStateWithLifecycle()
+    val quizCatalog = if (state.catalogLoadingState is QuizCatalogLoadingState.Success) {
+        val success = state.catalogLoadingState as QuizCatalogLoadingState.Success
+        success.data
+    } else emptyList()
 
     Column(
         modifier = modifier

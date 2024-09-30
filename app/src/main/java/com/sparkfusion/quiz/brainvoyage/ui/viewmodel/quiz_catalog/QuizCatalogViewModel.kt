@@ -1,8 +1,5 @@
 package com.sparkfusion.quiz.brainvoyage.ui.viewmodel.quiz_catalog
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.sparkfusion.quiz.brainvoyage.domain.model.QuizCatalogModel
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IQuizRepository
@@ -12,6 +9,10 @@ import com.sparkfusion.quiz.brainvoyage.utils.exception.BrainVoyageException
 import com.sparkfusion.quiz.brainvoyage.utils.exception.network.NetworkException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,7 +22,7 @@ class QuizCatalogViewModel @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : CommonViewModel<QuizCatalogContract.QuizCatalogState, QuizCatalogContract.QuizCatalogIntent>() {
 
-    override fun initialState(): QuizCatalogContract.QuizCatalogState = state
+    override fun initialState(): StateFlow<QuizCatalogContract.QuizCatalogState> = state.asStateFlow()
 
     override fun handleIntent(intent: QuizCatalogContract.QuizCatalogIntent) {
         when (intent) {
@@ -29,10 +30,10 @@ class QuizCatalogViewModel @Inject constructor(
         }
     }
 
-    private var state: QuizCatalogContract.QuizCatalogState by mutableStateOf(QuizCatalogContract.QuizCatalogState())
+    private val state = MutableStateFlow(QuizCatalogContract.QuizCatalogState())
 
     private fun loadQuizCatalog() {
-        state = state.copy(catalogLoadingState = QuizCatalogLoadingState.Loading)
+        state.update { it.copy(catalogLoadingState = QuizCatalogLoadingState.Loading) }
         viewModelScope.launch(ioDispatcher) {
             quizRepository.readCatalog()
                 .onSuccess(::handleOnSuccessQuizCatalogLoading)
@@ -41,16 +42,18 @@ class QuizCatalogViewModel @Inject constructor(
     }
 
     private fun handleOnSuccessQuizCatalogLoading(data: List<QuizCatalogModel>) {
-        state = state.copy(catalogLoadingState = QuizCatalogLoadingState.Success(data))
+        state.update { it.copy(catalogLoadingState = QuizCatalogLoadingState.Success(data)) }
     }
 
     private fun handleOnFailureQuizCatalogLoading(exception: BrainVoyageException) {
-        state = state.copy(
-            catalogLoadingState = when (exception) {
-                is NetworkException -> QuizCatalogLoadingState.NetworkError
-                else -> QuizCatalogLoadingState.Error
-            }
-        )
+        state.update {
+            it.copy(
+                catalogLoadingState = when (exception) {
+                    is NetworkException -> QuizCatalogLoadingState.NetworkError
+                    else -> QuizCatalogLoadingState.Error
+                }
+            )
+        }
     }
 
     init {

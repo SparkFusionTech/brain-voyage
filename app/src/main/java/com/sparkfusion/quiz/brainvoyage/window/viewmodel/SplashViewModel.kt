@@ -1,8 +1,5 @@
 package com.sparkfusion.quiz.brainvoyage.window.viewmodel
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ILoginRepository
 import com.sparkfusion.quiz.brainvoyage.utils.common.CommonViewModel
@@ -10,6 +7,10 @@ import com.sparkfusion.quiz.brainvoyage.utils.dispatchers.IODispatcher
 import com.sparkfusion.quiz.brainvoyage.utils.exception.datastore.FailedDataStoreOperationException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,7 +20,7 @@ class SplashViewModel @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : CommonViewModel<SplashContract.SplashState, SplashContract.SplashIntent>() {
 
-    override fun initialState(): SplashContract.SplashState = uiState
+    override fun initialState(): StateFlow<SplashContract.SplashState> = uiState.asStateFlow()
 
     override fun handleIntent(intent: SplashContract.SplashIntent) {}
 
@@ -35,14 +36,14 @@ class SplashViewModel @Inject constructor(
         }
     }
 
-    private var uiState by mutableStateOf<SplashContract.SplashState>(SplashContract.SplashState.Loading)
+    private val uiState = MutableStateFlow<SplashContract.SplashState>(SplashContract.SplashState.Loading)
 
     private fun onSuccessTokenValidation() {
-        uiState = SplashContract.SplashState.Success
+        uiState.update { SplashContract.SplashState.Success }
     }
 
     private fun onFailureTokenValidation() {
-        uiState = SplashContract.SplashState.Error
+        uiState.update { SplashContract.SplashState.Error }
     }
 
     init {

@@ -1,9 +1,11 @@
 package com.sparkfusion.quiz.brainvoyage.window.splash
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sparkfusion.quiz.brainvoyage.ui.navigation.Destination
 import com.sparkfusion.quiz.brainvoyage.window.viewmodel.SplashContract
 import com.sparkfusion.quiz.brainvoyage.window.viewmodel.SplashViewModel
@@ -13,7 +15,7 @@ fun SplashScreen(
     viewModel: SplashViewModel = hiltViewModel(),
     navigateTo: (Destination) -> Unit,
 ) {
-    val state = viewModel.initialState()
+    val state by viewModel.initialState().collectAsStateWithLifecycle()
     val isAnimationFinished = remember { mutableStateOf(false) }
     SplashContent(isAnimationFinished = isAnimationFinished)
 

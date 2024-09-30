@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -28,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.ui.theme.arcoFamily
@@ -44,7 +46,7 @@ fun LoginScreen(
     navigateToQuizCatalogScreen: () -> Unit,
     fetchRegistrationData: () -> Pair<String?, String?>
 ) {
-    val uiState = viewModel.initialState()
+    val uiState by viewModel.initialState().collectAsStateWithLifecycle()
     viewModel.handleIntent(LoginContract.LoginIntent.HandleRegistrationData(fetchRegistrationData()))
 
     val context = LocalContext.current
@@ -98,7 +100,9 @@ fun LoginScreen(
             ) {
                 if (uiState.loginState == LoginState.Loading) {
                     CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.CenterVertically).size(32.dp),
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .size(32.dp),
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 } else {

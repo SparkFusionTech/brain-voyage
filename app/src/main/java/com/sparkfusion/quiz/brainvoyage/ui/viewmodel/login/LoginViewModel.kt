@@ -1,10 +1,7 @@
 package com.sparkfusion.quiz.brainvoyage.ui.viewmodel.login
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import com.sparkfusion.quiz.brainvoyage.data.mapper.LoginUserDataEntityFactory
+import com.sparkfusion.quiz.brainvoyage.data.mapper.user.LoginUserDataEntityFactory
 import com.sparkfusion.quiz.brainvoyage.domain.model.LoginUserModel
 import com.sparkfusion.quiz.brainvoyage.domain.model.TokenModel
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ILoginRepository
@@ -16,6 +13,10 @@ import com.sparkfusion.quiz.brainvoyage.utils.exception.datastore.FailedDataStor
 import com.sparkfusion.quiz.brainvoyage.utils.exception.network.NetworkException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,7 +28,7 @@ class LoginViewModel @Inject constructor(
     private val session: ISession
 ) : CommonViewModel<LoginContract.LoginUIState, LoginContract.LoginIntent>() {
 
-    override fun initialState(): LoginContract.LoginUIState = uiState
+    override fun initialState(): StateFlow<LoginContract.LoginUIState> = uiState.asStateFlow()
 
     override fun handleIntent(intent: LoginContract.LoginIntent) = when (intent) {
         LoginContract.LoginIntent.Login -> login()
@@ -36,12 +37,12 @@ class LoginViewModel @Inject constructor(
         is LoginContract.LoginIntent.ChangePassword -> changePassword(intent.password)
     }
 
-    private var uiState: LoginContract.LoginUIState by mutableStateOf(LoginContract.LoginUIState())
+    private val uiState = MutableStateFlow(LoginContract.LoginUIState())
 
     private fun login() {
-        uiState = uiState.copy(loginState = LoginState.Loading)
+        uiState.update { it.copy(loginState = LoginState.Loading) }
         viewModelScope.launch(ioDispatcher) {
-            val user = LoginUserModel(uiState.email, uiState.password)
+            val user = LoginUserModel(uiState.value.email, uiState.value.password)
             loginRepository.authenticate(loginUserDataEntityFactory.mapFrom(user))
                 .onSuccess(::onSuccessLoginState)
                 .onFailure(::onFailureLoginState)
@@ -54,31 +55,33 @@ class LoginViewModel @Inject constructor(
                 session.saveUserToken(tokenModel.token)
             } catch (ignore: FailedDataStoreOperationException) {
             } finally {
-                uiState = uiState.copy(loginState = LoginState.Success)
+                uiState.update { it.copy(loginState = LoginState.Success) }
             }
         }
     }
 
     private fun onFailureLoginState(exception: BrainVoyageException) {
-        uiState = uiState.copy(
-            loginState = when (exception) {
-                is NetworkException -> LoginState.NetworkError
-                else -> LoginState.Error
-            }
-        )
+        uiState.update {
+            it.copy(
+                loginState = when (exception) {
+                    is NetworkException -> LoginState.NetworkError
+                    else -> LoginState.Error
+                }
+            )
+        }
     }
 
     private fun handleRegistrationData(pair: Pair<String?, String?>) {
         val (email, password) = pair
         if (email == null || password == null) return
-        uiState = uiState.copy(email = email, password = password)
+        uiState.update { it.copy(email = email, password = password) }
     }
 
     private fun changeEmail(email: String) {
-        uiState = uiState.copy(email = email)
+        uiState.update { it.copy(email = email) }
     }
 
     private fun changePassword(password: String) {
-        uiState = uiState.copy(password = password)
+        uiState.update { it.copy(password = password) }
     }
 }

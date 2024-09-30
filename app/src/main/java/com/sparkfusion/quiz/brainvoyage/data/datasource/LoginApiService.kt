@@ -12,6 +12,7 @@ import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Query
 
 interface LoginApiService {
 
@@ -26,9 +27,8 @@ interface LoginApiService {
     @POST("/users/authentication")
     suspend fun authenticate(@Body getUserDto: LoginUserDataEntity): Response<TokenDataEntity>
 
-    //
     @GET("/users/exists")
-    suspend fun exists(): Response<UserExistsDataEntity>
+    suspend fun exists(@Query("email") email: String): Response<UserExistsDataEntity>
 
     @GET("/users/check-token")
     suspend fun checkTokenValidation(): Response<TokenValidationDataEntity>

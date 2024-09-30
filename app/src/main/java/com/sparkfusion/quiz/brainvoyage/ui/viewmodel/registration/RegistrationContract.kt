@@ -10,6 +10,7 @@ interface RegistrationContract {
         data object Register : RegistrationIntent
         data object ChangePasswordVisibility : RegistrationIntent
         data object ClearRegistrationState: RegistrationIntent
+        data object CheckUserExistence : RegistrationIntent
         data class ChangeAccountIcon(val value: Bitmap?) : RegistrationIntent
         data class ChangeEmail(val value: String) : RegistrationIntent
         data class ChangePassword(val value: String) : RegistrationIntent
@@ -20,6 +21,7 @@ interface RegistrationContract {
         val password: String = "",
         val showPassword: Boolean = false,
         val accountIcon: Bitmap? = null,
-        val registrationState: RegistrationState = RegistrationState.Empty
+        val registrationState: RegistrationState = RegistrationState.Empty,
+        val userExistsState: UserExistsState = UserExistsState.Empty
     ) : UIState
 }

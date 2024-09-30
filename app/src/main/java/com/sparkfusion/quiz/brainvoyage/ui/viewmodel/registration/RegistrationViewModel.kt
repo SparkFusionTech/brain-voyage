@@ -1,11 +1,9 @@
 package com.sparkfusion.quiz.brainvoyage.ui.viewmodel.registration
 
 import android.graphics.Bitmap
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.sparkfusion.quiz.brainvoyage.domain.model.LoginUserModel
+import com.sparkfusion.quiz.brainvoyage.domain.model.UserExistsModel
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ILoginRepository
 import com.sparkfusion.quiz.brainvoyage.utils.common.CommonViewModel
 import com.sparkfusion.quiz.brainvoyage.utils.common.StringToMultipartWorker
@@ -20,6 +18,10 @@ import com.sparkfusion.quiz.brainvoyage.utils.image.ImageChildren
 import com.sparkfusion.quiz.brainvoyage.utils.image.ImageFileToMultipartWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import javax.inject.Inject
@@ -33,35 +35,45 @@ class RegistrationViewModel @Inject constructor(
     private val imageFileToMultipartWorker: ImageFileToMultipartWorker
 ) : CommonViewModel<RegistrationContract.RegistrationUIState, RegistrationContract.RegistrationIntent>() {
 
-    override fun initialState(): RegistrationContract.RegistrationUIState = uiState
+    override fun initialState(): StateFlow<RegistrationContract.RegistrationUIState> = uiState.asStateFlow()
 
     override fun handleIntent(intent: RegistrationContract.RegistrationIntent) {
         when (intent) {
             RegistrationContract.RegistrationIntent.Register -> register()
             RegistrationContract.RegistrationIntent.ChangePasswordVisibility -> changePasswordVisibility()
             RegistrationContract.RegistrationIntent.ClearRegistrationState -> clearRegistrationState()
+            RegistrationContract.RegistrationIntent.CheckUserExistence -> checkUserExistence()
             is RegistrationContract.RegistrationIntent.ChangeEmail -> changeEmail(intent.value)
             is RegistrationContract.RegistrationIntent.ChangePassword -> changePassword(intent.value)
             is RegistrationContract.RegistrationIntent.ChangeAccountIcon -> changeAccountIcon(intent.value)
         }
     }
 
-    private var uiState by mutableStateOf(RegistrationContract.RegistrationUIState())
+    private val uiState = MutableStateFlow(RegistrationContract.RegistrationUIState())
+
+    private fun checkUserExistence() {
+        uiState.update { it.copy(userExistsState = UserExistsState.Loading) }
+        viewModelScope.launch(ioDispatcher) {
+            repository.exists(uiState.value.email)
+                .onSuccess(::onSuccessUserExistenceResponse)
+                .onFailure { onFailureUserExistenceResponse() }
+        }
+    }
 
     private fun register() {
-        if (uiState.registrationState == RegistrationState.Loading) return
-        uiState = uiState.copy(registrationState = RegistrationState.Loading)
+        if (uiState.value.registrationState == RegistrationState.Loading) return
+        uiState.update { it.copy(registrationState = RegistrationState.Loading) }
         viewModelScope.launch(ioDispatcher) {
             try {
                 repository.registerAccount(
-                    stringToMultipartWorker(uiState.email),
-                    stringToMultipartWorker(uiState.password),
-                    getImageMultipart(uiState.accountIcon)
+                    stringToMultipartWorker(uiState.value.email),
+                    stringToMultipartWorker(uiState.value.password),
+                    getImageMultipart(uiState.value.accountIcon)
                 )
                     .onSuccess(::onSuccessRegistrationResponse)
                     .onFailure(::onFailureRegistrationResponse)
             } catch (exception: FailedBitmapToFileConversionException) {
-                uiState = uiState.copy(registrationState = RegistrationState.FailedImageHandling)
+                uiState.update { it.copy(registrationState = RegistrationState.FailedImageHandling) }
             }
         }
     }
@@ -72,40 +84,55 @@ class RegistrationViewModel @Inject constructor(
         return imageFileToMultipartWorker(file, ApiImageSerializeNames.ACCOUNT_ICON.value)
     }
 
+    private fun onSuccessUserExistenceResponse(model: UserExistsModel) {
+        uiState.update {
+            it.copy(userExistsState = if (model.exists) UserExistsState.Exists else UserExistsState.NotExists)
+        }
+    }
+
+    private fun onFailureUserExistenceResponse() {
+        uiState.update { it.copy(userExistsState = UserExistsState.Error) }
+    }
+
     private fun onSuccessRegistrationResponse(model: LoginUserModel) {
-        uiState = uiState.copy(registrationState = RegistrationState.Success(model))
+        uiState.update {
+            it.copy(registrationState = RegistrationState.Success(model))
+        }
     }
 
     private fun onFailureRegistrationResponse(exception: BrainVoyageException) {
-        uiState = uiState.copy(
-            registrationState = when (exception) {
-                is AlreadyExistsException -> RegistrationState.UserAlreadyExists
-                is NetworkException -> RegistrationState.NetworkError
-                else -> RegistrationState.Error
-            }
-        )
+        uiState.update {
+            it.copy(
+                registrationState = when (exception) {
+                    is AlreadyExistsException -> RegistrationState.UserAlreadyExists
+                    is NetworkException -> RegistrationState.NetworkError
+                    else -> RegistrationState.Error
+                }
+            )
+        }
     }
 
     private fun clearRegistrationState() {
-        uiState = uiState.copy(registrationState = RegistrationState.Empty)
+        uiState.update { it.copy(registrationState = RegistrationState.Empty) }
     }
 
     private fun changeAccountIcon(newValue: Bitmap?) {
-        if (newValue == uiState.accountIcon) return
-        uiState = uiState.copy(accountIcon = newValue)
+        if (newValue == uiState.value.accountIcon) return
+        uiState.update { it.copy(accountIcon = newValue) }
     }
 
     private fun changeEmail(newValue: String) {
-        if (newValue == uiState.email) return
-        uiState = uiState.copy(email = newValue)
+        if (newValue == uiState.value.email) return
+        uiState.update { it.copy(email = newValue) }
     }
 
     private fun changePassword(newValue: String) {
-        if (newValue == uiState.password) return
-        uiState = uiState.copy(password = newValue)
+        if (newValue == uiState.value.password) return
+        uiState.update { it.copy(password = newValue) }
     }
 
     private fun changePasswordVisibility() {
-        uiState = uiState.copy(showPassword = !uiState.showPassword)
+        uiState.update { it.copy(showPassword = !uiState.value.showPassword) }
     }
 }
+
