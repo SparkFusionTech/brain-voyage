@@ -1,7 +1,9 @@
 package com.sparkfusion.quiz.brainvoyage.data.di
 
-import com.sparkfusion.quiz.brainvoyage.data.LoginRepository
+import com.sparkfusion.quiz.brainvoyage.data.repository.LoginRepository
+import com.sparkfusion.quiz.brainvoyage.data.repository.QuizRepository
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ILoginRepository
+import com.sparkfusion.quiz.brainvoyage.domain.repository.IQuizRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -13,4 +15,7 @@ interface RepositoryModule {
 
     @Binds
     fun bindLoginRepositoryToILoginRepository(loginRepository: LoginRepository): ILoginRepository
+
+    @Binds
+    fun bindQuizRepositoryToIQuizRepository(quizRepository: QuizRepository): IQuizRepository
 }

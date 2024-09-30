@@ -12,7 +12,7 @@ class AuthInterceptor @Inject constructor(
     private val tokenCache: TokenCache
 ) : Interceptor {
 
-    private val noAuthRequired = listOf("/users/create", "/users/authentication")
+    private val noAuthRequired = listOf("/users/create", "/users/authentication", "/users/exists")
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()

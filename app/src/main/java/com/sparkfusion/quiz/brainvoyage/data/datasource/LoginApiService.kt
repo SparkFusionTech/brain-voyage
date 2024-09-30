@@ -1,5 +1,6 @@
 package com.sparkfusion.quiz.brainvoyage.data.datasource
 
+import com.sparkfusion.quiz.brainvoyage.data.entity.UserExistsDataEntity
 import com.sparkfusion.quiz.brainvoyage.data.entity.LoginUserDataEntity
 import com.sparkfusion.quiz.brainvoyage.data.entity.TokenDataEntity
 import com.sparkfusion.quiz.brainvoyage.data.entity.TokenValidationDataEntity
@@ -24,6 +25,10 @@ interface LoginApiService {
 
     @POST("/users/authentication")
     suspend fun authenticate(@Body getUserDto: LoginUserDataEntity): Response<TokenDataEntity>
+
+    //
+    @GET("/users/exists")
+    suspend fun exists(): Response<UserExistsDataEntity>
 
     @GET("/users/check-token")
     suspend fun checkTokenValidation(): Response<TokenValidationDataEntity>

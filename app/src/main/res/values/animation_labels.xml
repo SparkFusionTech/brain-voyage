@@ -2,4 +2,6 @@
 <resources>
     <string name="splash_screen_text_x_offset">Splash label animation x offset</string>
     <string name="splash_screen_text_alpha">Splash label animation alpha</string>
+    <string name="shimmer_loading_transition">Shimmer loading transition</string>
+    <string name="shimmer_loading_animation">Shimmer loading animation</string>
 </resources>

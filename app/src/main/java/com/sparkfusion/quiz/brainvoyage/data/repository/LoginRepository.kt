@@ -1,6 +1,7 @@
-package com.sparkfusion.quiz.brainvoyage.data
+package com.sparkfusion.quiz.brainvoyage.data.repository
 
 import com.sparkfusion.quiz.brainvoyage.data.common.ApiResponseHandler
+import com.sparkfusion.quiz.brainvoyage.data.common.handleExceptionCode
 import com.sparkfusion.quiz.brainvoyage.data.common.safeApiCall
 import com.sparkfusion.quiz.brainvoyage.data.datasource.LoginApiService
 import com.sparkfusion.quiz.brainvoyage.data.entity.LoginUserDataEntity
@@ -30,19 +31,28 @@ class LoginRepository @Inject constructor(
         password: RequestBody,
         accountIcon: MultipartBody.Part?
     ): Answer<LoginUserModel> = safeApiCall(ioDispatcher) {
-        val handler = ApiResponseHandler(loginApiService.registerUser(email, password, accountIcon))
+        val handler = ApiResponseHandler(
+            loginApiService.registerUser(email, password, accountIcon),
+            ::handleExceptionCode
+        )
         handler.handleFetchedData().suspendMap(loginUserDataEntityFactory::mapTo)
     }
 
     override suspend fun authenticate(
         user: LoginUserDataEntity
     ): Answer<TokenModel> = safeApiCall(ioDispatcher) {
-        val handler = ApiResponseHandler(loginApiService.authenticate(user))
+        val handler = ApiResponseHandler(
+            loginApiService.authenticate(user),
+            ::handleExceptionCode
+        )
         handler.handleFetchedData().suspendMap(tokenDataEntityFactory::mapTo)
     }
 
     override suspend fun checkTokenValidation(): Answer<Unit> = safeApiCall(ioDispatcher) {
-        ApiResponseHandler(loginApiService.checkTokenValidation())
+        ApiResponseHandler(
+            loginApiService.checkTokenValidation(),
+            ::handleExceptionCode
+        )
             .handleFetchedData()
             .suspendMap { }
     }

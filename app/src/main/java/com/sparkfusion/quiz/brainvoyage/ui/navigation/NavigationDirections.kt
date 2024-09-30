@@ -10,7 +10,7 @@ import com.sparkfusion.quiz.brainvoyage.image_crop.common.ImageCropType
 import com.sparkfusion.quiz.brainvoyage.image_crop.screen.FailedOpenImageScreen
 import com.sparkfusion.quiz.brainvoyage.image_crop.screen.ImageCropScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.CatalogItemScreen
-import com.sparkfusion.quiz.brainvoyage.ui.screen.CatalogScreen
+import com.sparkfusion.quiz.brainvoyage.ui.screen.catalog.CatalogScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.QuizItemScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.login.LoginRegistrationData
 import com.sparkfusion.quiz.brainvoyage.ui.screen.login.LoginScreen

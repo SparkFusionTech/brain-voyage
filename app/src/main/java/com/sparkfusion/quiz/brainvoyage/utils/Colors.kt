@@ -1,10 +1,20 @@
 package com.sparkfusion.quiz.brainvoyage.utils
 
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.sparkfusion.quiz.brainvoyage.ui.theme.registrationTextFieldColor
+
+@Composable
+fun descriptionColor(): Color {
+    return when {
+        isSystemInDarkTheme() -> MaterialTheme.colorScheme.outline
+        else -> Color.Gray
+    }
+}
 
 @Composable
 fun getLoginTextFieldContainerColors(): TextFieldColors {
