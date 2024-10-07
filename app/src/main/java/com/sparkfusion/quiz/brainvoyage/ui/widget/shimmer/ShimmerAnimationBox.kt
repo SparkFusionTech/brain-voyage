@@ -1,6 +1,7 @@
 package com.sparkfusion.quiz.brainvoyage.ui.widget.shimmer
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,7 +19,7 @@ fun ShimmerAnimationBox(
     contentAlignment: Alignment = Alignment.CenterStart,
     isLoadingCompleted: Boolean = false,
     size: DpSize,
-    isDarkModeEnabled: Boolean = false,
+    isDarkModeEnabled: Boolean = isSystemInDarkTheme(),
     backgroundColor: ShimmerAnimationBoxColor = DefaultShimmerAnimationBoxColor,
     shape: Shape = RoundedCornerShape(8.dp),
     content: @Composable (() -> Unit)? = null

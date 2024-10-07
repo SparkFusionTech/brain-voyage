@@ -21,5 +21,11 @@ sealed interface Destination {
     data object QuizItemDestination : Destination
 
     @Serializable
-    data object ImageCropDestination: Destination
+    data object ImageCropDestination : Destination
+
+    @Serializable
+    data object ImageSearchDestination : Destination
+
+    @Serializable
+    data object AddQuizDestination : Destination
 }

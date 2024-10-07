@@ -1,5 +1,6 @@
 package com.sparkfusion.quiz.brainvoyage.data.common
 
+import androidx.paging.PagingSource
 import com.sparkfusion.quiz.brainvoyage.utils.common.Answer
 import com.sparkfusion.quiz.brainvoyage.utils.exception.BrainVoyageException
 import com.sparkfusion.quiz.brainvoyage.utils.exception.UnexpectedException
@@ -18,6 +19,17 @@ suspend fun <T> safeApiCall(
         call.invoke()
     } catch (exception: Exception) {
         handleApiException(exception)
+    }
+}
+
+suspend fun <K : Any, T : Any> safePagingApiCall(
+    dispatcher: CoroutineDispatcher,
+    call: suspend () -> PagingSource.LoadResult<K, T>
+): PagingSource.LoadResult<K, T> = withContext(dispatcher) {
+    try {
+        call.invoke()
+    } catch (exception: Exception) {
+        PagingSource.LoadResult.Error(handleApiException(exception).exception)
     }
 }
 

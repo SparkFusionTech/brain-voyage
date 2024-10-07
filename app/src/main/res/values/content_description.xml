@@ -13,5 +13,9 @@
     <string name="splash_image_description">Image of the splash screen</string>
     <string name="catalog_item_image_description">Image of catalog item</string>
     <string name="catalog_preview_image_description">Preview image of catalog screen</string>
+    <string name="empty_search_images_status_description">Empty status of images searching description</string>
+    <string name="searched_image_description">Image of searched item</string>
+    <string name="navigate_back_icon_of_searching_screen_description">Icon of navigate back button</string>
+    <string name="search_icon_of_search_button_description">Icon of search button</string>
 
 </resources>

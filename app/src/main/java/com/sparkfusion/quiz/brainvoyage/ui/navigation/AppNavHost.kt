@@ -20,9 +20,13 @@ fun AppNavHost(
     ) {
         loginDirection(navController)
         registrationDirection(navController)
-        catalogDirection()
-        catalogItemDirection()
+        catalogDirection(navController)
+        catalogItemDirection(navController)
         quizItemDirection()
+
         imageCropDirection(navController)
+        imageSearchDirection(navController)
+
+        addQuizDirection(navController)
     }
 }

@@ -25,6 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.sparkfusion.quiz.brainvoyage.R
+import com.sparkfusion.quiz.brainvoyage.ui.model.QuizCatalogSerializable
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.quiz_catalog.QuizCatalogLoadingState
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.quiz_catalog.QuizCatalogViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
@@ -36,7 +37,8 @@ private const val DEFAULT_CATALOG_ITEMS_COUNT = 5
 @Composable
 fun CatalogScreen(
     modifier: Modifier = Modifier,
-    viewModel: QuizCatalogViewModel = hiltViewModel()
+    viewModel: QuizCatalogViewModel = hiltViewModel(),
+    onNavigateToCatalogItemScreen: (QuizCatalogSerializable) -> Unit
 ) {
     val isDarkModeEnabled = isSystemInDarkTheme()
     val state by viewModel.initialState().collectAsStateWithLifecycle()
@@ -101,7 +103,8 @@ fun CatalogScreen(
             items(quizCatalog.size) { index ->
                 CatalogItem(
                     modifier = Modifier.padding(top = 4.dp),
-                    quizCatalogModel = quizCatalog[index]
+                    quizCatalogModel = quizCatalog[index],
+                    onNavigateToCatalogItemScreen = onNavigateToCatalogItemScreen
                 )
             }
         }
@@ -111,5 +114,7 @@ fun CatalogScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun CatalogScreenPreview() {
-    CatalogScreen()
+    CatalogScreen(
+        onNavigateToCatalogItemScreen = {}
+    )
 }

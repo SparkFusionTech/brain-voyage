@@ -69,6 +69,9 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.paging.compose)
+    implementation(libs.androidx.paging)
+
     implementation(libs.androidx.datastore)
 
     implementation(libs.squareup.retrofit)

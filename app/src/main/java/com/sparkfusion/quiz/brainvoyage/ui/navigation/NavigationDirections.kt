@@ -9,9 +9,12 @@ import com.sparkfusion.quiz.brainvoyage.image_crop.common.IMAGE_CROP_KEY
 import com.sparkfusion.quiz.brainvoyage.image_crop.common.ImageCropType
 import com.sparkfusion.quiz.brainvoyage.image_crop.screen.FailedOpenImageScreen
 import com.sparkfusion.quiz.brainvoyage.image_crop.screen.ImageCropScreen
-import com.sparkfusion.quiz.brainvoyage.ui.screen.CatalogItemScreen
-import com.sparkfusion.quiz.brainvoyage.ui.screen.catalog.CatalogScreen
+import com.sparkfusion.quiz.brainvoyage.ui.model.QUIZ_CATALOG_INFO_KEY
+import com.sparkfusion.quiz.brainvoyage.ui.model.QuizCatalogSerializable
 import com.sparkfusion.quiz.brainvoyage.ui.screen.QuizItemScreen
+import com.sparkfusion.quiz.brainvoyage.ui.screen.catalog.CatalogScreen
+import com.sparkfusion.quiz.brainvoyage.ui.screen.catalog_item.CatalogItemScreen
+import com.sparkfusion.quiz.brainvoyage.ui.screen.image.ImageSearchScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.login.LoginRegistrationData
 import com.sparkfusion.quiz.brainvoyage.ui.screen.login.LoginScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.registration.RegistrationScreen
@@ -66,15 +69,34 @@ fun NavGraphBuilder.registrationDirection(navController: NavController) {
     }
 }
 
-fun NavGraphBuilder.catalogDirection() {
+fun NavGraphBuilder.catalogDirection(navController: NavController) {
     composable<Destination.CatalogDestination> {
-        CatalogScreen()
+        CatalogScreen(
+            onNavigateToCatalogItemScreen = {
+//                navController.currentBackStackEntry?.savedStateHandle?.set(
+//                    QUIZ_CATALOG_INFO_KEY,
+//                    it
+//                )
+                navController.navigate(Destination.CatalogItemDestination)
+            }
+        )
     }
 }
 
-fun NavGraphBuilder.catalogItemDirection() {
+fun NavGraphBuilder.catalogItemDirection(navController: NavController) {
     composable<Destination.CatalogItemDestination> {
-        CatalogItemScreen()
+//        val quizCatalogSerializableNullable = navController.previousBackStackEntry
+//            ?.savedStateHandle
+//            ?.get<QuizCatalogSerializable>(QUIZ_CATALOG_INFO_KEY)
+
+//        if (quizCatalogSerializableNullable == null) navController.popBackStack()
+//        else
+            CatalogItemScreen(
+            quizCatalogSerializable = QuizCatalogSerializable(1, ""),
+            onNavigateToQuizAddScreen = {
+                navController.navigate(Destination.ImageSearchDestination)
+            }
+        )
     }
 }
 
@@ -103,7 +125,13 @@ fun NavGraphBuilder.imageCropDirection(navController: NavController) {
     }
 }
 
-
+fun NavGraphBuilder.imageSearchDirection(navController: NavController) {
+    composable<Destination.ImageSearchDestination> {
+        ImageSearchScreen(
+            onNavigateBack = navController::popBackStack
+        )
+    }
+}
 
 
 

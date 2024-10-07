@@ -20,5 +20,7 @@
     <string name="user_already_exists">User already exists</string>
     <string name="loading_with_ellipsis">Loading…</string>
     <string name="already_exists">Already exists</string>
+    <string name="search">Search</string>
+    <string name="enter_your_query_to_find_images">Enter your query to find images</string>
     
 </resources>

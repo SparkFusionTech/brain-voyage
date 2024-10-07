@@ -39,3 +39,17 @@ fun getRegistrationTextFieldContainerColors(): TextFieldColors {
         disabledIndicatorColor = registrationTextFieldColor
     )
 }
+
+@Composable
+fun getClearTextFieldContainerColors(): TextFieldColors {
+    return TextFieldDefaults.colors(
+        unfocusedContainerColor = MaterialTheme.colorScheme.background,
+        focusedContainerColor = MaterialTheme.colorScheme.background,
+        errorContainerColor = MaterialTheme.colorScheme.background,
+        disabledContainerColor = MaterialTheme.colorScheme.background,
+        focusedIndicatorColor = MaterialTheme.colorScheme.background,
+        unfocusedIndicatorColor = MaterialTheme.colorScheme.background,
+        errorIndicatorColor = MaterialTheme.colorScheme.background,
+        disabledIndicatorColor = MaterialTheme.colorScheme.background
+    )
+}

@@ -28,12 +28,14 @@ import androidx.core.graphics.toColorInt
 import coil.compose.AsyncImage
 import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.domain.model.QuizCatalogModel
+import com.sparkfusion.quiz.brainvoyage.ui.model.QuizCatalogSerializable
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
 
 @Composable
 fun CatalogItem(
     modifier: Modifier = Modifier,
-    quizCatalogModel: QuizCatalogModel
+    quizCatalogModel: QuizCatalogModel,
+    onNavigateToCatalogItemScreen: (QuizCatalogSerializable) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -46,7 +48,12 @@ fun CatalogItem(
                 .size(110.dp),
             elevation = CardDefaults.cardElevation(2.dp),
             shape = RoundedCornerShape(24.dp),
-            onClick = { }
+            onClick = {
+                val quizCatalogSerializable = QuizCatalogSerializable(
+                    quizCatalogModel.id, quizCatalogModel.name
+                )
+                onNavigateToCatalogItemScreen(quizCatalogSerializable)
+            }
         ) {
             Box(
                 contentAlignment = Alignment.BottomCenter,
@@ -95,6 +102,7 @@ private fun CatalogItemPreview() {
             "link",
             "#FFBD8903",
             "#FFBD3B03"
-        )
+        ),
+        onNavigateToCatalogItemScreen = {}
     )
 }
