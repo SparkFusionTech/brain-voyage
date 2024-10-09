@@ -1,4 +1,4 @@
-package com.sparkfusion.quiz.brainvoyage.data.mapper.quiz_catalog
+package com.sparkfusion.quiz.brainvoyage.domain.mapper.quiz_catalog
 
 import com.sparkfusion.quiz.brainvoyage.data.entity.QuizCatalogDataEntity
 import com.sparkfusion.quiz.brainvoyage.domain.model.QuizCatalogModel

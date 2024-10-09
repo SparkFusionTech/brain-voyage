@@ -1,4 +1,4 @@
-package com.sparkfusion.quiz.brainvoyage.data.mapper.image
+package com.sparkfusion.quiz.brainvoyage.domain.mapper.image
 
 import com.sparkfusion.quiz.brainvoyage.data.entity.ImageSearchDataEntity
 import com.sparkfusion.quiz.brainvoyage.domain.model.ImageSearchModel

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="drawer_account_icon_description">Account icon in drawer</string>
+    <string name="drawer_item_icon_description">Icon of drawer item</string>
+    <string name="filters_button_icon_description">Icon of button to open filters screen</string>
+    <string name="drawer_menu_icon_description">Icon of button to open drawer</string>
+    <string name="floating_add_quiz_button_icon_description">Icon of floating button to navigate to quiz adding screen</string>
     <string name="login_password_trailing_icon_description">Trailing icon of password text field</string>
     <string name="login_password_leading_icon_description">Leading icon of password text field</string>
     <string name="login_email_leading_icon_description">Leading icon of email text field</string>

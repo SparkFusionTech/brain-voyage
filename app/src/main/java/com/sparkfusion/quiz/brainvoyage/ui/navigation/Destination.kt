@@ -28,4 +28,12 @@ sealed interface Destination {
 
     @Serializable
     data object AddQuizDestination : Destination
+
+    companion object {
+
+        @JvmStatic
+        fun getDestinationRoute(destination: Destination): String {
+            return destination.javaClass.name.replace("$", ".")
+        }
+    }
 }

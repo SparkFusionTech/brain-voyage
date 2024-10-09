@@ -1,4 +1,4 @@
-package com.sparkfusion.quiz.brainvoyage.data.mapper.user
+package com.sparkfusion.quiz.brainvoyage.domain.mapper.user
 
 import com.sparkfusion.quiz.brainvoyage.data.entity.UserExistsDataEntity
 import com.sparkfusion.quiz.brainvoyage.domain.model.UserExistsModel

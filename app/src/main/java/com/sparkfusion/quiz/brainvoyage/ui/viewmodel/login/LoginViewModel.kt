@@ -1,7 +1,12 @@
 package com.sparkfusion.quiz.brainvoyage.ui.viewmodel.login
 
 import androidx.lifecycle.viewModelScope
-import com.sparkfusion.quiz.brainvoyage.data.mapper.user.LoginUserDataEntityFactory
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import com.sparkfusion.quiz.brainvoyage.data.datasource.workmanager.UserInfoWorker
+import com.sparkfusion.quiz.brainvoyage.domain.mapper.user.LoginUserDataEntityFactory
 import com.sparkfusion.quiz.brainvoyage.domain.model.LoginUserModel
 import com.sparkfusion.quiz.brainvoyage.domain.model.TokenModel
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ILoginRepository
@@ -25,7 +30,8 @@ class LoginViewModel @Inject constructor(
     private val loginRepository: ILoginRepository,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val loginUserDataEntityFactory: LoginUserDataEntityFactory,
-    private val session: ISession
+    private val session: ISession,
+    private val workManager: WorkManager
 ) : CommonViewModel<LoginContract.LoginUIState, LoginContract.LoginIntent>() {
 
     override fun initialState(): StateFlow<LoginContract.LoginUIState> = uiState.asStateFlow()
@@ -49,10 +55,24 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    private fun startWorkManagerToSaveAccountInfo() {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val request = OneTimeWorkRequestBuilder<UserInfoWorker>()
+            .setConstraints(constraints)
+            .addTag(UserInfoWorker.TAG)
+            .build()
+
+        workManager.enqueue(request)
+    }
+
     private fun onSuccessLoginState(tokenModel: TokenModel) {
         viewModelScope.launch(ioDispatcher) {
             try {
                 session.saveUserToken(tokenModel.token)
+                startWorkManagerToSaveAccountInfo()
             } catch (ignore: FailedDataStoreOperationException) {
             } finally {
                 uiState.update { it.copy(loginState = LoginState.Success) }

@@ -73,10 +73,9 @@ fun NavGraphBuilder.catalogDirection(navController: NavController) {
     composable<Destination.CatalogDestination> {
         CatalogScreen(
             onNavigateToCatalogItemScreen = {
-//                navController.currentBackStackEntry?.savedStateHandle?.set(
-//                    QUIZ_CATALOG_INFO_KEY,
-//                    it
-//                )
+                navController.currentBackStackEntry?.savedStateHandle?.set(
+                    QUIZ_CATALOG_INFO_KEY, it
+                )
                 navController.navigate(Destination.CatalogItemDestination)
             }
         )
@@ -85,18 +84,24 @@ fun NavGraphBuilder.catalogDirection(navController: NavController) {
 
 fun NavGraphBuilder.catalogItemDirection(navController: NavController) {
     composable<Destination.CatalogItemDestination> {
-//        val quizCatalogSerializableNullable = navController.previousBackStackEntry
-//            ?.savedStateHandle
-//            ?.get<QuizCatalogSerializable>(QUIZ_CATALOG_INFO_KEY)
+        val quizCatalogSerializableNullable = navController.previousBackStackEntry
+            ?.savedStateHandle
+            ?.get<QuizCatalogSerializable>(QUIZ_CATALOG_INFO_KEY)
 
-//        if (quizCatalogSerializableNullable == null) navController.popBackStack()
-//        else
-            CatalogItemScreen(
-            quizCatalogSerializable = QuizCatalogSerializable(1, ""),
-            onNavigateToQuizAddScreen = {
-                navController.navigate(Destination.ImageSearchDestination)
+        val currentDestination = navController.currentBackStackEntry?.destination
+        if (quizCatalogSerializableNullable == null) {
+            val catalogItemDestinationName = Destination.getDestinationRoute(Destination.CatalogItemDestination)
+            if (currentDestination?.route == catalogItemDestinationName) {
+                navController.popBackStack()
             }
-        )
+        } else {
+            CatalogItemScreen(
+                quizCatalogSerializable = quizCatalogSerializableNullable,
+                onNavigateToQuizAddScreen = {
+                    navController.navigate(Destination.ImageSearchDestination)
+                }
+            )
+        }
     }
 }
 

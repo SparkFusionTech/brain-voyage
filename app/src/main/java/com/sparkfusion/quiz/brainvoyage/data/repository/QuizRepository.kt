@@ -4,7 +4,7 @@ import com.sparkfusion.quiz.brainvoyage.data.common.ApiListResponseHandler
 import com.sparkfusion.quiz.brainvoyage.data.common.handleExceptionCode
 import com.sparkfusion.quiz.brainvoyage.data.common.safeApiCall
 import com.sparkfusion.quiz.brainvoyage.data.datasource.QuizApiService
-import com.sparkfusion.quiz.brainvoyage.data.mapper.quiz_catalog.QuizCatalogListFactory
+import com.sparkfusion.quiz.brainvoyage.domain.mapper.quiz_catalog.QuizCatalogListFactory
 import com.sparkfusion.quiz.brainvoyage.domain.model.QuizCatalogModel
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IQuizRepository
 import com.sparkfusion.quiz.brainvoyage.utils.common.Answer

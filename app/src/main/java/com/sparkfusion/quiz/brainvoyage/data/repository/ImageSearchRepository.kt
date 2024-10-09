@@ -6,7 +6,7 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.sparkfusion.quiz.brainvoyage.data.datasource.image_search.ImageSearchApiService
 import com.sparkfusion.quiz.brainvoyage.data.datasource.image_search.ImageSearchPagingDataSource
-import com.sparkfusion.quiz.brainvoyage.data.mapper.image.ImageSearchDataEntityFactory
+import com.sparkfusion.quiz.brainvoyage.domain.mapper.image.ImageSearchDataEntityFactory
 import com.sparkfusion.quiz.brainvoyage.domain.model.ImageSearchModel
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IImageSearchRepository
 import com.sparkfusion.quiz.brainvoyage.utils.dispatchers.IODispatcher
