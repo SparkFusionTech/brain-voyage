@@ -29,6 +29,7 @@ import com.sparkfusion.quiz.brainvoyage.image_crop.view.ActionButton
 import com.sparkfusion.quiz.brainvoyage.image_crop.space.CircleCropSpace
 import com.sparkfusion.quiz.brainvoyage.image_crop.common.ImageCropType
 import com.sparkfusion.quiz.brainvoyage.image_crop.handler.ImageCropper
+import com.sparkfusion.quiz.brainvoyage.image_crop.space.DynamicRectangleCropSpace
 import com.sparkfusion.quiz.brainvoyage.image_crop.space.RectangleCropSpace
 import com.sparkfusion.quiz.brainvoyage.ui.theme.backgroundDark
 import kotlinx.coroutines.launch
@@ -62,32 +63,50 @@ fun ImageCropScreen(
             .fillMaxSize()
             .background(backgroundDark)
     ) {
-        val (cropWidth, cropHeight) = if (cropType == ImageCropType.RectangleCrop) {
-            val cropRectangleWidth = minOf(screenWidthPx, minSide)
-            val cropRectangleHeight = cropRectangleWidth * 2 / 3
+        val (cropWidth, cropHeight) = when (cropType) {
+            ImageCropType.RectangleCrop -> {
+                val cropRectangleWidth = minOf(screenWidthPx, minSide)
+                val cropRectangleHeight = cropRectangleWidth * 2 / 3
 
-            RectangleCropSpace(
-                modifier = Modifier.fillMaxSize(),
-                cropWidth = cropRectangleWidth,
-                cropHeight = cropRectangleHeight,
-                image = image,
-                onScaleChange = { scale = it },
-                onTransformChange = { transform = it }
-            )
+                RectangleCropSpace(
+                    modifier = Modifier.fillMaxSize(),
+                    cropWidth = cropRectangleWidth,
+                    cropHeight = cropRectangleHeight,
+                    image = image,
+                    onScaleChange = { scale = it },
+                    onTransformChange = { transform = it }
+                )
 
-            Pair(cropRectangleWidth, cropRectangleHeight)
-        } else {
-            val cropCircleDiameter = if (screenWidthPx < minSide) screenWidthPx else minSide
+                Pair(cropRectangleWidth, cropRectangleHeight)
+            }
+            is ImageCropType.DynamicRectangleCrop -> {
+                val cropRectangleWidthDp = cropType.widthDp
+                val cropRectangleHeightDp = cropType.heightDp
 
-            CircleCropSpace(
-                modifier = Modifier.fillMaxSize(),
-                cropCircleDiameter = cropCircleDiameter,
-                image = image,
-                onScaleChange = { scale = it },
-                onTransformChange = { transform = it }
-            )
+                DynamicRectangleCropSpace(
+                    modifier = Modifier.fillMaxSize(),
+                    cropWidthDp = cropRectangleWidthDp,
+                    cropHeightDp = cropRectangleHeightDp,
+                    image = image,
+                    onScaleChange = { scale = it },
+                    onTransformChange = { transform = it }
+                )
 
-            Pair(cropCircleDiameter, cropCircleDiameter)
+                with(LocalDensity.current) { Pair(cropRectangleWidthDp.toPx(), cropRectangleHeightDp.toPx()) }
+            }
+            else -> {
+                val cropCircleDiameter = if (screenWidthPx < minSide) screenWidthPx else minSide
+
+                CircleCropSpace(
+                    modifier = Modifier.fillMaxSize(),
+                    cropCircleDiameter = cropCircleDiameter,
+                    image = image,
+                    onScaleChange = { scale = it },
+                    onTransformChange = { transform = it }
+                )
+
+                Pair(cropCircleDiameter, cropCircleDiameter)
+            }
         }
 
         ActionButton(

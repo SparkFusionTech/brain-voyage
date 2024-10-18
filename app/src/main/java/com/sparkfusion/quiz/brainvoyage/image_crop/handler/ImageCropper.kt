@@ -25,7 +25,7 @@ class ImageCropper(
     ): Bitmap {
         val scaledBitmap = createScaledBitmap(scale)
         val (cropX, cropY) = getCropCoordinates(scaledBitmap, cropWidth, cropHeight, transform)
-        val croppedBitmap = if (cropType == ImageCropType.RectangleCrop) {
+        val croppedBitmap = if (cropType == ImageCropType.RectangleCrop || cropType is ImageCropType.DynamicRectangleCrop) {
             Bitmap.createBitmap(cropWidth.toInt(), cropHeight.toInt(), Bitmap.Config.ARGB_8888)
         } else {
             val cropDiameter = cropWidth.toInt()
@@ -37,7 +37,7 @@ class ImageCropper(
             isAntiAlias = true
         }
 
-        val (srcRect, destRect) = if (cropType == ImageCropType.RectangleCrop) {
+        val (srcRect, destRect) = if (cropType == ImageCropType.RectangleCrop || cropType is ImageCropType.DynamicRectangleCrop) {
             canvas.drawRect(0f, 0f, cropWidth, cropHeight, paint)
             getRectangles(cropWidth.toInt(), cropHeight.toInt(), cropX, cropY)
         } else {

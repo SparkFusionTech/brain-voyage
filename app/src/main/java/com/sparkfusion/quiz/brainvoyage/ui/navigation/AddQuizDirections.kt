@@ -1,5 +1,6 @@
 package com.sparkfusion.quiz.brainvoyage.ui.navigation
 
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -20,7 +21,10 @@ fun NavGraphBuilder.addQuizDirection(navController: NavController) {
             },
             onImageCropNavigate = { bitmap ->
                 navController.currentBackStackEntry?.savedStateHandle?.set(IMAGE_CROP_KEY, bitmap)
-                navController.currentBackStackEntry?.savedStateHandle?.setImageCropType(IMAGE_CROP_TYPE_KEY, ImageCropType.RectangleCrop)
+                navController.currentBackStackEntry?.savedStateHandle?.setImageCropType(
+                    IMAGE_CROP_TYPE_KEY,
+                    ImageCropType.DynamicRectangleCrop(200.dp, 240.dp)
+                )
                 navController.navigate(Destination.ImageCropDestination)
             },
             getCroppedImageBitmap = {

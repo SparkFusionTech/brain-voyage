@@ -1,5 +1,6 @@
 package com.sparkfusion.quiz.brainvoyage.image_crop.view
 
+//import com.sparkfusion.quiz.brainvoyage.image_crop.handler.drawBackgroundBlock
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
@@ -39,7 +40,14 @@ fun CropSpaceBox(
             .pointerInput(Unit) {
                 detectTransformGestures { _, pan, zoom, _ ->
                     scale.floatValue = (scale.floatValue * zoom).coerceIn(minScale, 10f)
-                    transform.value = transformHandlerBlock(transform.value, pan, scale.floatValue, image, cropWidth, cropHeight)
+                    transform.value = transformHandlerBlock(
+                        transform.value,
+                        pan,
+                        scale.floatValue,
+                        image,
+                        cropWidth,
+                        cropHeight
+                    )
                     onScaleChange?.invoke(scale.floatValue)
                     onTransformChange?.invoke(transform.value)
                 }

@@ -17,7 +17,7 @@ fun CircleCropSpace(
     onScaleChange: ((Float) -> Unit)? = null,
     onTransformChange: ((Offset) -> Unit)? = null
 ) {
-    val minScale = calculateMinScale(image.width, image.height, cropCircleDiameter)
+    val minScale = calculateRectangleMinScale(image.width, image.height, cropCircleDiameter)
     val scale = remember { mutableFloatStateOf(1f) }
 
     CropSpaceBox(
@@ -33,7 +33,7 @@ fun CircleCropSpace(
     )
 }
 
-private fun calculateMinScale(imageWidth: Int, imageHeight: Int, cropCircleDiameter: Float): Float {
+private fun calculateRectangleMinScale(imageWidth: Int, imageHeight: Int, cropCircleDiameter: Float): Float {
     val minSide = minOf(imageWidth.toFloat(), imageHeight.toFloat())
     return cropCircleDiameter / minSide
 }

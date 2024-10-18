@@ -76,7 +76,7 @@ fun DrawScope.drawBackgroundBlock(
     val checkPoint = nativeCanvas.saveLayer(null, null)
 
     drawRect(alphaForegroundColor)
-    if (cropType == ImageCropType.RectangleCrop) {
+    if (cropType == ImageCropType.RectangleCrop || cropType is ImageCropType.DynamicRectangleCrop) {
         drawRect(
             color = Color.Transparent,
             size = Size(cropWidth, cropHeight),

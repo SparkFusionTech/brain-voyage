@@ -6,20 +6,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ImageBitmap
-import com.sparkfusion.quiz.brainvoyage.image_crop.view.CropSpaceBox
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
 import com.sparkfusion.quiz.brainvoyage.image_crop.common.ImageCropType
+import com.sparkfusion.quiz.brainvoyage.image_crop.view.CropSpaceBox
 
 @Composable
-fun RectangleCropSpace(
+fun DynamicRectangleCropSpace(
     modifier: Modifier,
-    cropWidth: Float,
-    cropHeight: Float,
+    cropWidthDp: Dp,
+    cropHeightDp: Dp,
     image: ImageBitmap,
     onScaleChange: ((Float) -> Unit)? = null,
     onTransformChange: ((Offset) -> Unit)? = null
 ) {
+    val density = LocalDensity.current
+    val cropWidthPx = with(density) { cropWidthDp.toPx() }
+    val cropHeightPx = with(density) { cropHeightDp.toPx() }
+
     val initialScaleFactor = 1.5f
-    val minScale = calculateRectangleMinScale(image.width, image.height, cropWidth, cropHeight)
+    val minScale = calculateRectangleMinScale(image.width, image.height, cropWidthPx, cropHeightPx)
     val scale = remember { mutableFloatStateOf(minScale * initialScaleFactor) }
 
     CropSpaceBox(
@@ -28,15 +34,9 @@ fun RectangleCropSpace(
         scale = scale,
         minScale = minScale,
         image = image,
-        cropWidth = cropWidth,
-        cropHeight = cropHeight,
+        cropWidth = cropWidthPx,
+        cropHeight = cropHeightPx,
         onScaleChange = onScaleChange,
         onTransformChange = onTransformChange
     )
-}
-
-internal fun calculateRectangleMinScale(imageWidth: Int, imageHeight: Int, cropWidth: Float, cropHeight: Float): Float {
-    val minWidthScale = cropWidth / imageWidth.toFloat()
-    val minHeightScale = cropHeight / imageHeight.toFloat()
-    return maxOf(minWidthScale, minHeightScale)
 }
