@@ -1,5 +1,6 @@
 package com.sparkfusion.quiz.brainvoyage.ui.screen.image
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,6 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -29,6 +31,7 @@ import com.sparkfusion.quiz.brainvoyage.utils.getClearTextFieldContainerColors
 fun ImageSearchScreen(
     modifier: Modifier = Modifier,
     viewModel: ImageSearchViewModel = hiltViewModel(),
+    onImageSelected: (Bitmap, Dp, Dp) -> Unit,
     onNavigateBack: () -> Unit
 ) {
     val context = LocalContext.current
@@ -80,6 +83,9 @@ fun ImageSearchScreen(
             searchingState = state.imageSearchingState,
             onHandleErrorState = { exception ->
                 viewModel.handleIntent(ImageSearchContract.ImageSearchIntent.HandleErrorLoading(exception))
+            },
+            onImageItemClick = {
+                onImageSelected(it, 200.dp, 240.dp)
             }
         )
     }
@@ -89,6 +95,9 @@ fun ImageSearchScreen(
 @Composable
 private fun ImageSearchScreenPreview() {
     ImageSearchScreen(
-        onNavigateBack = {}
+        onNavigateBack = {},
+        onImageSelected = { _, _, _ ->
+
+        }
     )
 }

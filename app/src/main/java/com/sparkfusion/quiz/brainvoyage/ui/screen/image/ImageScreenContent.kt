@@ -1,6 +1,7 @@
 package com.sparkfusion.quiz.brainvoyage.ui.screen.image
 
 import android.content.Context
+import android.graphics.Bitmap
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -12,6 +13,7 @@ import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.image.ImageSearchingState
 fun ImageScreenContent(
     paddingValues: PaddingValues,
     context: Context,
+    onImageItemClick: (Bitmap) -> Unit,
     searchingState: ImageSearchingState,
     onHandleErrorState: (Throwable) -> Unit
 ) {
@@ -26,7 +28,8 @@ fun ImageScreenContent(
                 modifier = Modifier.padding(paddingValues),
                 pagingItems = pagingItems,
                 context = context,
-                onHandleErrorState = onHandleErrorState
+                onHandleErrorState = onHandleErrorState,
+                onItemClick = onImageItemClick
             )
         }
 

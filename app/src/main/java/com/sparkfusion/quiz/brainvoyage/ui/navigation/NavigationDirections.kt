@@ -9,6 +9,7 @@ import com.sparkfusion.quiz.brainvoyage.image_crop.common.IMAGE_CROP_KEY
 import com.sparkfusion.quiz.brainvoyage.image_crop.common.IMAGE_CROP_TYPE_KEY
 import com.sparkfusion.quiz.brainvoyage.image_crop.common.ImageCropType
 import com.sparkfusion.quiz.brainvoyage.image_crop.common.getImageCropType
+import com.sparkfusion.quiz.brainvoyage.image_crop.common.setImageCropType
 import com.sparkfusion.quiz.brainvoyage.image_crop.screen.FailedOpenImageScreen
 import com.sparkfusion.quiz.brainvoyage.image_crop.screen.ImageCropScreen
 import com.sparkfusion.quiz.brainvoyage.ui.model.QUIZ_CATALOG_INFO_KEY
@@ -118,7 +119,8 @@ fun NavGraphBuilder.imageCropDirection(navController: NavController) {
     composable<Destination.ImageCropDestination> {
         val savedState = navController.previousBackStackEntry?.savedStateHandle
         val bitmap: Bitmap? = savedState?.get<Bitmap>(IMAGE_CROP_KEY)
-        val imageCropType: ImageCropType = savedState?.getImageCropType(IMAGE_CROP_TYPE_KEY) ?: ImageCropType.CircleCrop
+        val imageCropType: ImageCropType =
+            savedState?.getImageCropType(IMAGE_CROP_TYPE_KEY) ?: ImageCropType.CircleCrop
         if (bitmap != null) {
             ImageCropScreen(
                 cropType = imageCropType,
@@ -137,7 +139,17 @@ fun NavGraphBuilder.imageCropDirection(navController: NavController) {
 fun NavGraphBuilder.imageSearchDirection(navController: NavController) {
     composable<Destination.ImageSearchDestination> {
         ImageSearchScreen(
-            onNavigateBack = navController::popBackStack
+            onNavigateBack = navController::popBackStack,
+            onImageSelected = { bitmap, width, height ->
+                navController.previousBackStackEntry?.savedStateHandle?.set(IMAGE_CROP_KEY, bitmap)
+                navController.previousBackStackEntry?.savedStateHandle?.setImageCropType(
+                    IMAGE_CROP_TYPE_KEY,
+                    ImageCropType.DynamicRectangleCrop(width, height)
+                )
+
+                navController.popBackStack()
+                navController.navigate(Destination.ImageCropDestination)
+            }
         )
     }
 }

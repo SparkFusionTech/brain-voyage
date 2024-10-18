@@ -1,6 +1,7 @@
 package com.sparkfusion.quiz.brainvoyage.ui.screen.image
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,6 +28,7 @@ fun SuccessImageSearchScreenContent(
     modifier: Modifier = Modifier,
     pagingItems: LazyPagingItems<ImageSearchModel>,
     context: Context,
+    onItemClick: (Bitmap) -> Unit,
     onHandleErrorState: (Throwable) -> Unit
 ) {
     LazyVerticalStaggeredGrid(
@@ -47,7 +49,8 @@ fun SuccessImageSearchScreenContent(
             pagingItems[index]?.let { model ->
                 ImageItemComponent(
                     context = context,
-                    model = model
+                    model = model,
+                    onClick = onItemClick
                 )
             }
         }
