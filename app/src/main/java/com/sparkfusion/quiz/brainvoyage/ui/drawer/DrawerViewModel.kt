@@ -5,7 +5,7 @@ import com.sparkfusion.quiz.brainvoyage.domain.mapper.user.AccountInfoDataEntity
 import com.sparkfusion.quiz.brainvoyage.domain.model.AccountInfoModel
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IAccountInfoStore
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ILoginRepository
-import com.sparkfusion.quiz.brainvoyage.utils.common.CommonViewModel
+import com.sparkfusion.quiz.brainvoyage.utils.common.viewmodel.SingleStateViewModel
 import com.sparkfusion.quiz.brainvoyage.utils.dispatchers.IODispatcher
 import com.sparkfusion.quiz.brainvoyage.utils.exception.BrainVoyageException
 import com.sparkfusion.quiz.brainvoyage.utils.exception.network.NetworkException
@@ -25,7 +25,7 @@ class DrawerViewModel @Inject constructor(
     private val accountInfoStore: IAccountInfoStore,
     private val accountInfoDataEntityFactory: AccountInfoDataEntityFactory,
     private val loginRepository: ILoginRepository
-) : CommonViewModel<DrawerContract.DrawerState, DrawerContract.DrawerIntent>() {
+) : SingleStateViewModel<DrawerContract.DrawerState, DrawerContract.DrawerIntent>() {
 
     override fun initialState(): StateFlow<DrawerContract.DrawerState> = state.asStateFlow()
 

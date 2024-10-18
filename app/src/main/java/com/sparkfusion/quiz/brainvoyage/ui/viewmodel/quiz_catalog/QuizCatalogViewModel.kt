@@ -3,7 +3,7 @@ package com.sparkfusion.quiz.brainvoyage.ui.viewmodel.quiz_catalog
 import androidx.lifecycle.viewModelScope
 import com.sparkfusion.quiz.brainvoyage.domain.model.QuizCatalogModel
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IQuizRepository
-import com.sparkfusion.quiz.brainvoyage.utils.common.CommonViewModel
+import com.sparkfusion.quiz.brainvoyage.utils.common.viewmodel.SingleStateViewModel
 import com.sparkfusion.quiz.brainvoyage.utils.dispatchers.IODispatcher
 import com.sparkfusion.quiz.brainvoyage.utils.exception.BrainVoyageException
 import com.sparkfusion.quiz.brainvoyage.utils.exception.network.NetworkException
@@ -20,7 +20,7 @@ import javax.inject.Inject
 class QuizCatalogViewModel @Inject constructor(
     private val quizRepository: IQuizRepository,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
-) : CommonViewModel<QuizCatalogContract.QuizCatalogState, QuizCatalogContract.QuizCatalogIntent>() {
+) : SingleStateViewModel<QuizCatalogContract.QuizCatalogState, QuizCatalogContract.QuizCatalogIntent>() {
 
     override fun initialState(): StateFlow<QuizCatalogContract.QuizCatalogState> = state.asStateFlow()
 

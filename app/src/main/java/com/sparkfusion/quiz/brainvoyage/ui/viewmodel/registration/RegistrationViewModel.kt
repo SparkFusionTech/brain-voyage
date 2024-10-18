@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.sparkfusion.quiz.brainvoyage.domain.model.LoginUserModel
 import com.sparkfusion.quiz.brainvoyage.domain.model.UserExistsModel
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ILoginRepository
-import com.sparkfusion.quiz.brainvoyage.utils.common.CommonViewModel
+import com.sparkfusion.quiz.brainvoyage.utils.common.viewmodel.SingleStateViewModel
 import com.sparkfusion.quiz.brainvoyage.utils.common.StringToMultipartWorker
 import com.sparkfusion.quiz.brainvoyage.utils.dispatchers.IODispatcher
 import com.sparkfusion.quiz.brainvoyage.utils.exception.BrainVoyageException
@@ -33,7 +33,7 @@ class RegistrationViewModel @Inject constructor(
     private val stringToMultipartWorker: StringToMultipartWorker,
     private val bitmapToFileWorker: BitmapToFileWorker,
     private val imageFileToMultipartWorker: ImageFileToMultipartWorker
-) : CommonViewModel<RegistrationContract.RegistrationUIState, RegistrationContract.RegistrationIntent>() {
+) : SingleStateViewModel<RegistrationContract.RegistrationUIState, RegistrationContract.RegistrationIntent>() {
 
     override fun initialState(): StateFlow<RegistrationContract.RegistrationUIState> = uiState.asStateFlow()
 

@@ -2,7 +2,7 @@ package com.sparkfusion.quiz.brainvoyage.window.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ILoginRepository
-import com.sparkfusion.quiz.brainvoyage.utils.common.CommonViewModel
+import com.sparkfusion.quiz.brainvoyage.utils.common.viewmodel.SingleStateViewModel
 import com.sparkfusion.quiz.brainvoyage.utils.dispatchers.IODispatcher
 import com.sparkfusion.quiz.brainvoyage.utils.exception.datastore.FailedDataStoreOperationException
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +18,7 @@ import javax.inject.Inject
 class SplashViewModel @Inject constructor(
     private val repository: ILoginRepository,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
-) : CommonViewModel<SplashContract.SplashState, SplashContract.SplashIntent>() {
+) : SingleStateViewModel<SplashContract.SplashState, SplashContract.SplashIntent>() {
 
     override fun initialState(): StateFlow<SplashContract.SplashState> = uiState.asStateFlow()
 

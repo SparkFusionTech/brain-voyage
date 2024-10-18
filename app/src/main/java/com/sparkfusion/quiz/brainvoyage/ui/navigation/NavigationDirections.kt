@@ -6,7 +6,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.sparkfusion.quiz.brainvoyage.image_crop.common.CROPPED_KEY
 import com.sparkfusion.quiz.brainvoyage.image_crop.common.IMAGE_CROP_KEY
+import com.sparkfusion.quiz.brainvoyage.image_crop.common.IMAGE_CROP_TYPE_KEY
 import com.sparkfusion.quiz.brainvoyage.image_crop.common.ImageCropType
+import com.sparkfusion.quiz.brainvoyage.image_crop.common.getImageCropType
 import com.sparkfusion.quiz.brainvoyage.image_crop.screen.FailedOpenImageScreen
 import com.sparkfusion.quiz.brainvoyage.image_crop.screen.ImageCropScreen
 import com.sparkfusion.quiz.brainvoyage.ui.model.QUIZ_CATALOG_INFO_KEY
@@ -90,7 +92,8 @@ fun NavGraphBuilder.catalogItemDirection(navController: NavController) {
 
         val currentDestination = navController.currentBackStackEntry?.destination
         if (quizCatalogSerializableNullable == null) {
-            val catalogItemDestinationName = Destination.getDestinationRoute(Destination.CatalogItemDestination)
+            val catalogItemDestinationName =
+                Destination.getDestinationRoute(Destination.CatalogItemDestination)
             if (currentDestination?.route == catalogItemDestinationName) {
                 navController.popBackStack()
             }
@@ -98,7 +101,7 @@ fun NavGraphBuilder.catalogItemDirection(navController: NavController) {
             CatalogItemScreen(
                 quizCatalogSerializable = quizCatalogSerializableNullable,
                 onNavigateToQuizAddScreen = {
-                    navController.navigate(Destination.ImageSearchDestination)
+                    navController.navigate(Destination.AddQuizDestination)
                 }
             )
         }
@@ -113,11 +116,12 @@ fun NavGraphBuilder.quizItemDirection() {
 
 fun NavGraphBuilder.imageCropDirection(navController: NavController) {
     composable<Destination.ImageCropDestination> {
-        val bitmap: Bitmap? =
-            navController.previousBackStackEntry?.savedStateHandle?.get<Bitmap>(IMAGE_CROP_KEY)
+        val savedState = navController.previousBackStackEntry?.savedStateHandle
+        val bitmap: Bitmap? = savedState?.get<Bitmap>(IMAGE_CROP_KEY)
+        val imageCropType: ImageCropType = savedState?.getImageCropType(IMAGE_CROP_TYPE_KEY) ?: ImageCropType.CircleCrop
         if (bitmap != null) {
             ImageCropScreen(
-                cropType = ImageCropType.CircleCrop,
+                cropType = imageCropType,
                 bitmap = bitmap,
                 onCropClickHandler = {
                     navController.previousBackStackEntry?.savedStateHandle?.set(CROPPED_KEY, it)

@@ -3,7 +3,7 @@ package com.sparkfusion.quiz.brainvoyage.ui.viewmodel.image
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IImageSearchRepository
-import com.sparkfusion.quiz.brainvoyage.utils.common.CommonViewModel
+import com.sparkfusion.quiz.brainvoyage.utils.common.viewmodel.SingleStateViewModel
 import com.sparkfusion.quiz.brainvoyage.utils.dispatchers.IODispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -18,7 +18,7 @@ import javax.inject.Inject
 class ImageSearchViewModel @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val repository: IImageSearchRepository
-) : CommonViewModel<ImageSearchContract.ImageSearchState, ImageSearchContract.ImageSearchIntent>() {
+) : SingleStateViewModel<ImageSearchContract.ImageSearchState, ImageSearchContract.ImageSearchIntent>() {
 
     override fun initialState(): StateFlow<ImageSearchContract.ImageSearchState> = state.asStateFlow()
 

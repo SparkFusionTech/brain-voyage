@@ -11,7 +11,7 @@ import com.sparkfusion.quiz.brainvoyage.domain.model.LoginUserModel
 import com.sparkfusion.quiz.brainvoyage.domain.model.TokenModel
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ILoginRepository
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ISession
-import com.sparkfusion.quiz.brainvoyage.utils.common.CommonViewModel
+import com.sparkfusion.quiz.brainvoyage.utils.common.viewmodel.SingleStateViewModel
 import com.sparkfusion.quiz.brainvoyage.utils.dispatchers.IODispatcher
 import com.sparkfusion.quiz.brainvoyage.utils.exception.BrainVoyageException
 import com.sparkfusion.quiz.brainvoyage.utils.exception.datastore.FailedDataStoreOperationException
@@ -32,7 +32,7 @@ class LoginViewModel @Inject constructor(
     private val loginUserDataEntityFactory: LoginUserDataEntityFactory,
     private val session: ISession,
     private val workManager: WorkManager
-) : CommonViewModel<LoginContract.LoginUIState, LoginContract.LoginIntent>() {
+) : SingleStateViewModel<LoginContract.LoginUIState, LoginContract.LoginIntent>() {
 
     override fun initialState(): StateFlow<LoginContract.LoginUIState> = uiState.asStateFlow()
 
