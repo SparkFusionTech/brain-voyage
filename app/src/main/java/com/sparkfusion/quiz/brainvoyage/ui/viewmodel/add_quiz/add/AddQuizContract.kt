@@ -1,4 +1,4 @@
-package com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz
+package com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add
 
 import android.graphics.Bitmap
 import com.sparkfusion.quiz.brainvoyage.utils.common.Intent

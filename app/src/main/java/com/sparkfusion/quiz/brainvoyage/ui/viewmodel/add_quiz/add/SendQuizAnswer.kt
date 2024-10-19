@@ -1,4 +1,4 @@
-package com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz
+package com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add
 
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.model.AddQuizInitialModel
 

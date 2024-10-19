@@ -5,6 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import com.sparkfusion.quiz.brainvoyage.ui.theme.registrationTextFieldColor
 
@@ -14,6 +15,11 @@ fun descriptionColor(): Color {
         isSystemInDarkTheme() -> MaterialTheme.colorScheme.outline
         else -> Color.Gray
     }
+}
+
+@Composable
+fun primaryGradientWithAlpha(): Brush {
+    return Brush.linearGradient(listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.primary))
 }
 
 @Composable

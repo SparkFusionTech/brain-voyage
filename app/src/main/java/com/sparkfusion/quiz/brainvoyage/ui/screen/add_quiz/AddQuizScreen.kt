@@ -37,8 +37,8 @@ import com.sparkfusion.quiz.brainvoyage.ui.launcher.rememberLauncherForImageCrop
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.component.AddQuizTopComponent
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.handler.SendModelHandler
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.model.AddQuizInitialModel
-import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.AddQuizContract
-import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.AddQuizViewModel
+import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add.AddQuizContract
+import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add.AddQuizViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
 import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.add_tag.AddTagDialog
 import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.select_image.SelectImageDialog

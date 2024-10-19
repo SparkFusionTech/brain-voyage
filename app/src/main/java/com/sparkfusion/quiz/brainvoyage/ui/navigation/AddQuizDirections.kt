@@ -12,15 +12,15 @@ import com.sparkfusion.quiz.brainvoyage.image_crop.common.setImageCropType
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.AddQuizScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.AddQuizWithQuestionScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.SEND_QUIZ_KEY
-import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.model.setAddQuizInitialModel
+import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.model.AddQuizInitialModel
 
 fun NavGraphBuilder.addQuizDirection(navController: NavController) {
     composable<Destination.AddQuizDestination> {
         AddQuizScreen(
             onBackClick = navController::popBackStack,
             onNextClick = {
-                navController.currentBackStackEntry?.savedStateHandle?.setAddQuizInitialModel(SEND_QUIZ_KEY, it)
-                navController.navigate(Destination.AddQuizWithQuestionsDestination)
+                navController.currentBackStackEntry?.savedStateHandle?.set(SEND_QUIZ_KEY, it)
+                navController.navigate(Destination.getDestinationRoute(Destination.AddQuizWithQuestionsDestination))
             },
             onSearchImageScreenNavigate = {
                 navController.navigate(Destination.ImageSearchDestination)
@@ -42,9 +42,17 @@ fun NavGraphBuilder.addQuizDirection(navController: NavController) {
 
 fun NavGraphBuilder.addQuizWithQuestionsDirection(navController: NavController) {
     composable<Destination.AddQuizWithQuestionsDestination> {
-        AddQuizWithQuestionScreen(
+        val model = navController.previousBackStackEntry?.savedStateHandle?.get<AddQuizInitialModel>(SEND_QUIZ_KEY)
+        if (model != null) {
+            AddQuizWithQuestionScreen(
+                model = model,
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
+        } else {
 
-        )
+        }
     }
 }
 

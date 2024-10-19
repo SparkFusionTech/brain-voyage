@@ -4,7 +4,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.model.AddQuizInitialModel
-import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.SendQuizAnswer
+import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add.SendQuizAnswer
 
 @Composable
 fun SendModelHandler(
