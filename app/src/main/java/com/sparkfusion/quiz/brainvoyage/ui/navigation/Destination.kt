@@ -29,6 +29,9 @@ sealed interface Destination {
     @Serializable
     data object AddQuizDestination : Destination
 
+    @Serializable
+    data object AddQuizWithQuestionsDestination : Destination
+
     companion object {
 
         @JvmStatic

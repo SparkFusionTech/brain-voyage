@@ -1,6 +1,7 @@
 package com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,7 +24,8 @@ import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
 @Composable
 fun AddQuizTopComponent(
     modifier: Modifier = Modifier,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onTagSearchClick: () -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -55,6 +57,7 @@ fun AddQuizTopComponent(
         Image(
             modifier = Modifier
                 .padding(end = 12.dp)
+                .clickable { onTagSearchClick() }
                 .size(24.dp),
             painter = painterResource(id = R.drawable.add_tag_icon),
             contentDescription = null,

@@ -85,7 +85,7 @@ fun ImageSearchScreen(
                 viewModel.handleIntent(ImageSearchContract.ImageSearchIntent.HandleErrorLoading(exception))
             },
             onImageItemClick = {
-                onImageSelected(it, 200.dp, 240.dp)
+                onImageSelected(it, 180.dp, 200.dp)
             }
         )
     }

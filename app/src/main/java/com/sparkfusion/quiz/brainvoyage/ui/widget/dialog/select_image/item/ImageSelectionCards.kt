@@ -1,4 +1,4 @@
-package com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.item
+package com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.select_image.item
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

@@ -1,4 +1,4 @@
-package com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.component
+package com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.select_image.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,8 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
-import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.item.ImageSelectionCards
-import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.item.SelectImageType
+import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.select_image.item.ImageSelectionCards
+import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.select_image.item.SelectImageType
 
 @Composable
 fun TextComponent(

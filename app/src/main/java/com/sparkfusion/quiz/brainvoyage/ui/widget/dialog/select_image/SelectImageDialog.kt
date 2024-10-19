@@ -1,23 +1,23 @@
-package com.sparkfusion.quiz.brainvoyage.ui.widget.dialog
+package com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.select_image
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
-import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
-import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.component.TextComponent
+import com.sparkfusion.quiz.brainvoyage.R
+import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.component.CancelButton
+import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.component.ConfirmButton
 import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.component.TitleComponent
-import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.item.SelectImageType
+import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.select_image.component.TextComponent
+import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.select_image.item.SelectImageType
 
 @Composable
 fun SelectImageDialog(
@@ -33,7 +33,10 @@ fun SelectImageDialog(
             properties = DialogProperties(usePlatformDefaultWidth = false),
             onDismissRequest = onDismiss,
             title = {
-                TitleComponent()
+                TitleComponent(
+                    title = "Image Selection",
+                    icon = painterResource(id = R.drawable.image_selection_dialog_icon)
+                )
             },
             text = {
                 TextComponent(
@@ -41,25 +44,13 @@ fun SelectImageDialog(
                     onItemClick = { selectedItem = it })
             },
             dismissButton = {
-                TextButton(onClick = onDismiss) {
-                    SFProRoundedText(
-                        content = "Cancel",
-                        fontWeight = FontWeight.SemiBold
-                    )
-                }
+                CancelButton(onDismiss = onDismiss)
             },
             confirmButton = {
-                Button(
-                    onClick = {
-                        if (selectedItem == SelectImageType.SEARCH) onSearchNavigate()
-                        else onGalleryNavigate()
-                        onDismiss()
-                    }
-                ) {
-                    SFProRoundedText(
-                        content = "Confirm",
-                        fontWeight = FontWeight.SemiBold
-                    )
+                ConfirmButton {
+                    if (selectedItem == SelectImageType.SEARCH) onSearchNavigate()
+                    else onGalleryNavigate()
+                    onDismiss()
                 }
             }
         )

@@ -28,5 +28,6 @@ fun AppNavHost(
         imageSearchDirection(navController)
 
         addQuizDirection(navController)
+        addQuizWithQuestionsDirection(navController)
     }
 }
