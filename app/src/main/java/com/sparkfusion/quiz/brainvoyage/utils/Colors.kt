@@ -18,6 +18,18 @@ fun descriptionColor(): Color {
 }
 
 @Composable
+fun fieldBorderColor(
+    isFocused: Boolean,
+    isDarkTheme: Boolean
+): Color {
+    return when {
+        isFocused -> MaterialTheme.colorScheme.primary
+        isDarkTheme -> TextFieldDefaults.colors().unfocusedContainerColor
+        else -> Color.Black
+    }
+}
+
+@Composable
 fun primaryGradientWithAlpha(): Brush {
     return Brush.linearGradient(listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.primary))
 }

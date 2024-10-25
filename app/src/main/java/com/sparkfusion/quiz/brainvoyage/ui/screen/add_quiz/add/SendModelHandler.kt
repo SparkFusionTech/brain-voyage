@@ -1,4 +1,4 @@
-package com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.handler
+package com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable

@@ -1,4 +1,4 @@
-package com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz
+package com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.clickable
@@ -34,11 +34,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.ui.launcher.rememberLauncherForImageCropping
-import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.component.AddQuizTopComponent
-import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.handler.SendModelHandler
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.model.AddQuizInitialModel
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add.AddQuizContract
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add.AddQuizViewModel
+import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add.SharedQuizContract
+import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add.SharedQuizViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
 import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.add_tag.AddTagDialog
 import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.select_image.SelectImageDialog
@@ -47,12 +47,14 @@ import com.sparkfusion.quiz.brainvoyage.ui.widget.text.DescriptionText
 import com.sparkfusion.quiz.brainvoyage.ui.widget.text.TitleText
 import com.sparkfusion.quiz.brainvoyage.utils.descriptionColor
 
-internal const val SEND_QUIZ_KEY = "send quiz key"
+//internal const val SEND_QUIZ_KEY = "send quiz key"
+internal const val SEND_QUESTION_KEY = "send question key"
 
 @Composable
 fun AddQuizScreen(
     modifier: Modifier = Modifier,
     viewModel: AddQuizViewModel = hiltViewModel(),
+    sharedQuizViewModel: SharedQuizViewModel,
     onBackClick: () -> Unit,
     onNextClick: (AddQuizInitialModel) -> Unit,
     onSearchImageScreenNavigate: () -> Unit,
@@ -128,7 +130,10 @@ fun AddQuizScreen(
         SendModelHandler(
             sendModelState = sendModelState,
             snackbarHostState = snackbarHostState,
-            onSuccess = onNextClick,
+            onSuccess = { model ->
+                sharedQuizViewModel.handleIntent(SharedQuizContract.Intent.SetAddQuizInitialModel(model))
+                onNextClick(model)
+            },
             clearState = {
                 viewModel.handleIntent(AddQuizContract.AddQuizIntent.ClearSendQuizState)
             }
@@ -239,7 +244,8 @@ private fun AddQuizScreenPreview() {
         onNextClick = {},
         onSearchImageScreenNavigate = {},
         onImageCropNavigate = {},
-        getCroppedImageBitmap = { null }
+        getCroppedImageBitmap = { null },
+        sharedQuizViewModel = SharedQuizViewModel()
     )
 }
 

@@ -1,4 +1,4 @@
-package com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.component
+package com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
