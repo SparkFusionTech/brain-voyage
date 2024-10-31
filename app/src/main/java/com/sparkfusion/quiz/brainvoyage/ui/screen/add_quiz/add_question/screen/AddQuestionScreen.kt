@@ -31,7 +31,6 @@ import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.componen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.component.text.ExplanationComponent
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.component.topbar.AddQuestionTopBar
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.model.category.CategoryType
-import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.model.question.SendQuestionModel
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add_question.add.AddQuestionContract
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add_question.add.AddQuestionViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add_question.shared.SharedQuestionContract
@@ -46,7 +45,6 @@ fun AddQuestionScreen(
     modifier: Modifier = Modifier,
     viewModel: AddQuestionViewModel = hiltViewModel(),
     sharedQuestionsViewModel: SharedQuestionsViewModel,
-    onSaveQuestion: (SendQuestionModel) -> Unit,
     onDismiss: () -> Unit,
     onSearchImageScreenNavigate: () -> Unit,
     onImageCropNavigate: (Bitmap) -> Unit,
@@ -133,11 +131,9 @@ fun AddQuestionScreen(
             snackbarHostState = snackbarHostState,
             onSuccess = { model ->
                 sharedQuestionsViewModel.handleIntent(
-                    SharedQuestionContract.Intent.AddQuestion(
-                        model
-                    )
+                    SharedQuestionContract.Intent.AddQuestion(model)
                 )
-                onSaveQuestion(model)
+                onDismiss()
             },
             onClearState = {
                 viewModel.handleIntent(AddQuestionContract.Intent.ClearQuestionAddingState)
@@ -156,6 +152,7 @@ fun AddQuestionScreen(
                 )
 
                 QuestionNameInputComponent(
+                    snackbarHostState = snackbarHostState,
                     value = state.question,
                     onValueChange = { question ->
                         viewModel.handleIntent(AddQuestionContract.Intent.ChangeQuestion(question))
@@ -205,11 +202,13 @@ fun AddQuestionScreen(
             }
 
             item {
-                AddButtonComponent {
-                    changeNewAnswerDialogVisibility(true)
-                }
-
                 if (viewModel.categories[state.currentCategoryId].type != CategoryType.TrueFalse) {
+                    if (answers.size < 8) {
+                        AddButtonComponent {
+                            changeNewAnswerDialogVisibility(true)
+                        }
+                    }
+
                     DifficultyComponent(
                         difficulties = viewModel.difficulties,
                         currentDifficultyId = state.currentDifficultyId,
@@ -240,7 +239,6 @@ fun AddQuestionScreen(
 @Composable
 private fun AddQuestionScreenPreview() {
     AddQuestionScreen(
-        onSaveQuestion = {},
         onDismiss = {},
         onSearchImageScreenNavigate = {},
         onImageCropNavigate = {},

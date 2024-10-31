@@ -23,7 +23,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -44,11 +43,11 @@ import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.questions.component.HandlePublicationComponent
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add.SharedQuizViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add_question.shared.SharedQuestionsViewModel
-import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.questions.AddQuizWithQuestionsContract
+import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.questions.AddQuizWithQuestionsContract.Intent
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.questions.AddQuizWithQuestionsViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
 import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.close_adding.CloseQuizAddingDialog
-import com.sparkfusion.quiz.brainvoyage.ui.widget.star.QuestionDifficulty
+import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.quiz_saving.QuizSavingDialog
 import com.sparkfusion.quiz.brainvoyage.ui.widget.star.StarCanvas
 import com.sparkfusion.quiz.brainvoyage.utils.descriptionColor
 import com.sparkfusion.quiz.brainvoyage.utils.primaryGradientWithAlpha
@@ -60,42 +59,48 @@ fun AddQuizWithQuestionScreen(
     sharedQuizViewModel: SharedQuizViewModel,
     sharedQuestionsViewModel: SharedQuestionsViewModel,
     onBackClick: () -> Unit,
-    onAddQuestionClick: () -> Unit
+    onAddQuestionClick: () -> Unit,
+    onCloseQuizAddingScreen: () -> Unit
 ) {
     val model by sharedQuizViewModel.quizModel.collectAsStateWithLifecycle()
     val questions by sharedQuestionsViewModel.questions.collectAsStateWithLifecycle()
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val publishState by viewModel.publishState.collectAsStateWithLifecycle()
+    val publishState by viewModel.quizVerificationState.collectAsStateWithLifecycle()
     val savingState by viewModel.quizAddingState.collectAsStateWithLifecycle()
 
     val snackbarHostState = remember { SnackbarHostState() }
     val changeCloseDialogVisibility = { v: Boolean ->
-        viewModel.handleIntent(AddQuizWithQuestionsContract.Intent.ChangeCloseDialogVisibility(v))
+        viewModel.handleIntent(Intent.ChangeCloseDialogVisibility(v))
     }
-    val clearPublishState = { viewModel.handleIntent(AddQuizWithQuestionsContract.Intent.ClearPublishState) }
+    val changePublicationDialogVisibility = { v: Boolean ->
+        viewModel.handleIntent(Intent.ChangePublicationDialogVisibility(v))
+    }
+    val clearQuizVerificationState = { viewModel.handleIntent(Intent.ClearQuizVerificationState) }
+    val clearSavingState = { viewModel.handleIntent(Intent.ClearSavingState) }
 
-    LaunchedEffect(savingState) {
-        when (savingState) {
-            AddQuizWithQuestionsContract.QuizSavingState.Empty -> {}
-            AddQuizWithQuestionsContract.QuizSavingState.Error -> {
-                snackbarHostState.showSnackbar("Error")
-            }
-
-            AddQuizWithQuestionsContract.QuizSavingState.QuestionsSaving -> {
-            }
-            AddQuizWithQuestionsContract.QuizSavingState.QuizSaving -> {}
-            AddQuizWithQuestionsContract.QuizSavingState.TagsSaving -> {}
-            AddQuizWithQuestionsContract.QuizSavingState.Success -> {
-                snackbarHostState.showSnackbar("It is correct")
-            }
+    QuizSavingDialog(
+        show = state.showPublicationDialog,
+        quizSavingState = savingState,
+        snackbarHostState = snackbarHostState,
+        onDismiss = {
+            changePublicationDialogVisibility(false)
+            clearSavingState()
+        },
+        onSuccess = {
+            changePublicationDialogVisibility(false)
+            onCloseQuizAddingScreen()
+        },
+        clearPublicationState = {
+            changePublicationDialogVisibility(false)
+            clearSavingState()
         }
-    }
+    )
 
     BackHandler { changeCloseDialogVisibility(true) }
     HandlePublicationComponent(
         publishState = publishState,
         snackbarHostState = snackbarHostState,
-        clearPublishState = clearPublishState
+        clearPublishState = clearQuizVerificationState
     )
 
     CloseQuizAddingDialog(
@@ -146,10 +151,7 @@ fun AddQuizWithQuestionScreen(
                 IconButton(
                     onClick = {
                         viewModel.handleIntent(
-                            AddQuizWithQuestionsContract.Intent.SaveQuiz(
-                                addQuizInitialModel = model,
-                                questions = questions
-                            )
+                            Intent.SaveQuiz(addQuizInitialModel = model, questions = questions)
                         )
                     }
                 ) {
@@ -200,6 +202,7 @@ fun AddQuizWithQuestionScreen(
                             content = model!!.description,
                             fontSize = 18.sp,
                             fontWeight = FontWeight.SemiBold,
+                            textAlign = TextAlign.Center
                         )
 
                         SFProRoundedText(
@@ -261,12 +264,12 @@ fun AddQuizWithQuestionScreen(
                                     modifier = Modifier.padding(start = 4.dp),
                                     sizeDp = 28.dp,
                                     cornerRadiusDp = 2.dp,
-                                    difficulty = QuestionDifficulty.Easy
+                                    difficulty = questions[index].difficulty
                                 )
                             }
 
                             SFProRoundedText(
-                                content = "5 answer options",
+                                content = "${questions[index].answers.size} answer options",
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.Medium,
                                 color = descriptionColor()
@@ -300,7 +303,8 @@ private fun AddQuizWithQuestionsScreenPreview() {
         onBackClick = {},
         onAddQuestionClick = {},
         sharedQuizViewModel = SharedQuizViewModel(),
-        sharedQuestionsViewModel = SharedQuestionsViewModel()
+        sharedQuestionsViewModel = SharedQuestionsViewModel(),
+        onCloseQuizAddingScreen = {}
     )
 }
 

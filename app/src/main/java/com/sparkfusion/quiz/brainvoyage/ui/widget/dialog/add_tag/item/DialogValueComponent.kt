@@ -34,21 +34,22 @@ fun DialogValueComponent(
             onValueChange = { enterValue = it },
             onButtonClick = {
                 if (items.size > 10) {
-                    showError = true
                     errorMessage = "Can be max 10 tags"
-                } else if (enterValue.length < 3) {
                     showError = true
+                } else if (enterValue.length < 3) {
                     errorMessage = "Value is too short (min 3)"
+                    showError = true
                 } else {
                     showError = false
                     onAddItem(enterValue)
+                    enterValue = ""
                 }
             }
         )
 
         if (showError) {
             SFProRoundedText(
-                content = "My error",
+                content = errorMessage,
                 color = MaterialTheme.colorScheme.error
             )
         }

@@ -1,15 +1,12 @@
 package com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.questions
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.sparkfusion.quiz.brainvoyage.domain.model.question.AddAnswerModel
-import com.sparkfusion.quiz.brainvoyage.domain.model.question.AddQuestionModel
-import com.sparkfusion.quiz.brainvoyage.domain.model.quiz.AddQuizModel
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IQuestionRepository
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IQuizRepository
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ITagRepository
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.model.question.SendQuestionModel
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.model.AddQuizInitialModel
+import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.questions.AddQuizWithQuestionsContract.Intent
 import com.sparkfusion.quiz.brainvoyage.utils.common.viewmodel.MultiStateViewModel
 import com.sparkfusion.quiz.brainvoyage.utils.dispatchers.IODispatcher
 import com.sparkfusion.quiz.brainvoyage.utils.image.ApiImageSerializeNames
@@ -33,120 +30,111 @@ class AddQuizWithQuestionsViewModel @Inject constructor(
     private val questionRepository: IQuestionRepository,
     private val bitmapToFileWorker: BitmapToFileWorker,
     private val imageFileToMultipartWorker: ImageFileToMultipartWorker
-) : MultiStateViewModel<AddQuizWithQuestionsContract.Intent>() {
+) : MultiStateViewModel<Intent>() {
 
     private val _state = MutableStateFlow(AddQuizWithQuestionsContract.State())
     val state: StateFlow<AddQuizWithQuestionsContract.State> get() = _state.asStateFlow()
 
-    private val _publishState =
-        MutableStateFlow<AddQuizWithQuestionsContract.PublishQuizState>(AddQuizWithQuestionsContract.PublishQuizState.Empty)
-    val publishState: StateFlow<AddQuizWithQuestionsContract.PublishQuizState> get() = _publishState.asStateFlow()
+    private val _quizVerificationState =
+        MutableStateFlow<AddQuizWithQuestionsContract.QuizVerificationState>(
+            AddQuizWithQuestionsContract.QuizVerificationState.Empty
+        )
+    val quizVerificationState: StateFlow<AddQuizWithQuestionsContract.QuizVerificationState>
+        get() = _quizVerificationState.asStateFlow()
 
-    private val _quizAddingState =
-        MutableStateFlow<AddQuizWithQuestionsContract.QuizSavingState>(AddQuizWithQuestionsContract.QuizSavingState.Empty)
-    val quizAddingState: StateFlow<AddQuizWithQuestionsContract.QuizSavingState> get() = _quizAddingState.asStateFlow()
+    private val _quizAddingState = MutableStateFlow<AddQuizWithQuestionsContract.QuizSavingState>(
+        AddQuizWithQuestionsContract.QuizSavingState.Empty
+    )
+    val quizAddingState: StateFlow<AddQuizWithQuestionsContract.QuizSavingState>
+        get() = _quizAddingState.asStateFlow()
 
-    override fun handleIntent(intent: AddQuizWithQuestionsContract.Intent) {
+    override fun handleIntent(intent: Intent) {
         when (intent) {
-            is AddQuizWithQuestionsContract.Intent.ChangeCloseDialogVisibility -> changeCloseDialogVisibility(
+            is Intent.ChangeCloseDialogVisibility -> changeCloseDialogVisibility(
                 intent.value
             )
 
-            is AddQuizWithQuestionsContract.Intent.SaveQuiz -> saveQuiz(
-                intent.addQuizInitialModel,
-                intent.questions
+            is Intent.SaveQuiz -> saveQuiz(
+                intent.addQuizInitialModel, intent.questions
             )
 
-            AddQuizWithQuestionsContract.Intent.ClearPublishState -> clearPublishState()
+            Intent.ClearQuizVerificationState -> clearPublishState()
+            is Intent.ChangePublicationDialogVisibility -> changePublicationDialogVisibility(intent.value)
+            Intent.ClearSavingState -> clearSavingState()
         }
     }
 
+    private fun clearSavingState() {
+        _quizAddingState.update { AddQuizWithQuestionsContract.QuizSavingState.Empty }
+    }
+
+    private fun changePublicationDialogVisibility(value: Boolean) {
+        _state.update { it.copy(showPublicationDialog = value) }
+    }
+
     private fun clearPublishState() {
-        _publishState.update { AddQuizWithQuestionsContract.PublishQuizState.Empty }
+        _quizVerificationState.update { AddQuizWithQuestionsContract.QuizVerificationState.Empty }
     }
 
     private fun saveQuiz(
         addQuizInitialModel: AddQuizInitialModel?,
         questions: List<SendQuestionModel>
     ) {
-        Log.d("QuizSaving", "Started saving quiz.")
-
-        if (addQuizInitialModel == null) {
-            Log.e("QuizSaving", "Quiz model is null.")
-            _publishState.update { AddQuizWithQuestionsContract.PublishQuizState.QuizIsNull }
-            return
-        }
-
-        Log.d("QuizSaving", "Quiz title: ${addQuizInitialModel.title}, description: ${addQuizInitialModel.description}")
-
-        if (questions.size < 5) {
-            Log.e("QuizSaving", "Not enough questions: ${questions.size}. Minimum is 5.")
-            _publishState.update { AddQuizWithQuestionsContract.PublishQuizState.NotEnoughQuestions }
-            return
-        }
-
-        _publishState.update { AddQuizWithQuestionsContract.PublishQuizState.Success }
+        if (!checkIsSavingReady(addQuizInitialModel, questions.size)) return
+        _state.update { it.copy(showPublicationDialog = true) }
 
         viewModelScope.launch(ioDispatcher) {
-            Log.d("QuizSaving", "Starting quiz saving process.")
             _quizAddingState.update { AddQuizWithQuestionsContract.QuizSavingState.QuizSaving }
-
             val quizSaveAnswer = quizRepository.createQuiz(
-                AddQuizModel(
-                    addQuizInitialModel.title,
-                    addQuizInitialModel.description,
-                    questions.size,
-                    addQuizInitialModel.catalogId
-                ),
+                addQuizInitialModel!!.map(questions.size),
                 imageFileToMultipartWorker.invoke(
                     bitmapToFileWorker.invoke(addQuizInitialModel.bitmap, ImageChildren.QUIZ_ICON),
                     ApiImageSerializeNames.QUIZ_ICON.value
                 )
             ).onFailure {
-                Log.e("QuizSaving", "Error occurred while saving quiz: ${it.message}")
-                _quizAddingState.update { AddQuizWithQuestionsContract.QuizSavingState.Error }
+                _quizAddingState.update { AddQuizWithQuestionsContract.QuizSavingState.QuizSavingError }
                 return@launch
             }
 
-            Log.d("QuizSaving", "Quiz saved successfully with ID: ${quizSaveAnswer.unwrap().id}")
-
+            _quizAddingState.update { AddQuizWithQuestionsContract.QuizSavingState.TagsSaving }
             tagRepository.createTags(addQuizInitialModel.tags, quizSaveAnswer.unwrap().id)
                 .onFailure {
-                    Log.e("QuizSaving", "Error occurred while creating tags: ${it.message}")
-                    _quizAddingState.update { AddQuizWithQuestionsContract.QuizSavingState.Error }
+                    _quizAddingState.update { AddQuizWithQuestionsContract.QuizSavingState.TagsSavingError }
                     return@launch
                 }
 
-            Log.d("QuizSaving", "Tags created successfully for quiz ID: ${quizSaveAnswer.unwrap().id}")
-
+            _quizAddingState.update { AddQuizWithQuestionsContract.QuizSavingState.QuestionsSaving }
             questions.forEach {
-                Log.d("QuizSaving", "Creating question: ${it.name}")
-
                 questionRepository.createQuestion(
-                    AddQuestionModel(
-                        it.name,
-                        it.categoryType.mapToInt(),
-                        it.difficulty.mapToInt(),
-                        it.explanation,
-                        quizSaveAnswer.unwrap().id,
-                        it.answers.mapIndexed { index, answerModel ->
-                            AddAnswerModel(
-                                answerModel.name,
-                                index + 1,
-                                answerModel.isCorrect
-                            )
-                        }
-                    ),
+                    it.map(quizSaveAnswer.unwrap().id),
                     imageFileToMultipartWorker.invoke(
                         bitmapToFileWorker.invoke(it.icon, ImageChildren.QUESTION_ICON),
                         ApiImageSerializeNames.QUESTION_ICON.value
                     )
-                )
+                ).onFailure {
+                    AddQuizWithQuestionsContract.QuizSavingState.QuestionsSavingError
+                }
             }
 
             _quizAddingState.update { AddQuizWithQuestionsContract.QuizSavingState.Success }
-            Log.d("QuizSaving", "Successfully saved quiz and all its questions.")
         }
+    }
+
+    private fun checkIsSavingReady(
+        addQuizInitialModel: AddQuizInitialModel?,
+        questionsCount: Int
+    ): Boolean {
+        if (addQuizInitialModel == null) {
+            _quizVerificationState.update { AddQuizWithQuestionsContract.QuizVerificationState.QuizVerificationIsNull }
+            return false
+        }
+
+        if (questionsCount < 5) {
+            _quizVerificationState.update { AddQuizWithQuestionsContract.QuizVerificationState.NotEnoughQuestions }
+            return false
+        }
+
+        return true
     }
 
     private fun changeCloseDialogVisibility(value: Boolean) {

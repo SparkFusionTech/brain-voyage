@@ -29,7 +29,6 @@ fun NavGraphBuilder.addQuizDirection(navController: NavController) {
                 onBackClick = navController::popBackStack,
                 quizCatalogSerializable = quizCatalogSerializable,
                 onNextClick = {
-//                navController.currentBackStackEntry?.savedStateHandle?.set(SEND_QUIZ_KEY, it)
                     navController.navigate(Destination.AddQuizWithQuestionsDestination)
                 },
                 onSearchImageScreenNavigate = {
@@ -58,14 +57,8 @@ fun NavGraphBuilder.addQuizDirection(navController: NavController) {
 fun NavGraphBuilder.addQuizWithQuestionsDirection(navController: NavController) {
     composable<Destination.AddQuizWithQuestionsDestination> { currentBackStack ->
         val backStack = navController.previousBackStackEntry
-//        val model = navController.previousBackStackEntry?.savedStateHandle?.get<AddQuizInitialModel>(
-//                SEND_QUIZ_KEY
-//            )
-//        if (model != null) {
-
         val sharedQuestionsViewModel: SharedQuestionsViewModel = hiltViewModel(currentBackStack)
         AddQuizWithQuestionScreen(
-//                model = model,
             sharedQuizViewModel = if (backStack == null) hiltViewModel<SharedQuizViewModel>()
             else hiltViewModel(backStack),
             sharedQuestionsViewModel = sharedQuestionsViewModel,
@@ -74,9 +67,11 @@ fun NavGraphBuilder.addQuizWithQuestionsDirection(navController: NavController) 
             },
             onAddQuestionClick = {
                 navController.navigate(Destination.AddQuestionScreenDestination)
+            },
+            onCloseQuizAddingScreen = {
+                navController.popBackStack(Destination.CatalogItemDestination, false)
             }
         )
-//        }
     }
 }
 
@@ -87,10 +82,6 @@ fun NavGraphBuilder.addQuestionScreenDirection(navController: NavController) {
             sharedQuestionsViewModel = if (previousBackStack == null) hiltViewModel()
             else hiltViewModel(previousBackStack),
             onDismiss = {
-                navController.popBackStack()
-            },
-            onSaveQuestion = {
-//                navController.currentBackStackEntry?.savedStateHandle?.set(SEND_QUESTION_KEY, it)
                 navController.popBackStack()
             },
             onSearchImageScreenNavigate = {

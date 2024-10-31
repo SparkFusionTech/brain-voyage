@@ -8,8 +8,10 @@ import com.sparkfusion.quiz.brainvoyage.utils.common.Intent as CommonIntent
 interface AddQuizWithQuestionsContract {
 
     sealed interface Intent : CommonIntent {
-        data object ClearPublishState : Intent
+        data object ClearSavingState : Intent
+        data object ClearQuizVerificationState : Intent
         data class ChangeCloseDialogVisibility(val value: Boolean) : Intent
+        data class ChangePublicationDialogVisibility(val value: Boolean) : Intent
         data class SaveQuiz(
             val addQuizInitialModel: AddQuizInitialModel?,
             val questions: List<SendQuestionModel>
@@ -17,22 +19,24 @@ interface AddQuizWithQuestionsContract {
     }
 
     data class State(
-        val showCloseDialog: Boolean = false
+        val showCloseDialog: Boolean = false,
+        val showPublicationDialog: Boolean = false
     ) : UIState
 
-    sealed interface PublishQuizState : UIState {
-        data object QuizIsNull : PublishQuizState
-        data object Empty : PublishQuizState
-        data object NotEnoughQuestions : PublishQuizState
-        data object Success : PublishQuizState
+    sealed interface QuizVerificationState : UIState {
+        data object QuizVerificationIsNull : QuizVerificationState
+        data object Empty : QuizVerificationState
+        data object NotEnoughQuestions : QuizVerificationState
     }
 
     sealed interface QuizSavingState : UIState {
         data object Empty : QuizSavingState
         data object QuizSaving : QuizSavingState
+        data object QuizSavingError : QuizSavingState
         data object TagsSaving : QuizSavingState
+        data object TagsSavingError : QuizSavingState
         data object QuestionsSaving : QuizSavingState
-        data object Error : QuizSavingState
+        data object QuestionsSavingError : QuizSavingState
         data object Success : QuizSavingState
     }
 }

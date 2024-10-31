@@ -7,25 +7,21 @@ import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.questions.AddQuizW
 
 @Composable
 fun HandlePublicationComponent(
-    publishState: AddQuizWithQuestionsContract.PublishQuizState,
+    publishState: AddQuizWithQuestionsContract.QuizVerificationState,
     snackbarHostState: SnackbarHostState,
     clearPublishState: () -> Unit
 ) {
     LaunchedEffect(publishState) {
         when (publishState) {
-            AddQuizWithQuestionsContract.PublishQuizState.Empty -> {}
-            AddQuizWithQuestionsContract.PublishQuizState.NotEnoughQuestions -> {
+            AddQuizWithQuestionsContract.QuizVerificationState.Empty -> {}
+            AddQuizWithQuestionsContract.QuizVerificationState.NotEnoughQuestions -> {
                 snackbarHostState.showSnackbar("Not enough questions (min 5)")
                 clearPublishState()
             }
 
-            AddQuizWithQuestionsContract.PublishQuizState.QuizIsNull -> {
+            AddQuizWithQuestionsContract.QuizVerificationState.QuizVerificationIsNull -> {
                 snackbarHostState.showSnackbar("Quiz information was not found")
                 clearPublishState()
-            }
-
-            AddQuizWithQuestionsContract.PublishQuizState.Success -> {
-                snackbarHostState.showSnackbar("Success")
             }
         }
     }

@@ -73,7 +73,7 @@ fun AddAnswerDialog(
                             .fillMaxWidth(),
                         value = answer,
                         onValueChange = {
-                            if (answer.length == 24) showTooLongSnackbar = true else answer = it
+                            if (answer.length > 24) showTooLongSnackbar = true else answer = it
                         },
                         placeholder = "Enter here..."
                     )

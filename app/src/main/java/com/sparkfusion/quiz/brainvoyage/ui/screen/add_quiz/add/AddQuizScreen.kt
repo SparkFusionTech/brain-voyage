@@ -49,9 +49,6 @@ import com.sparkfusion.quiz.brainvoyage.ui.widget.text.DescriptionText
 import com.sparkfusion.quiz.brainvoyage.ui.widget.text.TitleText
 import com.sparkfusion.quiz.brainvoyage.utils.descriptionColor
 
-//internal const val SEND_QUIZ_KEY = "send quiz key"
-internal const val SEND_QUESTION_KEY = "send question key"
-
 @Composable
 fun AddQuizScreen(
     modifier: Modifier = Modifier,
@@ -138,7 +135,11 @@ fun AddQuizScreen(
             sendModelState = sendModelState,
             snackbarHostState = snackbarHostState,
             onSuccess = { model ->
-                sharedQuizViewModel.handleIntent(SharedQuizContract.Intent.SetAddQuizInitialModel(model))
+                sharedQuizViewModel.handleIntent(
+                    SharedQuizContract.Intent.SetAddQuizInitialModel(
+                        model
+                    )
+                )
                 onNextClick(model)
             },
             clearState = {

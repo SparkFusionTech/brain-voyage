@@ -32,10 +32,10 @@ class AddQuestionViewModel @Inject constructor(
     val difficulties: Array<DifficultyModel> = initDifficulties()
 
     private val _commonState = MutableStateFlow(AddQuestionContract.CommonState())
-    val commonState: StateFlow<AddQuestionContract.CommonState> get() = _commonState
+    val commonState: StateFlow<AddQuestionContract.CommonState> get() = _commonState.asStateFlow()
 
     private val _imageState = MutableStateFlow(AddQuestionContract.ImageState())
-    val imageState: StateFlow<AddQuestionContract.ImageState> get() = _imageState
+    val imageState: StateFlow<AddQuestionContract.ImageState> get() = _imageState.asStateFlow()
 
     private val _answersState = MutableStateFlow(mutableStateListOf<QuestionAnswerModel>())
     val answersState: StateFlow<List<QuestionAnswerModel>> get() = _answersState.asStateFlow()
@@ -44,7 +44,7 @@ class AddQuestionViewModel @Inject constructor(
     val dialogsState: StateFlow<AddQuestionContract.DialogsState> get() = _dialogsState.asStateFlow()
 
     private val _errorState = MutableStateFlow<AddQuestionContract.ErrorState>(AddQuestionContract.ErrorState.Empty)
-    val errorState: StateFlow<AddQuestionContract.ErrorState> get() = _errorState
+    val errorState: StateFlow<AddQuestionContract.ErrorState> get() = _errorState.asStateFlow()
 
     override fun handleIntent(intent: AddQuestionContract.Intent) {
         when (intent) {

@@ -2,7 +2,13 @@ package com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.compone
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -13,8 +19,17 @@ import com.sparkfusion.quiz.brainvoyage.ui.widget.text.DefaultTextField
 @Composable
 fun QuestionNameInputComponent(
     value: String,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
+    snackbarHostState: SnackbarHostState
 ) {
+    var showErrorMessage by remember { mutableStateOf(false) }
+    LaunchedEffect(value) {
+        if (showErrorMessage) {
+            snackbarHostState.showSnackbar("Name is too long")
+            showErrorMessage = false
+        }
+    }
+
     SFProRoundedText(
         modifier = Modifier.padding(start = 24.dp, top = 40.dp),
         content = "Question",
@@ -27,7 +42,10 @@ fun QuestionNameInputComponent(
             .padding(start = 24.dp, end = 24.dp)
             .fillMaxWidth(),
         value = value,
-        onValueChange = onValueChange,
+        onValueChange = {
+            if (value.length < 40) onValueChange(it)
+            else showErrorMessage = true
+        },
         placeholder = "Enter here..."
     )
 }

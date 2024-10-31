@@ -2,6 +2,7 @@ package com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.model.q
 
 import android.graphics.Bitmap
 import android.os.Parcelable
+import com.sparkfusion.quiz.brainvoyage.domain.model.question.AddQuestionModel
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.model.answer.QuestionAnswerModel
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.model.category.CategoryType
 import com.sparkfusion.quiz.brainvoyage.ui.widget.star.QuestionDifficulty
@@ -15,4 +16,18 @@ data class SendQuestionModel(
     val explanation: String,
     val difficulty: QuestionDifficulty,
     val answers: List<QuestionAnswerModel>
-) : Parcelable
+) : Parcelable {
+
+    fun map(quizId: Long): AddQuestionModel {
+        return AddQuestionModel(
+            name,
+            categoryType.mapToInt(),
+            difficulty.mapToInt(),
+            explanation,
+            quizId,
+            answers.mapIndexed { index, answerModel ->
+                answerModel.map(index + 1)
+            }
+        )
+    }
+}
