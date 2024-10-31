@@ -21,6 +21,7 @@ interface AddQuestionContract {
         data class ChangeSelectedCheckButton(val id: Int, val value: Boolean) : Intent
         data class ChangeCategoryListVisibility(val value: Boolean) : Intent
         data object HandleQuestionAdding : Intent
+        data object ClearQuestionAddingState : Intent
     }
 
     data class ImageState(

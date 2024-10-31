@@ -16,6 +16,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -34,6 +35,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.ui.launcher.rememberLauncherForImageCropping
+import com.sparkfusion.quiz.brainvoyage.ui.model.QuizCatalogSerializable
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.model.AddQuizInitialModel
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add.AddQuizContract
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add.AddQuizViewModel
@@ -53,6 +55,7 @@ internal const val SEND_QUESTION_KEY = "send question key"
 @Composable
 fun AddQuizScreen(
     modifier: Modifier = Modifier,
+    quizCatalogSerializable: QuizCatalogSerializable,
     viewModel: AddQuizViewModel = hiltViewModel(),
     sharedQuizViewModel: SharedQuizViewModel,
     onBackClick: () -> Unit,
@@ -62,6 +65,10 @@ fun AddQuizScreen(
     getCroppedImageBitmap: () -> Bitmap?
 ) {
     viewModel.handleIntent(AddQuizContract.AddQuizIntent.ChangeIcon(getCroppedImageBitmap()))
+
+    LaunchedEffect(Unit) {
+        viewModel.handleIntent(AddQuizContract.AddQuizIntent.SetCatalog(quizCatalogSerializable))
+    }
 
     val state by viewModel.state.collectAsStateWithLifecycle()
     val tags by viewModel.tagsState.collectAsStateWithLifecycle()
@@ -245,7 +252,8 @@ private fun AddQuizScreenPreview() {
         onSearchImageScreenNavigate = {},
         onImageCropNavigate = {},
         getCroppedImageBitmap = { null },
-        sharedQuizViewModel = SharedQuizViewModel()
+        sharedQuizViewModel = SharedQuizViewModel(),
+        quizCatalogSerializable = QuizCatalogSerializable(1, "")
     )
 }
 

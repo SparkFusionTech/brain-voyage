@@ -2,6 +2,7 @@ package com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.compone
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,11 +20,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
@@ -43,53 +47,65 @@ fun CategoryComponent(
     isListVisible: Boolean
 ) {
     val boxSize = remember { mutableStateOf(Size.Zero) }
+    val anchor = remember { mutableStateOf(Offset.Zero) }
 
-    Row(
+    Box(
         modifier = modifier
             .padding(start = 24.dp, end = 24.dp)
             .background(registrationTextFieldColor, RoundedCornerShape(12.dp))
             .onGloballyPositioned { layoutCoordinates ->
                 boxSize.value = layoutCoordinates.size.toSize()
+                anchor.value =
+                    layoutCoordinates.positionInRoot()
             }
             .clickable { onListClick(!isListVisible) }
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+            .fillMaxWidth()
     ) {
-        AsyncImage(
-            modifier = Modifier
-                .padding(vertical = 8.dp, horizontal = 16.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .size(40.dp),
-            model = categories[currentCategoryId].iconId,
-            contentDescription = null
-        )
-
-        SFProRoundedText(
-            content = categories[currentCategoryId].name,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold
-        )
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        IconButton(
-            modifier = Modifier.padding(end = 8.dp),
-            onClick = {
-                onListClick(!isListVisible)
-            }
+        Row(
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.round_arrow_drop_down),
+            AsyncImage(
+                modifier = Modifier
+                    .padding(vertical = 8.dp, horizontal = 16.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .size(40.dp),
+                model = categories[currentCategoryId].iconId,
                 contentDescription = null
             )
+
+            SFProRoundedText(
+                content = categories[currentCategoryId].name,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            IconButton(
+                modifier = Modifier.padding(end = 8.dp),
+                onClick = {
+                    onListClick(!isListVisible)
+                }
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.round_arrow_drop_down),
+                    contentDescription = null
+                )
+            }
         }
     }
 
     val dropdownMenuWidth = LocalDensity.current.run { boxSize.value.width.toDp() }
     DropdownMenu(
-        modifier = Modifier.sizeIn(minWidth = dropdownMenuWidth),
         expanded = isListVisible,
-        onDismissRequest = { onListClick(false) }
+        onDismissRequest = { onListClick(false) },
+        offset = LocalDensity.current.run {
+            DpOffset(
+                x = anchor.value.x.toDp(),
+                y = (anchor.value.y + boxSize.value.height).toDp() + 56.dp
+            )
+        },
+        modifier = Modifier.sizeIn(minWidth = dropdownMenuWidth)
     ) {
         categories.forEachIndexed { index, item ->
             DropdownMenuItem(
@@ -104,6 +120,7 @@ fun CategoryComponent(
         }
     }
 }
+
 
 
 

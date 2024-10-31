@@ -1,15 +1,22 @@
 package com.sparkfusion.quiz.brainvoyage.data.repository
 
 import com.sparkfusion.quiz.brainvoyage.data.common.ApiListResponseHandler
+import com.sparkfusion.quiz.brainvoyage.data.common.ApiResponseHandler
 import com.sparkfusion.quiz.brainvoyage.data.common.handleExceptionCode
 import com.sparkfusion.quiz.brainvoyage.data.common.safeApiCall
 import com.sparkfusion.quiz.brainvoyage.data.datasource.QuizApiService
+import com.sparkfusion.quiz.brainvoyage.data.datasource.request_body.RequestBodyParser
+import com.sparkfusion.quiz.brainvoyage.domain.mapper.quiz.AddQuizDataEntityFactory
+import com.sparkfusion.quiz.brainvoyage.domain.mapper.quiz.GetQuizIdDataEntityFactory
 import com.sparkfusion.quiz.brainvoyage.domain.mapper.quiz_catalog.QuizCatalogListFactory
 import com.sparkfusion.quiz.brainvoyage.domain.model.QuizCatalogModel
+import com.sparkfusion.quiz.brainvoyage.domain.model.quiz.AddQuizModel
+import com.sparkfusion.quiz.brainvoyage.domain.model.quiz.GetQuizIdModel
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IQuizRepository
 import com.sparkfusion.quiz.brainvoyage.utils.common.Answer
 import com.sparkfusion.quiz.brainvoyage.utils.dispatchers.IODispatcher
 import kotlinx.coroutines.CoroutineDispatcher
+import okhttp3.MultipartBody
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,7 +24,10 @@ import javax.inject.Singleton
 class QuizRepository @Inject constructor(
     private val quizApiService: QuizApiService,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
-    private val quizCatalogListFactory: QuizCatalogListFactory
+    private val requestBodyParser: RequestBodyParser,
+    private val quizCatalogListFactory: QuizCatalogListFactory,
+    private val addQuizDataEntityFactory: AddQuizDataEntityFactory,
+    private val getQuizIdDataEntityFactory: GetQuizIdDataEntityFactory
 ) : IQuizRepository {
 
     override suspend fun readCatalog(): Answer<List<QuizCatalogModel>> = safeApiCall(ioDispatcher) {
@@ -25,7 +35,31 @@ class QuizRepository @Inject constructor(
             .handleFetchedData()
             .suspendMap(quizCatalogListFactory::mapTo)
     }
+
+    override suspend fun createQuiz(
+        addQuizModel: AddQuizModel,
+        image: MultipartBody.Part
+    ): Answer<GetQuizIdModel> = safeApiCall(ioDispatcher) {
+        val requestBody = requestBodyParser.parse(addQuizDataEntityFactory.mapFrom(addQuizModel))
+        ApiResponseHandler(
+            quizApiService.createQuiz(requestBody, image),
+            ::handleExceptionCode
+        )
+            .handleFetchedData()
+            .suspendMap(getQuizIdDataEntityFactory::mapTo)
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

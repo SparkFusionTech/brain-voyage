@@ -10,22 +10,27 @@ import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add_question.add.A
 fun HandleQuestionAddingComponent(
     state: AddQuestionContract.ErrorState,
     snackbarHostState: SnackbarHostState,
-    onSuccess: (SendQuestionModel) -> Unit
+    onSuccess: (SendQuestionModel) -> Unit,
+    onClearState: () -> Unit
 ) {
     LaunchedEffect(state) {
         when (state) {
             AddQuestionContract.ErrorState.Empty -> {}
             AddQuestionContract.ErrorState.EmptyImage -> {
                 snackbarHostState.showSnackbar("Image is not selected")
+                onClearState()
             }
             AddQuestionContract.ErrorState.NoCorrectAnswer -> {
                 snackbarHostState.showSnackbar("Correct answer was not selected")
+                onClearState()
             }
             AddQuestionContract.ErrorState.NotEnoughAnswers -> {
                 snackbarHostState.showSnackbar("Not enough answers")
+                onClearState()
             }
             AddQuestionContract.ErrorState.ShortQuestion -> {
                 snackbarHostState.showSnackbar("Questions name is too short")
+                onClearState()
             }
             is AddQuestionContract.ErrorState.Success -> {
                 onSuccess(state.sendQuestionModel)

@@ -7,4 +7,10 @@ sealed class CategoryType : Parcelable {
     @Parcelize data object Quiz : CategoryType()
     @Parcelize data object MultiplyChoice : CategoryType()
     @Parcelize data object TrueFalse : CategoryType()
+
+    fun mapToInt(): Int = when(this) {
+        Quiz -> 1
+        MultiplyChoice -> 2
+        TrueFalse -> 3
+    }
 }

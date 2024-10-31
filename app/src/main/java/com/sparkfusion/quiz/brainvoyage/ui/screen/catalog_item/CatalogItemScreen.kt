@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 fun CatalogItemScreen(
     modifier: Modifier = Modifier,
     quizCatalogSerializable: QuizCatalogSerializable,
-    onNavigateToQuizAddScreen: () -> Unit
+    onNavigateToQuizAddScreen: (QuizCatalogSerializable) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     NavigationDrawer { drawerState ->
@@ -40,7 +40,7 @@ fun CatalogItemScreen(
             },
             floatingActionButton = {
                 LargeFloatingActionButton(
-                    onClick = onNavigateToQuizAddScreen
+                    onClick = { onNavigateToQuizAddScreen(quizCatalogSerializable) }
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.plus_icon),

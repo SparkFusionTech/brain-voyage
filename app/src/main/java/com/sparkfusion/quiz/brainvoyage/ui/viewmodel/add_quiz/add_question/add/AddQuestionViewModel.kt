@@ -62,7 +62,12 @@ class AddQuestionViewModel @Inject constructor(
             is AddQuestionContract.Intent.ChangeSelectedCheckButton -> changeSelectedCheckButton(intent.id, intent.value)
             is AddQuestionContract.Intent.ChangeCategoryListVisibility -> changeCategoryListVisibility(intent.value)
             AddQuestionContract.Intent.HandleQuestionAdding -> handleQuestionAdding()
+            AddQuestionContract.Intent.ClearQuestionAddingState -> clearQuestionAddingState()
         }
+    }
+
+    private fun clearQuestionAddingState() {
+        _errorState.update { AddQuestionContract.ErrorState.Empty }
     }
 
     private fun changeCategoryListVisibility(value: Boolean) {

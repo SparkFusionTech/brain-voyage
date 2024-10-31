@@ -2,6 +2,7 @@ package com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add
 
 import android.graphics.Bitmap
 import androidx.compose.runtime.mutableStateListOf
+import com.sparkfusion.quiz.brainvoyage.ui.model.QuizCatalogSerializable
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.model.AddQuizInitialModel
 import com.sparkfusion.quiz.brainvoyage.utils.common.viewmodel.MultiStateViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,7 +35,12 @@ class AddQuizViewModel @Inject constructor() : MultiStateViewModel<AddQuizContra
             is AddQuizContract.AddQuizIntent.DeleteTag -> deleteTag(intent.id)
             AddQuizContract.AddQuizIntent.LoadSendQuizState -> loadSendQuizState()
             AddQuizContract.AddQuizIntent.ClearSendQuizState -> clearQuizSendState()
+            is AddQuizContract.AddQuizIntent.SetCatalog -> addCatalog(intent.quizCatalogSerializable)
         }
+    }
+
+    private fun addCatalog(quizCatalogSerializable: QuizCatalogSerializable) {
+        _state.update { it.copy(catalogId = quizCatalogSerializable.id) }
     }
 
     private fun clearQuizSendState() {
@@ -63,7 +69,8 @@ class AddQuizViewModel @Inject constructor() : MultiStateViewModel<AddQuizContra
                     bitmap = state.value.bitmap!!,
                     title = state.value.title,
                     description = state.value.description,
-                    tags = tagsState.value
+                    tags = tagsState.value,
+                    catalogId = state.value.catalogId
                 )
             )
         }

@@ -30,6 +30,7 @@ import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.componen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.component.text.AnswersTitleComponent
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.component.text.ExplanationComponent
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.component.topbar.AddQuestionTopBar
+import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.model.category.CategoryType
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.model.question.SendQuestionModel
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add_question.add.AddQuestionContract
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add_question.add.AddQuestionViewModel
@@ -81,7 +82,6 @@ fun AddQuestionScreen(
             changeCloseDialogVisibility(false)
         },
         onConfirm = {
-            changeCloseDialogVisibility(false)
             onDismiss()
         }
     )
@@ -138,6 +138,9 @@ fun AddQuestionScreen(
                     )
                 )
                 onSaveQuestion(model)
+            },
+            onClearState = {
+                viewModel.handleIntent(AddQuestionContract.Intent.ClearQuestionAddingState)
             }
         )
 
@@ -206,13 +209,15 @@ fun AddQuestionScreen(
                     changeNewAnswerDialogVisibility(true)
                 }
 
-                DifficultyComponent(
-                    difficulties = viewModel.difficulties,
-                    currentDifficultyId = state.currentDifficultyId,
-                    onItemClick = { index ->
-                        viewModel.handleIntent(AddQuestionContract.Intent.ChangeDifficulty(index))
-                    }
-                )
+                if (viewModel.categories[state.currentCategoryId].type != CategoryType.TrueFalse) {
+                    DifficultyComponent(
+                        difficulties = viewModel.difficulties,
+                        currentDifficultyId = state.currentDifficultyId,
+                        onItemClick = { index ->
+                            viewModel.handleIntent(AddQuestionContract.Intent.ChangeDifficulty(index))
+                        }
+                    )
+                }
 
                 ExplanationComponent(
                     description = state.description,

@@ -1,5 +1,6 @@
 package com.sparkfusion.quiz.brainvoyage.data.common
 
+import android.util.Log
 import com.sparkfusion.quiz.brainvoyage.utils.common.Answer
 import com.sparkfusion.quiz.brainvoyage.utils.exception.BrainVoyageException
 import com.sparkfusion.quiz.brainvoyage.utils.exception.network.NotFoundException
@@ -16,6 +17,7 @@ class ApiResponseHandler<R>(
             if (body == null) Answer.Failure(NotFoundException())
             else Answer.Success(body)
         } else {
+            Log.i("TAGTAG", "" + response.code() + " - " + response.errorBody()?.string().toString())
             Answer.Failure(handleExceptionCode(response.code()))
         }
     }

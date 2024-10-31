@@ -20,8 +20,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,6 +41,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.sparkfusion.quiz.brainvoyage.R
+import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.questions.component.HandlePublicationComponent
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add.SharedQuizViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add_question.shared.SharedQuestionsViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.questions.AddQuizWithQuestionsContract
@@ -60,12 +65,38 @@ fun AddQuizWithQuestionScreen(
     val model by sharedQuizViewModel.quizModel.collectAsStateWithLifecycle()
     val questions by sharedQuestionsViewModel.questions.collectAsStateWithLifecycle()
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val publishState by viewModel.publishState.collectAsStateWithLifecycle()
+    val savingState by viewModel.quizAddingState.collectAsStateWithLifecycle()
 
+    val snackbarHostState = remember { SnackbarHostState() }
     val changeCloseDialogVisibility = { v: Boolean ->
         viewModel.handleIntent(AddQuizWithQuestionsContract.Intent.ChangeCloseDialogVisibility(v))
     }
+    val clearPublishState = { viewModel.handleIntent(AddQuizWithQuestionsContract.Intent.ClearPublishState) }
+
+    LaunchedEffect(savingState) {
+        when (savingState) {
+            AddQuizWithQuestionsContract.QuizSavingState.Empty -> {}
+            AddQuizWithQuestionsContract.QuizSavingState.Error -> {
+                snackbarHostState.showSnackbar("Error")
+            }
+
+            AddQuizWithQuestionsContract.QuizSavingState.QuestionsSaving -> {
+            }
+            AddQuizWithQuestionsContract.QuizSavingState.QuizSaving -> {}
+            AddQuizWithQuestionsContract.QuizSavingState.TagsSaving -> {}
+            AddQuizWithQuestionsContract.QuizSavingState.Success -> {
+                snackbarHostState.showSnackbar("It is correct")
+            }
+        }
+    }
 
     BackHandler { changeCloseDialogVisibility(true) }
+    HandlePublicationComponent(
+        publishState = publishState,
+        snackbarHostState = snackbarHostState,
+        clearPublishState = clearPublishState
+    )
 
     CloseQuizAddingDialog(
         show = state.showCloseDialog,
@@ -73,12 +104,17 @@ fun AddQuizWithQuestionScreen(
             changeCloseDialogVisibility(false)
         },
         onConfirm = {
-            changeCloseDialogVisibility(false)
             onBackClick()
         }
     )
 
     Scaffold(
+        snackbarHost = {
+            SnackbarHost(
+                modifier = Modifier.padding(horizontal = 8.dp, vertical = 12.dp),
+                hostState = snackbarHostState
+            )
+        },
         topBar = {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -107,7 +143,16 @@ fun AddQuizWithQuestionScreen(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                IconButton(onClick = { }) {
+                IconButton(
+                    onClick = {
+                        viewModel.handleIntent(
+                            AddQuizWithQuestionsContract.Intent.SaveQuiz(
+                                addQuizInitialModel = model,
+                                questions = questions
+                            )
+                        )
+                    }
+                ) {
                     Icon(
                         painter = painterResource(id = R.drawable.round_check),
                         contentDescription = null,

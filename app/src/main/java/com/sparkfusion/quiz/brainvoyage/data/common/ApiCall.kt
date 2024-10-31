@@ -1,5 +1,6 @@
 package com.sparkfusion.quiz.brainvoyage.data.common
 
+import android.util.Log
 import androidx.paging.PagingSource
 import com.sparkfusion.quiz.brainvoyage.utils.common.Answer
 import com.sparkfusion.quiz.brainvoyage.utils.exception.BrainVoyageException
@@ -18,6 +19,7 @@ suspend fun <T> safeApiCall(
     try {
         call.invoke()
     } catch (exception: Exception) {
+        Log.i("TAGTAG", "exception - " + exception.message.toString())
         handleApiException(exception)
     }
 }

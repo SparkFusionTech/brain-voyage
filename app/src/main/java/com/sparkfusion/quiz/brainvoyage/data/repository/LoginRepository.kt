@@ -41,7 +41,9 @@ class LoginRepository @Inject constructor(
             loginApiService.registerUser(email, password, accountIcon),
             ::handleExceptionCode
         )
-        handler.handleFetchedData().suspendMap(loginUserDataEntityFactory::mapTo)
+        handler.handleFetchedData().suspendMap {
+            loginUserDataEntityFactory.mapTo(it)
+        }
     }
 
     override suspend fun loadUserInfo(): Answer<AccountInfoModel> = safeApiCall(ioDispatcher) {

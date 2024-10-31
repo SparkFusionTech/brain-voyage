@@ -102,6 +102,7 @@ fun NavGraphBuilder.catalogItemDirection(navController: NavController) {
             CatalogItemScreen(
                 quizCatalogSerializable = quizCatalogSerializableNullable,
                 onNavigateToQuizAddScreen = {
+                    navController.currentBackStackEntry?.savedStateHandle?.set(QUIZ_CATALOG_INFO_KEY, it)
                     navController.navigate(Destination.AddQuizDestination)
                 }
             )

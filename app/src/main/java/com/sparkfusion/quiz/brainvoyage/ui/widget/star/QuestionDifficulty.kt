@@ -14,7 +14,7 @@ private val difficultEndColor = Color(0xFF990000)
 private val impossibleStartColor = Color(0xFFDF0086)
 private val impossibleEndColor = Color(0xFF5A0026)
 
-sealed class QuestionDifficulty(val brush: Brush): Parcelable {
+sealed class QuestionDifficulty(val brush: Brush) : Parcelable {
 
     @Parcelize
     data object Easy : QuestionDifficulty(
@@ -43,6 +43,13 @@ sealed class QuestionDifficulty(val brush: Brush): Parcelable {
             colors = listOf(impossibleStartColor, impossibleEndColor)
         )
     )
+
+    fun mapToInt(): Int = when (this) {
+        Easy -> 1
+        Normal -> 2
+        Difficult -> 3
+        Impossible -> 4
+    }
 }
 
 

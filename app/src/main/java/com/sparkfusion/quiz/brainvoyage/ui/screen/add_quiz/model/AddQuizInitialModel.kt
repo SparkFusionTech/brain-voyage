@@ -9,5 +9,6 @@ data class AddQuizInitialModel(
     val bitmap: Bitmap,
     val title: String,
     val description: String,
-    val tags: List<String>
+    val tags: List<String>,
+    val catalogId: Long
 ) : Parcelable
