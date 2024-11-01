@@ -1,4 +1,4 @@
-package com.sparkfusion.quiz.brainvoyage.ui.screen.registration
+package com.sparkfusion.quiz.brainvoyage.ui.screen.registration.component
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -11,6 +11,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.sparkfusion.quiz.brainvoyage.R
+import com.sparkfusion.quiz.brainvoyage.ui.screen.registration.handler.getUserExistenceIconByState
+import com.sparkfusion.quiz.brainvoyage.ui.screen.registration.handler.getUserExistenceIconTintByState
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.registration.RegistrationState
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.registration.UserExistsState
 

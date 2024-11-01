@@ -1,10 +1,7 @@
 package com.sparkfusion.quiz.brainvoyage.ui.screen.catalog_item
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeFloatingActionButton
@@ -12,11 +9,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -27,6 +22,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.ui.drawer.NavigationDrawer
 import com.sparkfusion.quiz.brainvoyage.ui.model.QuizCatalogSerializable
+import com.sparkfusion.quiz.brainvoyage.ui.screen.catalog_item.component.CatalogItemTopBar
+import com.sparkfusion.quiz.brainvoyage.ui.screen.catalog_item.component.quizzesLoadingHandlerComponent
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.catalog_item.CatalogItemContract
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.catalog_item.CatalogItemViewModel
 import kotlinx.coroutines.launch
@@ -74,51 +71,13 @@ fun CatalogItemScreen(
             floatingActionButtonPosition = FabPosition.End
         ) {
             LazyColumn(modifier = modifier.padding(it)) {
-                when (quizzesLoadingState) {
-                    CatalogItemContract.QuizLoadingState.Error -> {
-                        item {
-                            LaunchedEffect(quizzesLoadingState) {
-                                snackbarHostState.showSnackbar("Unknown error")
-                            }
-                            ReloadQuizzesComponent {
-                                viewModel.handleIntent(CatalogItemContract.Intent.LoadQuizzes(quizCatalogSerializable.id))
-                            }
-                        }
-                    }
-
-                    CatalogItemContract.QuizLoadingState.Loading -> {
-                        item {
-                            Box(
-                                modifier = Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                CircularProgressIndicator()
-                            }
-                        }
-                    }
-
-                    CatalogItemContract.QuizLoadingState.NetworkError -> {
-                        item {
-                            LaunchedEffect(quizzesLoadingState) {
-                                snackbarHostState.showSnackbar("Network error")
-                            }
-                            ReloadQuizzesComponent {
-                                viewModel.handleIntent(CatalogItemContract.Intent.LoadQuizzes(quizCatalogSerializable.id))
-                            }
-                        }
-                    }
-
-                    is CatalogItemContract.QuizLoadingState.Success -> {
-                        val state = (quizzesLoadingState as CatalogItemContract.QuizLoadingState.Success)
-                        items(state.data.size) { index ->
-                            QuizItemComponent(
-                                quiz = state.data[index],
-                                onItemClick = {
-
-                                }
-                            )
-                        }
-                    }
+                quizzesLoadingHandlerComponent(
+                    quizzesLoadingState = quizzesLoadingState,
+                    snackbarHostState = snackbarHostState
+                ) {
+                    viewModel.handleIntent(
+                        CatalogItemContract.Intent.LoadQuizzes(quizCatalogSerializable.id)
+                    )
                 }
             }
         }

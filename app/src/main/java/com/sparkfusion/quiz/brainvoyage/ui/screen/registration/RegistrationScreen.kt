@@ -13,6 +13,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.sparkfusion.quiz.brainvoyage.ui.screen.registration.component.AccountIconComponent
+import com.sparkfusion.quiz.brainvoyage.ui.screen.registration.component.EmailTextFieldComponent
+import com.sparkfusion.quiz.brainvoyage.ui.screen.registration.component.PasswordTextFieldComponent
+import com.sparkfusion.quiz.brainvoyage.ui.screen.registration.component.RegistrationButtonComponent
+import com.sparkfusion.quiz.brainvoyage.ui.screen.registration.component.TopBar
+import com.sparkfusion.quiz.brainvoyage.ui.screen.registration.handler.HandleUserExistenceMessageShowing
+import com.sparkfusion.quiz.brainvoyage.ui.screen.registration.handler.RegistrationErrorStateHandler
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.registration.RegistrationContract
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.registration.RegistrationState
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.registration.RegistrationViewModel

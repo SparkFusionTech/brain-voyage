@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.component.item.DifficultyItemComponent
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.model.difficulty.DifficultyModel
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
@@ -21,7 +23,7 @@ fun DifficultyComponent(
 ) {
     SFProRoundedText(
         modifier = Modifier.padding(start = 24.dp, top = 40.dp),
-        content = "Difficulty",
+        content = stringResource(id = R.string.difficulty),
         fontSize = 18.sp,
         fontWeight = FontWeight.SemiBold
     )

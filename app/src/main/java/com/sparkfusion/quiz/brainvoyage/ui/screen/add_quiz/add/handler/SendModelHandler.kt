@@ -1,8 +1,10 @@
-package com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add
+package com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add.handler
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.res.stringResource
+import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.model.AddQuizInitialModel
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add.SendQuizAnswer
 
@@ -13,10 +15,13 @@ fun SendModelHandler(
     onSuccess: (AddQuizInitialModel) -> Unit,
     clearState: () -> Unit
 ) {
+    val descriptionIsTooShortMessage = stringResource(id = R.string.description_is_too_short)
+    val imageIsNotSelectedMessage = stringResource(id = R.string.image_is_not_selected)
+    val titleIsTooShortMessage = stringResource(id = R.string.title_is_too_short)
     when (sendModelState) {
         SendQuizAnswer.DescriptionIsTooShort -> {
             LaunchedEffect(sendModelState) {
-                snackbarHostState.showSnackbar("Description is too short")
+                snackbarHostState.showSnackbar(descriptionIsTooShortMessage)
                 clearState()
             }
         }
@@ -25,7 +30,7 @@ fun SendModelHandler(
 
         SendQuizAnswer.ImageIsNotSelected -> {
             LaunchedEffect(sendModelState) {
-                snackbarHostState.showSnackbar("Image is not selected")
+                snackbarHostState.showSnackbar(imageIsNotSelectedMessage)
                 clearState()
             }
         }
@@ -37,7 +42,7 @@ fun SendModelHandler(
 
         SendQuizAnswer.TitleIsTooShort -> {
             LaunchedEffect(sendModelState) {
-                snackbarHostState.showSnackbar("Title is too short")
+                snackbarHostState.showSnackbar(titleIsTooShortMessage)
                 clearState()
             }
         }

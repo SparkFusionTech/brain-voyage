@@ -1,4 +1,4 @@
-package com.sparkfusion.quiz.brainvoyage.ui.screen.registration
+package com.sparkfusion.quiz.brainvoyage.ui.screen.registration.component
 
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.height

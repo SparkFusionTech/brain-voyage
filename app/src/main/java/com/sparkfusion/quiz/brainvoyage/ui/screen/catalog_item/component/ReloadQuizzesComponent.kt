@@ -1,4 +1,4 @@
-package com.sparkfusion.quiz.brainvoyage.ui.screen.catalog_item
+package com.sparkfusion.quiz.brainvoyage.ui.screen.catalog_item.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,14 +34,14 @@ fun ReloadQuizzesComponent(
         Image(
             modifier = Modifier.size(128.dp),
             painter = painterResource(id = R.drawable.error_icon),
-            contentDescription = null
+            contentDescription = stringResource(id = R.string.loading_error_screen_image_description)
         )
 
         SFProRoundedText(
             modifier = Modifier
                 .width(260.dp)
                 .padding(top = 24.dp),
-            content = "An error has occurred! Please try again.",
+            content = stringResource(id = R.string.an_error_has_occurred),
             fontWeight = FontWeight.SemiBold,
             fontSize = 20.sp,
             textAlign = TextAlign.Center
@@ -51,7 +52,7 @@ fun ReloadQuizzesComponent(
             onClick = onReloadClick
         ) {
             SFProRoundedText(
-                content = "Reload",
+                content = stringResource(id = R.string.reload),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium
             )

@@ -19,13 +19,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -67,14 +67,13 @@ fun CategoryComponent(
             AsyncImage(
                 modifier = Modifier
                     .padding(vertical = 8.dp, horizontal = 16.dp)
-                    .clip(RoundedCornerShape(12.dp))
                     .size(40.dp),
                 model = categories[currentCategoryId].iconId,
-                contentDescription = null
+                contentDescription = stringResource(id = R.string.category_icon_description)
             )
 
             SFProRoundedText(
-                content = categories[currentCategoryId].name,
+                content = stringResource(id = categories[currentCategoryId].name),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -89,7 +88,7 @@ fun CategoryComponent(
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.round_arrow_drop_down),
-                    contentDescription = null
+                    contentDescription = stringResource(id = R.string.collapse_or_expand_category_list_icon_description)
                 )
             }
         }
@@ -109,9 +108,7 @@ fun CategoryComponent(
     ) {
         categories.forEachIndexed { index, item ->
             DropdownMenuItem(
-                text = {
-                    SFProRoundedText(content = item.name)
-                },
+                text = { SFProRoundedText(content = stringResource(id = item.name)) },
                 onClick = {
                     onListClick(false)
                     onItemClick(index)

@@ -1,4 +1,4 @@
-package com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.component.topbar
+package com.sparkfusion.quiz.brainvoyage.ui.screen.registration.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -20,36 +22,35 @@ import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
 
 @Composable
-fun AddQuestionTopBar(
+fun TopBar(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit
 ) {
     Row(
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .height(72.dp)
-            .fillMaxWidth()
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
-            modifier = Modifier.padding(start = 8.dp),
+            modifier = Modifier
+                .padding(start = 12.dp)
+                .size(36.dp),
             onClick = onBackClick
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.arrow_back_icon),
-                contentDescription = stringResource(id = R.string.add_question_back_button_description)
+                contentDescription = stringResource(id = R.string.registration_back_button_icon_description)
             )
         }
 
-        Spacer(modifier = Modifier.weight(1f))
-
         SFProRoundedText(
-            modifier = Modifier.padding(end = 56.dp),
-            content = stringResource(id = R.string.new_question),
+            content = stringResource(id = R.string.registration),
             fontSize = 20.sp,
             fontWeight = FontWeight.ExtraBold
         )
 
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.width(48.dp))
     }
 }

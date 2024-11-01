@@ -18,7 +18,7 @@ import com.sparkfusion.quiz.brainvoyage.ui.screen.QuizItemScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.catalog.CatalogScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.catalog_item.CatalogItemScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.image.ImageSearchScreen
-import com.sparkfusion.quiz.brainvoyage.ui.screen.login.LoginRegistrationData
+import com.sparkfusion.quiz.brainvoyage.ui.screen.login.model.LoginRegistrationData
 import com.sparkfusion.quiz.brainvoyage.ui.screen.login.LoginScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.registration.RegistrationScreen
 

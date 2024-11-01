@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.sparkfusion.quiz.brainvoyage.R
@@ -33,7 +34,7 @@ fun DifficultyItemComponent(
             Icon(
                 modifier = Modifier.align(Alignment.TopEnd),
                 painter = painterResource(id = R.drawable.thumbtack_icon),
-                contentDescription = null,
+                contentDescription = stringResource(id = R.string.difficulty_thumbtack_icon_description),
                 tint = MaterialTheme.colorScheme.primary
             )
         }
@@ -53,7 +54,7 @@ fun DifficultyItemComponent(
             AsyncImage(
                 modifier = Modifier.size(48.dp),
                 model = difficulty.iconId,
-                contentDescription = null,
+                contentDescription = stringResource(id = R.string.difficulty_icon_description),
                 contentScale = ContentScale.Fit
             )
         }

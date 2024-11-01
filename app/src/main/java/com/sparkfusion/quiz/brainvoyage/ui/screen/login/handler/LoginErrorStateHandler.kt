@@ -1,4 +1,4 @@
-package com.sparkfusion.quiz.brainvoyage.ui.screen.login
+package com.sparkfusion.quiz.brainvoyage.ui.screen.login.handler
 
 import android.content.Context
 import android.widget.Toast

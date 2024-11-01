@@ -12,12 +12,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.ui.launcher.rememberLauncherForImageCropping
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.component.button.AddButtonComponent
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.component.button.SaveButton
@@ -161,7 +163,7 @@ fun AddQuestionScreen(
 
                 SFProRoundedText(
                     modifier = Modifier.padding(start = 24.dp, top = 20.dp),
-                    content = "Category",
+                    content = stringResource(id = R.string.category),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -175,12 +177,17 @@ fun AddQuestionScreen(
                     },
                     isListVisible = state.isCategoryListVisible,
                     onItemClick = { index ->
-                        viewModel.handleIntent(AddQuestionContract.Intent.ChangeCategory(index))
+                        viewModel.handleIntent(
+                            AddQuestionContract.Intent.ChangeCategory(
+                                index,
+                                context.resources.getStringArray(R.array.trueFalseValues).toList()
+                            )
+                        )
                     },
                     currentCategoryId = state.currentCategoryId
                 )
 
-                AnswersTitleComponent(subtitle = "(max 4)")
+                AnswersTitleComponent(subtitle = stringResource(id = R.string.max_4))
             }
 
             items(answers.size) { index ->

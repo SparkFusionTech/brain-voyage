@@ -22,5 +22,35 @@
     <string name="searched_image_description">Image of searched item</string>
     <string name="navigate_back_icon_of_searching_screen_description">Icon of navigate back button</string>
     <string name="search_icon_of_search_button_description">Icon of search button</string>
+    <string name="loading_error_screen_image_description">Image of loading error screen</string>
+    <string name="rating_star_icon_description">Star icon of rating</string>
+    <string name="quiz_preview_image_description">Image of quiz on preview screen</string>
+    <string name="add_quiz_with_questions_back_button_icon_description">Icon of back button on AddQuizWithQuestionsScreen</string>
+    <string name="publish_icon_description">Icon of publish button</string>
+    <string name="question_item_image_description">Image of question item</string>
+    <string name="adding_quiz_image_description">Image of adding quiz</string>
+    <string name="add_quiz_back_button_description">Icon of back button on AddQuizScreen</string>
+    <string name="add_tags_button_icon_description">Icon of add tags button</string>
+    <string name="selected_quiz_image_description">Image of quiz selected by user</string>
+    <string name="add_question_back_button_description">Image of back button on AddQuestionScreen</string>
+    <string name="difficulty_thumbtack_icon_description">Icon of difficulty selection</string>
+    <string name="difficulty_icon_description">Icon of difficulty</string>
+    <string name="empty_selected_image_icon_description">Icon of not selected image</string>
+    <string name="question_image_description">Question image</string>
+    <string name="category_icon_description">Category icon</string>
+    <string name="collapse_or_expand_category_list_icon_description">Icon of collapsed or expanded category list</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </resources>

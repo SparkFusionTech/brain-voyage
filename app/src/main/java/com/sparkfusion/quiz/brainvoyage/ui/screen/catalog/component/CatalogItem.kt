@@ -1,4 +1,4 @@
-package com.sparkfusion.quiz.brainvoyage.ui.screen.catalog
+package com.sparkfusion.quiz.brainvoyage.ui.screen.catalog.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

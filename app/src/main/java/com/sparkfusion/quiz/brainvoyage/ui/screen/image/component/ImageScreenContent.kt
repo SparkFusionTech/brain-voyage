@@ -1,4 +1,4 @@
-package com.sparkfusion.quiz.brainvoyage.ui.screen.image
+package com.sparkfusion.quiz.brainvoyage.ui.screen.image.component
 
 import android.content.Context
 import android.graphics.Bitmap

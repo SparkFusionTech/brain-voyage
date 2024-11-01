@@ -1,14 +1,11 @@
 package com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.model.question
 
 import android.graphics.Bitmap
-import android.os.Parcelable
 import com.sparkfusion.quiz.brainvoyage.domain.model.question.AddQuestionModel
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.model.answer.QuestionAnswerModel
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.model.category.CategoryType
 import com.sparkfusion.quiz.brainvoyage.ui.widget.star.QuestionDifficulty
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
 data class SendQuestionModel(
     val name: String,
     val icon: Bitmap,
@@ -16,7 +13,7 @@ data class SendQuestionModel(
     val explanation: String,
     val difficulty: QuestionDifficulty,
     val answers: List<QuestionAnswerModel>
-) : Parcelable {
+) {
 
     fun map(quizId: Long): AddQuestionModel {
         return AddQuestionModel(

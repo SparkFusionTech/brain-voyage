@@ -22,5 +22,65 @@
     <string name="already_exists">Already exists</string>
     <string name="search">Search</string>
     <string name="enter_your_query_to_find_images">Enter your query to find images</string>
-    
+    <string name="reload">Reload</string>
+    <string name="an_error_has_occurred">An error has occurred! Please try again.</string>
+    <string name="rating_template">%1$.1f/5.0</string>
+    <string name="questions_count_template">%1$d questions</string>
+    <string name="not_enough_questions_min_5">Not enough questions (min 5)</string>
+    <string name="quiz_information_was_not_found">Quiz information was not found</string>
+    <string name="questions">Questions</string>
+    <string name="add">Add</string>
+    <string name="answer_options_template">%1$d answer options</string>
+    <string name="add_questions_only_on_the_selected_topic">Add questions only on the selected topic, otherwise the quiz will not pass moderation!*</string>
+    <string name="new_quiz">New Quiz</string>
+    <string name="description_is_too_short">Description is too short</string>
+    <string name="image_is_not_selected">Image is not selected</string>
+    <string name="title_is_too_short">Title is too short</string>
+    <string name="next">Next</string>
+    <string name="add_a_description_so_users_can">Add a description so users can understand what the quiz is about*</string>
+    <string name="description">Description</string>
+    <string name="do_not_forget_to_add_search_keywords">Don\'t forget to add search keywords so that users can find your work faster.</string>
+    <string name="max_32">(max 32)</string>
+    <string name="title">Title</string>
+    <string name="quiz">Quiz</string>
+    <string name="true_false">True/False</string>
+    <string name="multiply_choice">Multiply choice</string>
+    <string name="category">Category</string>
+    <string name="max_4">(max 4)</string>
+    <string name="new_question">New Question</string>
+    <string name="explanation">Explanation</string>
+    <string name="add_an_explanation_of_the_correct_answer">Add an explanation of the correct answer or just interesting information on the topic of the question*</string>
+    <string name="answers">Answers</string>
+    <string name="name_is_too_long">Name is too long</string>
+    <string name="question">Question</string>
+    <string name="correct_answer_was_not_selected">Correct answer was not selected</string>
+    <string name="not_enough_answers">Not enough answers</string>
+    <string name="questions_name_is_too_short">Questions name is too short</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="save">Save</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </resources>

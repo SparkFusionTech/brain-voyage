@@ -11,7 +11,7 @@ interface AddQuestionContract {
         data class ChangeQuestion(val value: String) : Intent
         data class ChangeDescription(val value: String) : Intent
         data class ChangeDifficulty(val id: Int) : Intent
-        data class ChangeCategory(val id: Int) : Intent
+        data class ChangeCategory(val id: Int, val trueFalseValues: List<String>) : Intent
         data class AddAnswer(val answer: String) : Intent
         data class DeleteAnswer(val id: Int) : Intent
         data class ChangeNewAnswerDialogVisibility(val value: Boolean) : Intent

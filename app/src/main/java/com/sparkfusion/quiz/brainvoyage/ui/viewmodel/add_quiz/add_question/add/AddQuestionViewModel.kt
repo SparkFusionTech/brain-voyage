@@ -48,7 +48,7 @@ class AddQuestionViewModel @Inject constructor(
 
     override fun handleIntent(intent: AddQuestionContract.Intent) {
         when (intent) {
-            is AddQuestionContract.Intent.ChangeCategory -> changeCategory(intent.id)
+            is AddQuestionContract.Intent.ChangeCategory -> changeCategory(intent.id, intent.trueFalseValues)
             is AddQuestionContract.Intent.ChangeDescription -> changeDescription(intent.value)
             is AddQuestionContract.Intent.ChangeDifficulty -> changeDifficulty(intent.id)
             is AddQuestionContract.Intent.ChangeIcon -> changeIcon(intent.icon)
@@ -170,7 +170,7 @@ class AddQuestionViewModel @Inject constructor(
         _commonState.update { it.copy(currentDifficultyId = id) }
     }
 
-    private fun changeCategory(id: Int) {
+    private fun changeCategory(id: Int, trueFalseValues: List<String>) {
         viewModelScope.launch(defaultDispatcher) {
             if (id < 0 || id > categories.size - 1) return@launch
 
@@ -187,7 +187,7 @@ class AddQuestionViewModel @Inject constructor(
             if (newCategoryType == CategoryType.TrueFalse) {
                 _answersState.value.clear()
                 _commonState.update { it.copy(currentDifficultyId = 0) }
-                getTrueFalseCategoryAnswers().forEach { addAnswer(it.name) }
+                getTrueFalseCategoryAnswers(trueFalseValues).forEach { addAnswer(it.name) }
             }
 
             _commonState.update { it.copy(currentCategoryId = id) }

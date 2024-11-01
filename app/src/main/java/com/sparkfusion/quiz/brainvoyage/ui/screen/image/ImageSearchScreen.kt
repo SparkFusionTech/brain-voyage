@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sparkfusion.quiz.brainvoyage.R
+import com.sparkfusion.quiz.brainvoyage.ui.screen.image.component.ImageScreenContent
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.image.ImageSearchContract
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.image.ImageSearchViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText

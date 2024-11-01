@@ -1,4 +1,4 @@
-package com.sparkfusion.quiz.brainvoyage.ui.screen.catalog_item
+package com.sparkfusion.quiz.brainvoyage.ui.screen.catalog_item.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,7 +43,7 @@ fun QuizItemComponent(
                 .clip(RoundedCornerShape(16.dp))
                 .size(90.dp),
             model = quiz.imageUrl,
-            contentDescription = null
+            contentDescription = stringResource(id = R.string.quiz_preview_image_description)
         )
 
         Column(
@@ -69,7 +70,10 @@ fun QuizItemComponent(
                     )
 
                     SFProRoundedText(
-                        content = "${quiz.questions} questions",
+                        content = stringResource(
+                            id = R.string.questions_count_template,
+                            quiz.questions
+                        ),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         color = descriptionColor()
@@ -79,14 +83,16 @@ fun QuizItemComponent(
                 if (quiz.rating >= 1.0) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         AsyncImage(
-                            modifier = Modifier.padding(top = 4.dp).size(28.dp),
+                            modifier = Modifier
+                                .padding(top = 4.dp)
+                                .size(28.dp),
                             model = R.drawable.rating_start_icon,
-                            contentDescription = null
+                            contentDescription = stringResource(id = R.string.rating_star_icon_description)
                         )
 
                         SFProRoundedText(
                             modifier = Modifier.padding(top = 2.dp),
-                            content = "${quiz.rating}/5.0",
+                            content = stringResource(id = R.string.rating_template, quiz.rating),
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Normal
                         )

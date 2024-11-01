@@ -1,4 +1,4 @@
-package com.sparkfusion.quiz.brainvoyage.ui.screen.registration
+package com.sparkfusion.quiz.brainvoyage.ui.screen.registration.component
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon

@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.sparkfusion.quiz.brainvoyage.R
@@ -32,7 +33,7 @@ fun QuestionImageComponent(
                     .clickable { changeImageSelectionDialogVisibility(true) }
                     .size(128.dp),
                 model = R.drawable.select_image_icon,
-                contentDescription = null
+                contentDescription = stringResource(id = R.string.empty_selected_image_icon_description)
             )
         } else {
             AsyncImage(
@@ -43,7 +44,7 @@ fun QuestionImageComponent(
                     .clickable { changeImageSelectionDialogVisibility(true) },
                 model = bitmap,
                 contentScale = ContentScale.Fit,
-                contentDescription = null
+                contentDescription = stringResource(id = R.string.question_image_description)
             )
         }
     }

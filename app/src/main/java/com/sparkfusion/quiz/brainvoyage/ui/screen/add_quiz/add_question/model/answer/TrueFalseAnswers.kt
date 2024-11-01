@@ -3,9 +3,9 @@ package com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.model.a
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 
-fun getTrueFalseCategoryAnswers(): SnapshotStateList<QuestionAnswerModel> {
+fun getTrueFalseCategoryAnswers(values: List<String>): SnapshotStateList<QuestionAnswerModel> {
     return mutableStateListOf(
-        QuestionAnswerModel("True", false),
-        QuestionAnswerModel("False", false)
+        QuestionAnswerModel(values[0], false),
+        QuestionAnswerModel(values[1], false)
     )
 }
