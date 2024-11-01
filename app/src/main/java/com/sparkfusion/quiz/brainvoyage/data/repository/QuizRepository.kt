@@ -8,10 +8,12 @@ import com.sparkfusion.quiz.brainvoyage.data.datasource.QuizApiService
 import com.sparkfusion.quiz.brainvoyage.data.datasource.request_body.RequestBodyParser
 import com.sparkfusion.quiz.brainvoyage.domain.mapper.quiz.AddQuizDataEntityFactory
 import com.sparkfusion.quiz.brainvoyage.domain.mapper.quiz.GetQuizIdDataEntityFactory
+import com.sparkfusion.quiz.brainvoyage.domain.mapper.quiz.GetQuizPreviewListFactory
 import com.sparkfusion.quiz.brainvoyage.domain.mapper.quiz_catalog.QuizCatalogListFactory
 import com.sparkfusion.quiz.brainvoyage.domain.model.QuizCatalogModel
 import com.sparkfusion.quiz.brainvoyage.domain.model.quiz.AddQuizModel
 import com.sparkfusion.quiz.brainvoyage.domain.model.quiz.GetQuizIdModel
+import com.sparkfusion.quiz.brainvoyage.domain.model.quiz.GetQuizPreviewModel
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IQuizRepository
 import com.sparkfusion.quiz.brainvoyage.utils.common.Answer
 import com.sparkfusion.quiz.brainvoyage.utils.dispatchers.IODispatcher
@@ -27,8 +29,19 @@ class QuizRepository @Inject constructor(
     private val requestBodyParser: RequestBodyParser,
     private val quizCatalogListFactory: QuizCatalogListFactory,
     private val addQuizDataEntityFactory: AddQuizDataEntityFactory,
-    private val getQuizIdDataEntityFactory: GetQuizIdDataEntityFactory
+    private val getQuizIdDataEntityFactory: GetQuizIdDataEntityFactory,
+    private val getQuizPreviewListFactory: GetQuizPreviewListFactory
 ) : IQuizRepository {
+
+    override suspend fun readQuizzesByCatalogId(catalogId: Long): Answer<List<GetQuizPreviewModel>> =
+        safeApiCall(ioDispatcher) {
+            ApiListResponseHandler(
+                quizApiService.readQuizzesByCatalogId(catalogId),
+                ::handleExceptionCode
+            )
+                .handleFetchedData()
+                .suspendMap(getQuizPreviewListFactory::mapTo)
+        }
 
     override suspend fun readCatalog(): Answer<List<QuizCatalogModel>> = safeApiCall(ioDispatcher) {
         ApiListResponseHandler(quizApiService.readCatalog(), ::handleExceptionCode)
