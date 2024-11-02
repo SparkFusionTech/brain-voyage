@@ -10,6 +10,7 @@ import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface QuizApiService {
@@ -28,6 +29,11 @@ interface QuizApiService {
     suspend fun readQuizzesByCatalogId(
         @Query("catalogId") catalogId: Long
     ): Response<List<GetQuizPreviewDataEntity>>
+    
+    @GET("/quizzes/{quizId}")
+    suspend fun readQuizById(
+        @Path("quizId") quizId: Long
+    ): Response<GetQuizPreviewDataEntity>
 }
 
 

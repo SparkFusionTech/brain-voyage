@@ -1,4 +1,4 @@
-package com.sparkfusion.quiz.brainvoyage.ui.screen.catalog_item.component
+package com.sparkfusion.quiz.brainvoyage.ui.widget.reload
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -22,15 +22,18 @@ import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
 
 @Composable
-fun ReloadQuizzesComponent(
+fun ReloadComponent(
     modifier: Modifier = Modifier,
-    onReloadClick: () -> Unit
+    onReloadClick: () -> Unit,
+    topBar: @Composable () -> Unit
 ) {
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        topBar()
+
         Image(
             modifier = Modifier.size(128.dp),
             painter = painterResource(id = R.drawable.error_icon),
@@ -62,9 +65,10 @@ fun ReloadQuizzesComponent(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun ReloadQuizzesComponentPreview() {
-    ReloadQuizzesComponent(
-        onReloadClick = {}
+private fun ReloadComponentPreview() {
+    ReloadComponent(
+        onReloadClick = {},
+        topBar = {}
     )
 }
 

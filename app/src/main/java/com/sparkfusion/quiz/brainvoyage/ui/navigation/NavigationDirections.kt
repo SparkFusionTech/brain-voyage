@@ -14,9 +14,10 @@ import com.sparkfusion.quiz.brainvoyage.image_crop.screen.FailedOpenImageScreen
 import com.sparkfusion.quiz.brainvoyage.image_crop.screen.ImageCropScreen
 import com.sparkfusion.quiz.brainvoyage.ui.model.QUIZ_CATALOG_INFO_KEY
 import com.sparkfusion.quiz.brainvoyage.ui.model.QuizCatalogSerializable
-import com.sparkfusion.quiz.brainvoyage.ui.screen.QuizItemScreen
+import com.sparkfusion.quiz.brainvoyage.ui.screen.quiz_item.QuizItemScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.catalog.CatalogScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.catalog_item.CatalogItemScreen
+import com.sparkfusion.quiz.brainvoyage.ui.screen.catalog_item.QUIZ_ID_KEY
 import com.sparkfusion.quiz.brainvoyage.ui.screen.image.ImageSearchScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.login.model.LoginRegistrationData
 import com.sparkfusion.quiz.brainvoyage.ui.screen.login.LoginScreen
@@ -102,17 +103,32 @@ fun NavGraphBuilder.catalogItemDirection(navController: NavController) {
             CatalogItemScreen(
                 quizCatalogSerializable = quizCatalogSerializableNullable,
                 onNavigateToQuizAddScreen = {
-                    navController.currentBackStackEntry?.savedStateHandle?.set(QUIZ_CATALOG_INFO_KEY, it)
+                    navController.currentBackStackEntry?.savedStateHandle?.set(
+                        QUIZ_CATALOG_INFO_KEY,
+                        it
+                    )
                     navController.navigate(Destination.AddQuizDestination)
+                },
+                onQuizClick = {
+                    navController.currentBackStackEntry?.savedStateHandle?.set(QUIZ_ID_KEY, it)
+                    navController.navigate(Destination.QuizItemDestination)
                 }
             )
         }
     }
 }
 
-fun NavGraphBuilder.quizItemDirection() {
+fun NavGraphBuilder.quizItemDirection(navController: NavController) {
     composable<Destination.QuizItemDestination> {
-        QuizItemScreen()
+        val quizId = navController.previousBackStackEntry?.savedStateHandle?.get<Long>(QUIZ_ID_KEY)
+        quizId?.let {
+            QuizItemScreen(
+                quizId = it,
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
+        }
     }
 }
 

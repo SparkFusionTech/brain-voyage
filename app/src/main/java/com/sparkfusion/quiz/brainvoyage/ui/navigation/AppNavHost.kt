@@ -22,7 +22,7 @@ fun AppNavHost(
         registrationDirection(navController)
         catalogDirection(navController)
         catalogItemDirection(navController)
-        quizItemDirection()
+        quizItemDirection(navController)
 
         imageCropDirection(navController)
         imageSearchDirection(navController)

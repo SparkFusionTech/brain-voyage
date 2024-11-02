@@ -8,6 +8,7 @@ import com.sparkfusion.quiz.brainvoyage.data.datasource.QuizApiService
 import com.sparkfusion.quiz.brainvoyage.data.datasource.request_body.RequestBodyParser
 import com.sparkfusion.quiz.brainvoyage.domain.mapper.quiz.AddQuizDataEntityFactory
 import com.sparkfusion.quiz.brainvoyage.domain.mapper.quiz.GetQuizIdDataEntityFactory
+import com.sparkfusion.quiz.brainvoyage.domain.mapper.quiz.GetQuizPreviewDataEntityFactory
 import com.sparkfusion.quiz.brainvoyage.domain.mapper.quiz.GetQuizPreviewListFactory
 import com.sparkfusion.quiz.brainvoyage.domain.mapper.quiz_catalog.QuizCatalogListFactory
 import com.sparkfusion.quiz.brainvoyage.domain.model.QuizCatalogModel
@@ -30,7 +31,8 @@ class QuizRepository @Inject constructor(
     private val quizCatalogListFactory: QuizCatalogListFactory,
     private val addQuizDataEntityFactory: AddQuizDataEntityFactory,
     private val getQuizIdDataEntityFactory: GetQuizIdDataEntityFactory,
-    private val getQuizPreviewListFactory: GetQuizPreviewListFactory
+    private val getQuizPreviewListFactory: GetQuizPreviewListFactory,
+    private val getQuizPreviewDataEntityFactory: GetQuizPreviewDataEntityFactory
 ) : IQuizRepository {
 
     override suspend fun readQuizzesByCatalogId(catalogId: Long): Answer<List<GetQuizPreviewModel>> =
@@ -61,7 +63,16 @@ class QuizRepository @Inject constructor(
             .handleFetchedData()
             .suspendMap(getQuizIdDataEntityFactory::mapTo)
     }
+
+    override suspend fun readQuizById(quizId: Long): Answer<GetQuizPreviewModel> =
+        safeApiCall(ioDispatcher) {
+            ApiResponseHandler(quizApiService.readQuizById(quizId), ::handleExceptionCode)
+                .handleFetchedData()
+                .suspendMap(getQuizPreviewDataEntityFactory::mapTo)
+
+        }
 }
+
 
 
 

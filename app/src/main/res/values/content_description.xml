@@ -40,8 +40,11 @@
     <string name="category_icon_description">Category icon</string>
     <string name="collapse_or_expand_category_list_icon_description">Icon of collapsed or expanded category list</string>
     <string name="question_swipe_deletion_icon_description">Icon on box to delete question by swipe</string>
-
-
+    <string name="quiz_image_description">Image of quiz</string>
+    <string name="quiz_item_back_button_icon_description">Icon of back button on QuizItemScreen</string>
+    <string name="rating_filled_star_icon_description">Icon of filled star</string>
+    <string name="rating_outlined_star_icon_description">Icon of outlined star</string>
+    <string name="rating_half_star_icon_description">Icon of half star</string>
 
 
 

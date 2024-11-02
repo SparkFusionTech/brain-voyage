@@ -14,4 +14,6 @@ interface IQuizRepository {
     suspend fun createQuiz(addQuizModel: AddQuizModel, image: MultipartBody.Part): Answer<GetQuizIdModel>
 
     suspend fun readQuizzesByCatalogId(catalogId: Long): Answer<List<GetQuizPreviewModel>>
+
+    suspend fun readQuizById(quizId: Long): Answer<GetQuizPreviewModel>
 }

@@ -9,6 +9,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -28,14 +29,19 @@ import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.catalog_item.CatalogItemCon
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.catalog_item.CatalogItemViewModel
 import kotlinx.coroutines.launch
 
+const val QUIZ_ID_KEY = "quiz id key"
+
 @Composable
 fun CatalogItemScreen(
     modifier: Modifier = Modifier,
     viewModel: CatalogItemViewModel = hiltViewModel(),
     quizCatalogSerializable: QuizCatalogSerializable,
-    onNavigateToQuizAddScreen: (QuizCatalogSerializable) -> Unit
+    onNavigateToQuizAddScreen: (QuizCatalogSerializable) -> Unit,
+    onQuizClick: (Long) -> Unit
 ) {
-    viewModel.handleIntent(CatalogItemContract.Intent.LoadQuizzes(quizCatalogSerializable.id))
+    LaunchedEffect(quizCatalogSerializable.id) {
+        viewModel.handleIntent(CatalogItemContract.Intent.LoadQuizzes(quizCatalogSerializable.id))
+    }
     val quizzesLoadingState by viewModel.quizLoadingState.collectAsStateWithLifecycle()
 
     val coroutineScope = rememberCoroutineScope()
@@ -51,9 +57,7 @@ fun CatalogItemScreen(
                     title = quizCatalogSerializable.name,
                     onMenuClick = {
                         coroutineScope.launch {
-                            drawerState.apply {
-                                if (isClosed) open() else close()
-                            }
+                            if (drawerState.isClosed) drawerState.open() else drawerState.close()
                         }
                     }
                 )
@@ -73,22 +77,26 @@ fun CatalogItemScreen(
             LazyColumn(modifier = modifier.padding(it)) {
                 quizzesLoadingHandlerComponent(
                     quizzesLoadingState = quizzesLoadingState,
-                    snackbarHostState = snackbarHostState
-                ) {
-                    viewModel.handleIntent(
-                        CatalogItemContract.Intent.LoadQuizzes(quizCatalogSerializable.id)
-                    )
-                }
+                    snackbarHostState = snackbarHostState,
+                    onItemClick = onQuizClick,
+                    onReloadClick = {
+                        viewModel.handleIntent(
+                            CatalogItemContract.Intent.LoadQuizzes(quizCatalogSerializable.id)
+                        )
+                    }
+                )
             }
         }
     }
 }
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun CatalogItemScreenPreview() {
     CatalogItemScreen(
         quizCatalogSerializable = QuizCatalogSerializable(1, "Music"),
-        onNavigateToQuizAddScreen = {}
+        onNavigateToQuizAddScreen = {},
+        onQuizClick = {}
     )
 }
