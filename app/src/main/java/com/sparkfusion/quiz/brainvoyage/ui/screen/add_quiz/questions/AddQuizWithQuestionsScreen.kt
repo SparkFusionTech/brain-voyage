@@ -26,6 +26,7 @@ import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.questions.component.H
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.questions.component.PreviewInformationComponent
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.questions.component.QuestionItemComponent
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add.SharedQuizViewModel
+import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add_question.shared.SharedQuestionContract
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add_question.shared.SharedQuestionsViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.questions.AddQuizWithQuestionsContract.Intent
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.questions.AddQuizWithQuestionsViewModel
@@ -122,7 +123,14 @@ fun AddQuizWithQuestionScreen(
                 }
 
                 items(questions.size) { index ->
-                    QuestionItemComponent(model = questions[index])
+                    QuestionItemComponent(
+                        model = questions[index],
+                        onDeleteItem = {
+                            sharedQuestionsViewModel.handleIntent(
+                                SharedQuestionContract.Intent.DeleteQuestion(index)
+                            )
+                        }
+                    )
                 }
 
                 item {

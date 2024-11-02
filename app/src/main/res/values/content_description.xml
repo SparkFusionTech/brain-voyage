@@ -39,7 +39,7 @@
     <string name="question_image_description">Question image</string>
     <string name="category_icon_description">Category icon</string>
     <string name="collapse_or_expand_category_list_icon_description">Icon of collapsed or expanded category list</string>
-
+    <string name="question_swipe_deletion_icon_description">Icon on box to delete question by swipe</string>
 
 
 

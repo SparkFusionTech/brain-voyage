@@ -19,7 +19,12 @@ class SharedQuestionsViewModel @Inject constructor(
     override fun handleIntent(intent: SharedQuestionContract.Intent) {
         when (intent) {
             is SharedQuestionContract.Intent.AddQuestion -> addQuestion(intent.question)
+            is SharedQuestionContract.Intent.DeleteQuestion -> deleteQuestion(intent.id)
         }
+    }
+
+    private fun deleteQuestion(id: Int) {
+        if (id >= 0 && id < questions.value.size) _questions.value.removeAt(id)
     }
 
     private fun addQuestion(question: SendQuestionModel) {

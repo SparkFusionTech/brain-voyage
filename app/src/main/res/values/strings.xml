@@ -58,6 +58,8 @@
     <string name="questions_name_is_too_short">Questions name is too short</string>
     <string name="difficulty">Difficulty</string>
     <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="do_you_want_cancel_deletion">Cancel deletion?</string>
 
 
 

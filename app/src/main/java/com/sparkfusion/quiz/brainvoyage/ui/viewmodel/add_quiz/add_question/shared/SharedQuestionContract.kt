@@ -7,5 +7,6 @@ interface SharedQuestionContract {
 
     sealed interface Intent : CommonIntent {
         data class AddQuestion(val question: SendQuestionModel) : Intent
+        data class DeleteQuestion(val id: Int) : Intent
     }
 }
