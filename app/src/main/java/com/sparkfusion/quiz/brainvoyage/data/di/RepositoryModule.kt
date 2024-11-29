@@ -1,10 +1,12 @@
 package com.sparkfusion.quiz.brainvoyage.data.di
 
+import com.sparkfusion.quiz.brainvoyage.data.repository.AnswerRepository
 import com.sparkfusion.quiz.brainvoyage.data.repository.ImageSearchRepository
 import com.sparkfusion.quiz.brainvoyage.data.repository.LoginRepository
 import com.sparkfusion.quiz.brainvoyage.data.repository.QuestionRepository
 import com.sparkfusion.quiz.brainvoyage.data.repository.QuizRepository
 import com.sparkfusion.quiz.brainvoyage.data.repository.TagRepository
+import com.sparkfusion.quiz.brainvoyage.domain.repository.IAnswerRepository
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IImageSearchRepository
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ILoginRepository
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IQuestionRepository
@@ -39,4 +41,26 @@ interface RepositoryModule {
     fun bindQuestionRepositoryToIQuestionRepository(
         questionRepository: QuestionRepository
     ): IQuestionRepository
+
+    @Binds
+    fun bindAnswerRepositoryToIAnswerRepository(
+        answerRepository: AnswerRepository
+    ): IAnswerRepository
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

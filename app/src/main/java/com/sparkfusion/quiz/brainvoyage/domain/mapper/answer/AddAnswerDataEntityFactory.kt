@@ -1,7 +1,7 @@
 package com.sparkfusion.quiz.brainvoyage.domain.mapper.answer
 
 import com.sparkfusion.quiz.brainvoyage.data.entity.answer.AddAnswerDataEntity
-import com.sparkfusion.quiz.brainvoyage.domain.model.question.AddAnswerModel
+import com.sparkfusion.quiz.brainvoyage.domain.model.answer.AddAnswerModel
 import com.sparkfusion.quiz.brainvoyage.utils.common.MapFactory
 import javax.inject.Inject
 

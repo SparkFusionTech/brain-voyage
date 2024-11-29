@@ -20,7 +20,8 @@ import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
 fun DrawerItemComponent(
     modifier: Modifier = Modifier,
     label: String,
-    icon: Painter
+    icon: Painter,
+    onItemClick: () -> Unit
 ) {
     NavigationDrawerItem(
         modifier = modifier,
@@ -45,9 +46,7 @@ fun DrawerItemComponent(
             )
         },
         selected = true,
-        onClick = {
-
-        }
+        onClick = onItemClick
     )
 }
 

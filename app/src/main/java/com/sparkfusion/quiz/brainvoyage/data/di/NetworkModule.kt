@@ -1,6 +1,7 @@
 package com.sparkfusion.quiz.brainvoyage.data.di
 
 import com.sparkfusion.quiz.brainvoyage.data.common.AuthInterceptor
+import com.sparkfusion.quiz.brainvoyage.data.datasource.AnswerApiService
 import com.sparkfusion.quiz.brainvoyage.data.datasource.image_search.ImageSearchApiService
 import com.sparkfusion.quiz.brainvoyage.data.datasource.LoginApiService
 import com.sparkfusion.quiz.brainvoyage.data.datasource.QuestionApiService
@@ -63,6 +64,12 @@ object NetworkModule {
     @Provides
     fun provideQuestionApiService(retrofit: Retrofit): QuestionApiService {
         return retrofit.create(QuestionApiService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideAnswerApiService(retrofit: Retrofit): AnswerApiService {
+        return retrofit.create(AnswerApiService::class.java)
     }
 
     @Singleton

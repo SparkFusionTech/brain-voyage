@@ -10,11 +10,14 @@ import com.sparkfusion.quiz.brainvoyage.domain.mapper.quiz.AddQuizDataEntityFact
 import com.sparkfusion.quiz.brainvoyage.domain.mapper.quiz.GetQuizIdDataEntityFactory
 import com.sparkfusion.quiz.brainvoyage.domain.mapper.quiz.GetQuizPreviewDataEntityFactory
 import com.sparkfusion.quiz.brainvoyage.domain.mapper.quiz.GetQuizPreviewListFactory
+import com.sparkfusion.quiz.brainvoyage.domain.mapper.quiz.SubmittedQuizDataEntityFactory
+import com.sparkfusion.quiz.brainvoyage.domain.mapper.quiz.SubmittedQuizzesListFactory
 import com.sparkfusion.quiz.brainvoyage.domain.mapper.quiz_catalog.QuizCatalogListFactory
 import com.sparkfusion.quiz.brainvoyage.domain.model.QuizCatalogModel
 import com.sparkfusion.quiz.brainvoyage.domain.model.quiz.AddQuizModel
 import com.sparkfusion.quiz.brainvoyage.domain.model.quiz.GetQuizIdModel
 import com.sparkfusion.quiz.brainvoyage.domain.model.quiz.GetQuizPreviewModel
+import com.sparkfusion.quiz.brainvoyage.domain.model.quiz.SubmittedQuizModel
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IQuizRepository
 import com.sparkfusion.quiz.brainvoyage.utils.common.Answer
 import com.sparkfusion.quiz.brainvoyage.utils.dispatchers.IODispatcher
@@ -32,7 +35,9 @@ class QuizRepository @Inject constructor(
     private val addQuizDataEntityFactory: AddQuizDataEntityFactory,
     private val getQuizIdDataEntityFactory: GetQuizIdDataEntityFactory,
     private val getQuizPreviewListFactory: GetQuizPreviewListFactory,
-    private val getQuizPreviewDataEntityFactory: GetQuizPreviewDataEntityFactory
+    private val getQuizPreviewDataEntityFactory: GetQuizPreviewDataEntityFactory,
+    private val submittedQuizzesListFactory: SubmittedQuizzesListFactory,
+    private val submittedQuizDataEntityFactory: SubmittedQuizDataEntityFactory
 ) : IQuizRepository {
 
     override suspend fun readQuizzesByCatalogId(catalogId: Long): Answer<List<GetQuizPreviewModel>> =
@@ -71,6 +76,25 @@ class QuizRepository @Inject constructor(
                 .suspendMap(getQuizPreviewDataEntityFactory::mapTo)
 
         }
+
+    override suspend fun readSubmittedQuizById(quizId: Long): Answer<SubmittedQuizModel> =
+        safeApiCall(ioDispatcher) {
+            ApiResponseHandler(quizApiService.readSubmittedQuizById(quizId))
+                .handleFetchedData()
+                .suspendMap(submittedQuizDataEntityFactory::mapTo)
+        }
+
+    override suspend fun readSubmittedQuizzes(): Answer<List<SubmittedQuizModel>> =
+        safeApiCall(ioDispatcher) {
+            ApiListResponseHandler(quizApiService.readSubmittedQuizzes(), ::handleExceptionCode)
+                .handleFetchedData()
+                .suspendMap(submittedQuizzesListFactory::mapTo)
+        }
+
+    override suspend fun deleteQuizById(quizId: Long): Answer<Unit> = safeApiCall(ioDispatcher) {
+        ApiResponseHandler(quizApiService.deleteQuizById(quizId))
+            .handleFetchedData()
+    }
 }
 
 

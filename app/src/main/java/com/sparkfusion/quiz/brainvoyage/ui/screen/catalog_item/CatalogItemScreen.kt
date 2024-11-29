@@ -37,7 +37,8 @@ fun CatalogItemScreen(
     viewModel: CatalogItemViewModel = hiltViewModel(),
     quizCatalogSerializable: QuizCatalogSerializable,
     onNavigateToQuizAddScreen: (QuizCatalogSerializable) -> Unit,
-    onQuizClick: (Long) -> Unit
+    onQuizClick: (Long) -> Unit,
+    onNavigateToMyQuizzesScreen: () -> Unit
 ) {
     LaunchedEffect(quizCatalogSerializable.id) {
         viewModel.handleIntent(CatalogItemContract.Intent.LoadQuizzes(quizCatalogSerializable.id))
@@ -47,7 +48,9 @@ fun CatalogItemScreen(
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    NavigationDrawer { drawerState ->
+    NavigationDrawer(
+        onMyQuizzesClick = onNavigateToMyQuizzesScreen
+    ) { drawerState ->
         Scaffold(
             snackbarHost = {
                 SnackbarHost(hostState = snackbarHostState, modifier = Modifier.padding(16.dp))
@@ -97,6 +100,7 @@ private fun CatalogItemScreenPreview() {
     CatalogItemScreen(
         quizCatalogSerializable = QuizCatalogSerializable(1, "Music"),
         onNavigateToQuizAddScreen = {},
-        onQuizClick = {}
+        onQuizClick = {},
+        onNavigateToMyQuizzesScreen = {}
     )
 }

@@ -8,7 +8,7 @@ import retrofit2.Response
 
 class ApiResponseHandler<R>(
     private val response: Response<R>,
-    private val handleExceptionCode: (code: Int) -> BrainVoyageException
+    private val handleExceptionCode: (code: Int) -> BrainVoyageException = ::handleExceptionCode
 ) {
 
     fun handleFetchedData(): Answer<R> {

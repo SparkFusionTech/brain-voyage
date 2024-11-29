@@ -112,6 +112,9 @@ fun NavGraphBuilder.catalogItemDirection(navController: NavController) {
                 onQuizClick = {
                     navController.currentBackStackEntry?.savedStateHandle?.set(QUIZ_ID_KEY, it)
                     navController.navigate(Destination.QuizItemDestination)
+                },
+                onNavigateToMyQuizzesScreen = {
+                    navController.navigate(Destination.MyQuizzesScreenDestination)
                 }
             )
         }

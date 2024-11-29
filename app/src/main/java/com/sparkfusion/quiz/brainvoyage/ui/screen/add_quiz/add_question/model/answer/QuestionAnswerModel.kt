@@ -1,6 +1,6 @@
 package com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.model.answer
 
-import com.sparkfusion.quiz.brainvoyage.domain.model.question.AddAnswerModel
+import com.sparkfusion.quiz.brainvoyage.domain.model.answer.AddAnswerModel
 
 data class QuestionAnswerModel(
     val name: String,

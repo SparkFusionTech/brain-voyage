@@ -1,6 +1,7 @@
 package com.sparkfusion.quiz.brainvoyage.ui.screen.quiz_item
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,7 +21,9 @@ fun QuizItemScreen(
     quizId: Long,
     onBackClick: () -> Unit
 ) {
-    viewModel.handleIntent(QuizItemContract.Intent.ReadQuiz(quizId))
+    LaunchedEffect(Unit) {
+        viewModel.handleIntent(QuizItemContract.Intent.ReadQuiz(quizId))
+    }
     val quizLoadingState by viewModel.quizLoadingState.collectAsStateWithLifecycle()
 
     when (quizLoadingState) {

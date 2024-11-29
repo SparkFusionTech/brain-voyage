@@ -1,4 +1,4 @@
-package com.sparkfusion.quiz.brainvoyage.domain.model.question
+package com.sparkfusion.quiz.brainvoyage.domain.model.answer
 
 data class AddAnswerModel(
     val name: String,

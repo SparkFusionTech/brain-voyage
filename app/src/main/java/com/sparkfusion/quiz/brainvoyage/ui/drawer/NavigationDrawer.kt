@@ -26,6 +26,7 @@ import com.sparkfusion.quiz.brainvoyage.ui.drawer.component.AccountNameComponent
 fun NavigationDrawer(
     modifier: Modifier = Modifier,
     viewModel: DrawerViewModel = hiltViewModel(),
+    onMyQuizzesClick: () -> Unit,
     content: @Composable (drawerState: DrawerState) -> Unit
 ) {
     val state by viewModel.initialState().collectAsStateWithLifecycle()
@@ -51,12 +52,20 @@ fun NavigationDrawer(
 
                 DrawerItemComponent(
                     label = "My profile",
-                    icon = painterResource(id = R.drawable.round_account)
+                    icon = painterResource(id = R.drawable.round_account),
+                    onItemClick = {}
                 )
 
                 DrawerItemComponent(
                     label = "Settings",
-                    icon = painterResource(id = R.drawable.round_settings)
+                    icon = painterResource(id = R.drawable.round_settings),
+                    onItemClick = {}
+                )
+
+                DrawerItemComponent(
+                    label = "My quizzes",
+                    icon = painterResource(id = R.drawable.round_settings),
+                    onItemClick = onMyQuizzesClick
                 )
             }
         }
@@ -69,7 +78,8 @@ fun NavigationDrawer(
 @Composable
 private fun NavigationDrawerPreview() {
     NavigationDrawer(
-        content = {}
+        content = {},
+        onMyQuizzesClick = {}
     )
 }
 

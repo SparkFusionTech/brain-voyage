@@ -4,6 +4,7 @@ import com.sparkfusion.quiz.brainvoyage.domain.model.QuizCatalogModel
 import com.sparkfusion.quiz.brainvoyage.domain.model.quiz.AddQuizModel
 import com.sparkfusion.quiz.brainvoyage.domain.model.quiz.GetQuizIdModel
 import com.sparkfusion.quiz.brainvoyage.domain.model.quiz.GetQuizPreviewModel
+import com.sparkfusion.quiz.brainvoyage.domain.model.quiz.SubmittedQuizModel
 import com.sparkfusion.quiz.brainvoyage.utils.common.Answer
 import okhttp3.MultipartBody
 
@@ -16,4 +17,24 @@ interface IQuizRepository {
     suspend fun readQuizzesByCatalogId(catalogId: Long): Answer<List<GetQuizPreviewModel>>
 
     suspend fun readQuizById(quizId: Long): Answer<GetQuizPreviewModel>
+
+    suspend fun readSubmittedQuizzes(): Answer<List<SubmittedQuizModel>>
+
+    suspend fun readSubmittedQuizById(quizId: Long): Answer<SubmittedQuizModel>
+
+    suspend fun deleteQuizById(quizId: Long): Answer<Unit>
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
