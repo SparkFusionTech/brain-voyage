@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
@@ -13,12 +14,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sparkfusion.quiz.brainvoyage.ui.screen.drawer.my_quiz_info.component.MyQuizInfoTopBar
 import com.sparkfusion.quiz.brainvoyage.ui.screen.drawer.my_quiz_info.component.SuccessQuizReadingComponent
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.drawer.my_quiz_info.MyQuizInfoContract
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.drawer.my_quiz_info.MyQuizInfoViewModel
+import com.sparkfusion.quiz.brainvoyage.utils.dp.getStatusBarHeightInDp
+import com.sparkfusion.quiz.brainvoyage.window.StatusBarHeightOwner
 
 @Composable
 fun MyQuizInfoScreen(
@@ -42,6 +46,9 @@ fun MyQuizInfoScreen(
     ) {
         item {
             MyQuizInfoTopBar(
+                modifier = Modifier.padding(
+                    top = if (StatusBarHeightOwner.hasCutout) getStatusBarHeightInDp().dp else 0.dp
+                ),
                 onBackClick = onBackClick,
                 onDeleteClick = {}
             )

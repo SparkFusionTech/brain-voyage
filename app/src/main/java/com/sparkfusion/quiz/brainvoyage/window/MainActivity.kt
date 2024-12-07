@@ -14,18 +14,22 @@ import com.sparkfusion.quiz.brainvoyage.ui.theme.BrainVoyageTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.serialization.json.Json
 
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        hideBars()
 
         val startDestination = getStartDestination()
         setContent {
             val navController = rememberNavController()
             BrainVoyageTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(
+                    modifier = Modifier.fillMaxSize()
+                ) { innerPadding ->
                     AppNavHost(
                         innerPadding = innerPadding,
                         navController = navController,

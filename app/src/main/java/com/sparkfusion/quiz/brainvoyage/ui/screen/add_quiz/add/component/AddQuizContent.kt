@@ -45,9 +45,9 @@ fun AddQuizContent(
         Spacer(modifier = Modifier.height(30.dp))
         AsyncImage(
             modifier = Modifier
-                .clickable { onImageAddClick() }
                 .align(Alignment.CenterHorizontally)
                 .clip(RoundedCornerShape(16.dp))
+                .clickable { onImageAddClick() }
                 .height(200.dp)
                 .width(180.dp),
             model = bitmap ?: R.drawable.select_image_icon,

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -36,7 +35,10 @@ import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashContent(isAnimationFinished: MutableState<Boolean>) {
+fun SplashContent(
+    modifier: Modifier = Modifier,
+    isAnimationFinished: MutableState<Boolean>
+) {
     val scale = remember { Animatable(0.0f) }
     val isTextVisible = remember { mutableStateOf(false) }
 
@@ -55,7 +57,7 @@ fun SplashContent(isAnimationFinished: MutableState<Boolean>) {
     }
 
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {

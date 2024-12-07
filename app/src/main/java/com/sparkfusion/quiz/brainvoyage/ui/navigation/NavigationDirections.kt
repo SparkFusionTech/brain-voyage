@@ -19,6 +19,7 @@ import com.sparkfusion.quiz.brainvoyage.ui.screen.catalog.CatalogScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.catalog_item.CatalogItemScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.catalog_item.QUIZ_ID_KEY
 import com.sparkfusion.quiz.brainvoyage.ui.screen.image.ImageSearchScreen
+import com.sparkfusion.quiz.brainvoyage.ui.screen.image.key.CROP_IMAGE_TYPE_AFTER_SEARCH_KEY
 import com.sparkfusion.quiz.brainvoyage.ui.screen.login.model.LoginRegistrationData
 import com.sparkfusion.quiz.brainvoyage.ui.screen.login.LoginScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.registration.RegistrationScreen
@@ -158,13 +159,16 @@ fun NavGraphBuilder.imageCropDirection(navController: NavController) {
 
 fun NavGraphBuilder.imageSearchDirection(navController: NavController) {
     composable<Destination.ImageSearchDestination> {
+        val cropType = navController.previousBackStackEntry?.savedStateHandle?.getImageCropType(
+            CROP_IMAGE_TYPE_AFTER_SEARCH_KEY
+        )
+
         ImageSearchScreen(
             onNavigateBack = navController::popBackStack,
-            onImageSelected = { bitmap, width, height ->
+            onImageSelected = { bitmap ->
                 navController.previousBackStackEntry?.savedStateHandle?.set(IMAGE_CROP_KEY, bitmap)
                 navController.previousBackStackEntry?.savedStateHandle?.setImageCropType(
-                    IMAGE_CROP_TYPE_KEY,
-                    ImageCropType.DynamicRectangleCrop(width, height)
+                    IMAGE_CROP_TYPE_KEY, cropType ?: ImageCropType.RectangleCrop
                 )
 
                 navController.popBackStack()

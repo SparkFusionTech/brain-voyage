@@ -27,6 +27,8 @@ import com.sparkfusion.quiz.brainvoyage.ui.screen.catalog_item.component.Catalog
 import com.sparkfusion.quiz.brainvoyage.ui.screen.catalog_item.component.quizzesLoadingHandlerComponent
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.catalog_item.CatalogItemContract
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.catalog_item.CatalogItemViewModel
+import com.sparkfusion.quiz.brainvoyage.utils.dp.getStatusBarHeightInDp
+import com.sparkfusion.quiz.brainvoyage.window.StatusBarHeightOwner
 import kotlinx.coroutines.launch
 
 const val QUIZ_ID_KEY = "quiz id key"
@@ -57,6 +59,9 @@ fun CatalogItemScreen(
             },
             topBar = {
                 CatalogItemTopBar(
+                    modifier = Modifier.padding(
+                        top = if (StatusBarHeightOwner.hasCutout) getStatusBarHeightInDp().dp else 0.dp
+                    ),
                     title = quizCatalogSerializable.name,
                     onMenuClick = {
                         coroutineScope.launch {

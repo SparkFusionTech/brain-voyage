@@ -15,6 +15,7 @@ import com.sparkfusion.quiz.brainvoyage.ui.model.QuizCatalogSerializable
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add.AddQuizScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.screen.AddQuestionScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.questions.AddQuizWithQuestionScreen
+import com.sparkfusion.quiz.brainvoyage.ui.screen.image.key.CROP_IMAGE_TYPE_AFTER_SEARCH_KEY
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add.SharedQuizViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add_question.shared.SharedQuestionsViewModel
 
@@ -32,6 +33,10 @@ fun NavGraphBuilder.addQuizDirection(navController: NavController) {
                     navController.navigate(Destination.AddQuizWithQuestionsDestination)
                 },
                 onSearchImageScreenNavigate = {
+                    navController.currentBackStackEntry?.savedStateHandle?.setImageCropType(
+                        CROP_IMAGE_TYPE_AFTER_SEARCH_KEY,
+                        ImageCropType.DynamicRectangleCrop(180.dp, 200.dp)
+                    )
                     navController.navigate(Destination.ImageSearchDestination)
                 },
                 onImageCropNavigate = { bitmap ->
@@ -85,6 +90,10 @@ fun NavGraphBuilder.addQuestionScreenDirection(navController: NavController) {
                 navController.popBackStack()
             },
             onSearchImageScreenNavigate = {
+                navController.currentBackStackEntry?.savedStateHandle?.setImageCropType(
+                    CROP_IMAGE_TYPE_AFTER_SEARCH_KEY,
+                    ImageCropType.RectangleCrop
+                )
                 navController.navigate(Destination.ImageSearchDestination)
             },
             onImageCropNavigate = { bitmap ->

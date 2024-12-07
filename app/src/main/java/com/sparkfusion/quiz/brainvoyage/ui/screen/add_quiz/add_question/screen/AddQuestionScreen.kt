@@ -41,6 +41,8 @@ import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
 import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.add_answer.AddAnswerDialog
 import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.close_adding.CloseQuizAddingDialog
 import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.select_image.SelectImageDialog
+import com.sparkfusion.quiz.brainvoyage.utils.dp.getStatusBarHeightInDp
+import com.sparkfusion.quiz.brainvoyage.window.StatusBarHeightOwner
 
 @Composable
 fun AddQuestionScreen(
@@ -122,6 +124,9 @@ fun AddQuestionScreen(
         },
         topBar = {
             AddQuestionTopBar(
+                modifier = Modifier.padding(
+                    top = if (StatusBarHeightOwner.hasCutout) getStatusBarHeightInDp().dp else 0.dp
+                ),
                 onBackClick = {
                     changeCloseDialogVisibility(true)
                 }
@@ -203,6 +208,11 @@ fun AddQuestionScreen(
                     onCheckButtonClick = { id, value ->
                         viewModel.handleIntent(
                             AddQuestionContract.Intent.ChangeSelectedCheckButton(id, value)
+                        )
+                    },
+                    onDeleteItem = { id ->
+                        viewModel.handleIntent(
+                            AddQuestionContract.Intent.DeleteAnswer(id)
                         )
                     }
                 )

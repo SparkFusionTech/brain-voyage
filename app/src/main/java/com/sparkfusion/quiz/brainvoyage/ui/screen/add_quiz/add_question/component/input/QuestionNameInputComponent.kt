@@ -46,8 +46,8 @@ fun QuestionNameInputComponent(
             .fillMaxWidth(),
         value = value,
         onValueChange = {
-            if (value.length < 40) onValueChange(it)
-            else showErrorMessage = true
+            if (it.length == 40) showErrorMessage = true
+            else onValueChange(it)
         },
         placeholder = stringResource(id = R.string.enter_here)
     )

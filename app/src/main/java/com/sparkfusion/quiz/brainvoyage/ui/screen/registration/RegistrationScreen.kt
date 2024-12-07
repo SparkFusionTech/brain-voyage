@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -23,6 +24,8 @@ import com.sparkfusion.quiz.brainvoyage.ui.screen.registration.handler.Registrat
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.registration.RegistrationContract
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.registration.RegistrationState
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.registration.RegistrationViewModel
+import com.sparkfusion.quiz.brainvoyage.utils.dp.getStatusBarHeightInDp
+import com.sparkfusion.quiz.brainvoyage.window.StatusBarHeightOwner
 
 @Composable
 fun RegistrationScreen(
@@ -53,7 +56,12 @@ fun RegistrationScreen(
     RegistrationErrorStateHandler(state = uiState.registrationState, context = context)
 
     Column(modifier = modifier.fillMaxWidth()) {
-        TopBar(onBackClick = onBackClick)
+        TopBar(
+            modifier = Modifier.padding(
+                top = if (StatusBarHeightOwner.hasCutout) getStatusBarHeightInDp().dp else 0.dp
+            ),
+            onBackClick = onBackClick
+        )
 
         Spacer(modifier = Modifier.height(30.dp))
 

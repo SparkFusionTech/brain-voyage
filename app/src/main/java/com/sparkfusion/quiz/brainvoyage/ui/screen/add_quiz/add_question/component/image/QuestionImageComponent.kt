@@ -30,6 +30,7 @@ fun QuestionImageComponent(
             AsyncImage(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
+                    .clip(RoundedCornerShape(12.dp))
                     .clickable { changeImageSelectionDialogVisibility(true) }
                     .size(128.dp),
                 model = R.drawable.select_image_icon,
@@ -43,7 +44,7 @@ fun QuestionImageComponent(
                     .clip(RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp))
                     .clickable { changeImageSelectionDialogVisibility(true) },
                 model = bitmap,
-                contentScale = ContentScale.Fit,
+                contentScale = ContentScale.Crop,
                 contentDescription = stringResource(id = R.string.question_image_description)
             )
         }

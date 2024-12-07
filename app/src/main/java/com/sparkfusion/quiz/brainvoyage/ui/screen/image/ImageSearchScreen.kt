@@ -4,6 +4,8 @@ import android.graphics.Bitmap
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -14,10 +16,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -26,15 +29,18 @@ import com.sparkfusion.quiz.brainvoyage.ui.screen.image.component.ImageScreenCon
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.image.ImageSearchContract
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.image.ImageSearchViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
+import com.sparkfusion.quiz.brainvoyage.utils.dp.getStatusBarHeightInDp
 import com.sparkfusion.quiz.brainvoyage.utils.getClearTextFieldContainerColors
+import com.sparkfusion.quiz.brainvoyage.window.StatusBarHeightOwner
 
 @Composable
 fun ImageSearchScreen(
     modifier: Modifier = Modifier,
     viewModel: ImageSearchViewModel = hiltViewModel(),
-    onImageSelected: (Bitmap, Dp, Dp) -> Unit,
+    onImageSelected: (Bitmap) -> Unit,
     onNavigateBack: () -> Unit
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     val context = LocalContext.current
     val state by viewModel.initialState().collectAsStateWithLifecycle()
 
@@ -43,7 +49,11 @@ fun ImageSearchScreen(
         topBar = {
             Row(
                 modifier = Modifier
-                    .padding(start = 8.dp, end = 8.dp),
+                    .padding(
+                        start = 8.dp,
+                        end = 8.dp,
+                        top = if (StatusBarHeightOwner.hasCutout) getStatusBarHeightInDp().dp else 0.dp
+                    ),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 IconButton(onClick = onNavigateBack) {
@@ -56,6 +66,8 @@ fun ImageSearchScreen(
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
                     value = state.query,
+                    maxLines = 1,
+                    singleLine = true,
                     onValueChange = {
                         viewModel.handleIntent(
                             ImageSearchContract.ImageSearchIntent.ChangeQuery(it)
@@ -66,14 +78,26 @@ fun ImageSearchScreen(
                     },
                     colors = getClearTextFieldContainerColors(),
                     trailingIcon = {
-                        IconButton(onClick = { viewModel.handleIntent(ImageSearchContract.ImageSearchIntent.LoadImages) }) {
+                        IconButton(
+                            onClick = {
+                                viewModel.handleIntent(ImageSearchContract.ImageSearchIntent.LoadImages)
+                                keyboardController?.hide()
+                            }
+                        ) {
                             Icon(
                                 painter = painterResource(id = R.drawable.search_icon),
                                 tint = MaterialTheme.colorScheme.primary,
                                 contentDescription = stringResource(id = R.string.search_icon_of_search_button_description)
                             )
                         }
-                    }
+                    },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                    keyboardActions = KeyboardActions(
+                        onSearch = {
+                            viewModel.handleIntent(ImageSearchContract.ImageSearchIntent.LoadImages)
+                            keyboardController?.hide()
+                        }
+                    )
                 )
             }
         }
@@ -83,10 +107,14 @@ fun ImageSearchScreen(
             context = context,
             searchingState = state.imageSearchingState,
             onHandleErrorState = { exception ->
-                viewModel.handleIntent(ImageSearchContract.ImageSearchIntent.HandleErrorLoading(exception))
+                viewModel.handleIntent(
+                    ImageSearchContract.ImageSearchIntent.HandleErrorLoading(
+                        exception
+                    )
+                )
             },
             onImageItemClick = {
-                onImageSelected(it, 180.dp, 200.dp)
+                onImageSelected(it)
             }
         )
     }
@@ -97,8 +125,6 @@ fun ImageSearchScreen(
 private fun ImageSearchScreenPreview() {
     ImageSearchScreen(
         onNavigateBack = {},
-        onImageSelected = { _, _, _ ->
-
-        }
+        onImageSelected = { _ -> }
     )
 }

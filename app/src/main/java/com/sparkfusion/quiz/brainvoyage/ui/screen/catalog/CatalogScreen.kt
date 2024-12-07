@@ -32,6 +32,8 @@ import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.quiz_catalog.QuizCatalogVie
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
 import com.sparkfusion.quiz.brainvoyage.ui.widget.shimmer.ShimmerAnimationBox
 import com.sparkfusion.quiz.brainvoyage.utils.descriptionColor
+import com.sparkfusion.quiz.brainvoyage.utils.dp.getStatusBarHeightInDp
+import com.sparkfusion.quiz.brainvoyage.window.StatusBarHeightOwner
 
 private const val DEFAULT_CATALOG_ITEMS_COUNT = 5
 
@@ -54,7 +56,11 @@ fun CatalogScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 24.dp, end = 24.dp)
+                .padding(
+                    start = 24.dp,
+                    end = 24.dp,
+                    top = if (StatusBarHeightOwner.hasCutout) getStatusBarHeightInDp().dp else 0.dp
+                )
                 .height(72.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {

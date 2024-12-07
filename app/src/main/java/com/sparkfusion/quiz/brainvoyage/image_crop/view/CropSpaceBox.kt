@@ -1,6 +1,5 @@
 package com.sparkfusion.quiz.brainvoyage.image_crop.view
 
-//import com.sparkfusion.quiz.brainvoyage.image_crop.handler.drawBackgroundBlock
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box

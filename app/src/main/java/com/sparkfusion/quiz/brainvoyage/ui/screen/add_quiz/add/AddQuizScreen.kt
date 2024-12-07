@@ -27,6 +27,8 @@ import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add.SharedQuizCont
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add.SharedQuizViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.add_tag.AddTagDialog
 import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.select_image.SelectImageDialog
+import com.sparkfusion.quiz.brainvoyage.utils.dp.getStatusBarHeightInDp
+import com.sparkfusion.quiz.brainvoyage.window.StatusBarHeightOwner
 
 @Composable
 fun AddQuizScreen(
@@ -96,7 +98,9 @@ fun AddQuizScreen(
     Scaffold(
         topBar = {
             AddQuizTopComponent(
-                modifier = Modifier,
+                modifier = Modifier.padding(
+                    top = if (StatusBarHeightOwner.hasCutout) getStatusBarHeightInDp().dp else 0.dp
+                ),
                 onBackClick = onBackClick,
                 onTagSearchClick = {
                     changeTagAddingDialogVisibility(true)

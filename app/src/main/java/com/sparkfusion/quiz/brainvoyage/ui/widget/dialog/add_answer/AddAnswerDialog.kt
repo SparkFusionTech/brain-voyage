@@ -82,12 +82,18 @@ fun AddAnswerDialog(
                 }
             },
             dismissButton = {
-                CancelButton(onDismiss = onDismiss)
+                CancelButton(
+                    onDismiss = {
+                        answer = ""
+                        onDismiss()
+                    }
+                )
             },
             confirmButton = {
                 ConfirmButton {
                     if (answer.isNotEmpty()) {
                         onConfirm(answer)
+                        answer = ""
                         onDismiss()
                     } else {
                         showIsEmptySnackbar = true

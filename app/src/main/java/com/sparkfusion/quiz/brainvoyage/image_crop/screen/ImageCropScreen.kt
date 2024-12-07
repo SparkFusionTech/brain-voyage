@@ -25,12 +25,12 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.sparkfusion.quiz.brainvoyage.R
-import com.sparkfusion.quiz.brainvoyage.image_crop.view.ActionButton
-import com.sparkfusion.quiz.brainvoyage.image_crop.space.CircleCropSpace
 import com.sparkfusion.quiz.brainvoyage.image_crop.common.ImageCropType
 import com.sparkfusion.quiz.brainvoyage.image_crop.handler.ImageCropper
+import com.sparkfusion.quiz.brainvoyage.image_crop.space.CircleCropSpace
 import com.sparkfusion.quiz.brainvoyage.image_crop.space.DynamicRectangleCropSpace
 import com.sparkfusion.quiz.brainvoyage.image_crop.space.RectangleCropSpace
+import com.sparkfusion.quiz.brainvoyage.image_crop.view.ActionButton
 import com.sparkfusion.quiz.brainvoyage.ui.theme.backgroundDark
 import kotlinx.coroutines.launch
 
@@ -55,7 +55,9 @@ fun ImageCropScreen(
     var transform by remember { mutableStateOf(Offset(0f, 0f)) }
 
     LaunchedEffect(croppedImage) {
-        croppedImage?.let { onCropClickHandler(it.asAndroidBitmap()) }
+        croppedImage?.let {
+            onCropClickHandler(it.asAndroidBitmap())
+        }
     }
 
     Box(
@@ -79,6 +81,7 @@ fun ImageCropScreen(
 
                 Pair(cropRectangleWidth, cropRectangleHeight)
             }
+
             is ImageCropType.DynamicRectangleCrop -> {
                 val cropRectangleWidthDp = cropType.widthDp
                 val cropRectangleHeightDp = cropType.heightDp
@@ -92,8 +95,14 @@ fun ImageCropScreen(
                     onTransformChange = { transform = it }
                 )
 
-                with(LocalDensity.current) { Pair(cropRectangleWidthDp.toPx(), cropRectangleHeightDp.toPx()) }
+                with(LocalDensity.current) {
+                    Pair(
+                        cropRectangleWidthDp.toPx(),
+                        cropRectangleHeightDp.toPx()
+                    )
+                }
             }
+
             else -> {
                 val cropCircleDiameter = if (screenWidthPx < minSide) screenWidthPx else minSide
 
@@ -128,3 +137,18 @@ fun ImageCropScreen(
         )
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

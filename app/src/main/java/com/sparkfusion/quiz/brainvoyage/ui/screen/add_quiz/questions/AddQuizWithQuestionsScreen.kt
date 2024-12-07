@@ -33,6 +33,8 @@ import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.questions.AddQuizW
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
 import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.close_adding.CloseQuizAddingDialog
 import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.quiz_saving.QuizSavingDialog
+import com.sparkfusion.quiz.brainvoyage.utils.dp.getStatusBarHeightInDp
+import com.sparkfusion.quiz.brainvoyage.window.StatusBarHeightOwner
 
 @Composable
 fun AddQuizWithQuestionScreen(
@@ -100,6 +102,9 @@ fun AddQuizWithQuestionScreen(
         },
         topBar = {
             AddQuizWithQuestionsTopBar(
+                modifier = Modifier.padding(
+                    top = if (StatusBarHeightOwner.hasCutout) getStatusBarHeightInDp().dp else 0.dp
+                ),
                 onCheckClick = {
                     viewModel.handleIntent(
                         Intent.SaveQuiz(addQuizInitialModel = model, questions = questions)

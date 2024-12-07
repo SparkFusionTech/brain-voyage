@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -78,6 +79,7 @@ fun QuestionItemComponent(
             }
 
             onDeleteItem()
+            resetSwipe = true
             showSnackbar = false
         }
     }
@@ -89,6 +91,14 @@ fun QuestionItemComponent(
             if (showSnackbar) {
                 val timerProgress = millisRemaining / totalDuration.toFloat()
                 CustomSnackbarWithCountdown(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .background(
+                            Color.Black.copy(alpha = 0.8f),
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .padding(16.dp),
                     message = stringResource(id = R.string.do_you_want_cancel_deletion),
                     timerProgress = timerProgress,
                     secondsRemaining = (millisRemaining / 1000).coerceAtLeast(0),
@@ -139,13 +149,15 @@ fun QuestionItemComponent(
                         .clip(RoundedCornerShape(16.dp))
                         .size(48.dp),
                     model = model.icon,
-                    contentScale = ContentScale.Fit,
+                    contentScale = ContentScale.Crop,
                     contentDescription = stringResource(id = R.string.question_item_image_description)
                 )
 
                 Column(
-                    modifier = Modifier.padding(),
-                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .padding()
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.Center
                 ) {
                     Row(
                         modifier = Modifier.padding(top = 24.dp),
@@ -153,6 +165,7 @@ fun QuestionItemComponent(
                         horizontalArrangement = Arrangement.Start
                     ) {
                         SFProRoundedText(
+                            modifier = Modifier.widthIn(max = 200.dp),
                             content = model.name,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,

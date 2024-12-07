@@ -31,6 +31,8 @@ import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.drawer.my_quizzes.MyQuizzes
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.drawer.my_quizzes.MyQuizzesViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
 import com.sparkfusion.quiz.brainvoyage.utils.descriptionColor
+import com.sparkfusion.quiz.brainvoyage.utils.dp.getStatusBarHeightInDp
+import com.sparkfusion.quiz.brainvoyage.window.StatusBarHeightOwner
 
 @Composable
 fun MyQuizzesScreen(
@@ -51,6 +53,9 @@ fun MyQuizzesScreen(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = modifier
+                    .padding(
+                        top = if (StatusBarHeightOwner.hasCutout) getStatusBarHeightInDp().dp else 0.dp
+                    )
                     .height(72.dp)
                     .fillMaxWidth()
             ) {
