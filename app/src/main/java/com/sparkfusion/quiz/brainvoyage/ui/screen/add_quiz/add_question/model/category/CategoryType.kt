@@ -13,4 +13,17 @@ sealed class CategoryType : Parcelable {
         MultiplyChoice -> 2
         TrueFalse -> 3
     }
+
+    companion object {
+
+        @JvmStatic
+        fun fromInt(value: Int): CategoryType? {
+            return when (value) {
+                1 -> Quiz
+                2 -> MultiplyChoice
+                3 -> TrueFalse
+                else -> null
+            }
+        }
+    }
 }

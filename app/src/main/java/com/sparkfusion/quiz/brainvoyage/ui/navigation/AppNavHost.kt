@@ -33,5 +33,8 @@ fun AppNavHost(
 
         myQuizzesDirection(navController)
         myQuizInfoDirection(navController)
+
+        playQuizDirection(navController)
+        quizVictoryDirection(navController)
     }
 }

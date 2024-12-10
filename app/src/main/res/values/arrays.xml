@@ -6,4 +6,30 @@
         <item>False</item>
     </string-array>
 
+    <string-array name="correct_answers_messages">
+        <item>Correct!</item>
+        <item>Well done!</item>
+        <item>That\'s right!</item>
+        <item>Good job!</item>
+        <item>Exactly!</item>
+        <item>You got it!</item>
+        <item>Right answer!</item>
+        <item>Nicely done!</item>
+        <item>Spot on!</item>
+        <item>You\'re correct!</item>
+    </string-array>
+
+    <string-array name="incorrect_answers_messages">
+        <item>Incorrect!</item>
+        <item>Try again!</item>
+        <item>That\'s not it!</item>
+        <item>Wrong answer!</item>
+        <item>Almost, but not quite!</item>
+        <item>Keep trying!</item>
+        <item>Nope, try again!</item>
+        <item>Not quite right!</item>
+        <item>Check your answer!</item>
+        <item>You can do better!</item>
+    </string-array>
+
 </resources>

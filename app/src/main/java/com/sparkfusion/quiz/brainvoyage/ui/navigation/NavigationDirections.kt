@@ -1,6 +1,7 @@
 package com.sparkfusion.quiz.brainvoyage.ui.navigation
 
 import android.graphics.Bitmap
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -22,7 +23,10 @@ import com.sparkfusion.quiz.brainvoyage.ui.screen.image.ImageSearchScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.image.key.CROP_IMAGE_TYPE_AFTER_SEARCH_KEY
 import com.sparkfusion.quiz.brainvoyage.ui.screen.login.model.LoginRegistrationData
 import com.sparkfusion.quiz.brainvoyage.ui.screen.login.LoginScreen
+import com.sparkfusion.quiz.brainvoyage.ui.screen.play.PlayQuizScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.registration.RegistrationScreen
+import com.sparkfusion.quiz.brainvoyage.ui.screen.victory.VictoryQuizScreen
+import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.victory.VictoryQuizViewModel
 
 fun NavGraphBuilder.loginDirection(navController: NavController) {
     composable<Destination.LoginDestination> {
@@ -128,11 +132,49 @@ fun NavGraphBuilder.quizItemDirection(navController: NavController) {
         quizId?.let {
             QuizItemScreen(
                 quizId = it,
+                onPlayButtonClick = {
+                    navController.currentBackStackEntry?.savedStateHandle?.set(QUIZ_ID_KEY, quizId)
+                    navController.navigate(Destination.PlayQuizDestination)
+                },
                 onBackClick = {
                     navController.popBackStack()
                 }
             )
         }
+    }
+}
+
+fun NavGraphBuilder.playQuizDirection(navController: NavController) {
+    composable<Destination.PlayQuizDestination> { backStackEntry ->
+        val quizId = navController.previousBackStackEntry?.savedStateHandle?.get<Long>(QUIZ_ID_KEY)
+        val victoryQuizViewModel: VictoryQuizViewModel = hiltViewModel(backStackEntry)
+
+        quizId?.let {
+            PlayQuizScreen(
+                quizId = it,
+                victoryQuizViewModel = victoryQuizViewModel,
+                onNavigateToVictoryScreen = {
+                    navController.navigate(Destination.QuizVictoryDestination)
+                },
+                onDismiss = {
+                    navController.popBackStack(Destination.CatalogItemDestination, inclusive = false)
+                }
+            )
+        }
+    }
+}
+
+fun NavGraphBuilder.quizVictoryDirection(navController: NavController) {
+    composable<Destination.QuizVictoryDestination> {
+        val backStack = navController.previousBackStackEntry
+        val viewModel: VictoryQuizViewModel = if (backStack == null) hiltViewModel()
+        else hiltViewModel(backStack)
+        VictoryQuizScreen(
+            viewModel = viewModel,
+            onBackClick = {
+                navController.popBackStack(Destination.QuizItemDestination, inclusive = true)
+            }
+        )
     }
 }
 

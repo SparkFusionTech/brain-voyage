@@ -5,10 +5,12 @@ import com.sparkfusion.quiz.brainvoyage.data.common.ApiResponseHandler
 import com.sparkfusion.quiz.brainvoyage.data.common.safeApiCall
 import com.sparkfusion.quiz.brainvoyage.data.datasource.QuestionApiService
 import com.sparkfusion.quiz.brainvoyage.data.datasource.request_body.RequestBodyParser
+import com.sparkfusion.quiz.brainvoyage.data.entity.question.QuestionWithAnswerDataEntityListFactory
 import com.sparkfusion.quiz.brainvoyage.domain.mapper.question.AddQuestionDataEntityFactory
 import com.sparkfusion.quiz.brainvoyage.domain.mapper.question.QuestionsListFactory
 import com.sparkfusion.quiz.brainvoyage.domain.model.question.AddQuestionModel
 import com.sparkfusion.quiz.brainvoyage.domain.model.question.QuestionModel
+import com.sparkfusion.quiz.brainvoyage.domain.model.question.QuestionWithAnswersModel
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IQuestionRepository
 import com.sparkfusion.quiz.brainvoyage.utils.common.Answer
 import com.sparkfusion.quiz.brainvoyage.utils.dispatchers.IODispatcher
@@ -23,8 +25,16 @@ class QuestionRepository @Inject constructor(
     private val questionApiService: QuestionApiService,
     private val requestBodyParser: RequestBodyParser,
     private val addQuestionDataEntityFactory: AddQuestionDataEntityFactory,
+    private val questionWithAnswersDataEntityMapper: QuestionWithAnswerDataEntityListFactory,
     private val questionsListFactory: QuestionsListFactory
 ) : IQuestionRepository {
+
+    override suspend fun readQuestionsWithAnswersByQuizId(quizId: Long): Answer<List<QuestionWithAnswersModel>> =
+        safeApiCall(ioDispatcher) {
+            ApiListResponseHandler(questionApiService.readQuestionsWithAnswers(quizId))
+                .handleFetchedData()
+                .suspendMap(questionWithAnswersDataEntityMapper::mapTo)
+        }
 
     override suspend fun createQuestion(
         addQuestion: AddQuestionModel,

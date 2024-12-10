@@ -1,6 +1,7 @@
 package com.sparkfusion.quiz.brainvoyage.data.datasource
 
 import com.sparkfusion.quiz.brainvoyage.data.entity.question.QuestionDataEntity
+import com.sparkfusion.quiz.brainvoyage.data.entity.question.QuestionWithAnswersDataEntity
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -23,4 +24,9 @@ interface QuestionApiService {
     suspend fun readQuestionsByQuizId(
         @Query("quizId") quizId: Long
     ): Response<List<QuestionDataEntity>>
+
+    @GET("/quizzes/questions/play")
+    suspend fun readQuestionsWithAnswers(
+        @Query("quizId") quizId: Long
+    ): Response<List<QuestionWithAnswersDataEntity>>
 }

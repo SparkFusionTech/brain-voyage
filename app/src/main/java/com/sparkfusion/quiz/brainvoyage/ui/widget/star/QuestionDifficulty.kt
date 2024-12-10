@@ -50,6 +50,20 @@ sealed class QuestionDifficulty(val brush: Brush) : Parcelable {
         Difficult -> 3
         Impossible -> 4
     }
+
+    companion object {
+
+        @JvmStatic
+        fun mapToQuestionDifficulty(value: Int): QuestionDifficulty {
+            return when (value) {
+                1 -> Easy
+                2 -> Normal
+                3 -> Difficult
+                4 -> Impossible
+                else -> Easy
+            }
+        }
+    }
 }
 
 
