@@ -1,10 +1,15 @@
 package com.sparkfusion.quiz.brainvoyage.ui.navigation
 
 import android.graphics.Bitmap
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.image_crop.common.CROPPED_KEY
 import com.sparkfusion.quiz.brainvoyage.image_crop.common.IMAGE_CROP_KEY
 import com.sparkfusion.quiz.brainvoyage.image_crop.common.IMAGE_CROP_TYPE_KEY
@@ -15,15 +20,16 @@ import com.sparkfusion.quiz.brainvoyage.image_crop.screen.FailedOpenImageScreen
 import com.sparkfusion.quiz.brainvoyage.image_crop.screen.ImageCropScreen
 import com.sparkfusion.quiz.brainvoyage.ui.model.QUIZ_CATALOG_INFO_KEY
 import com.sparkfusion.quiz.brainvoyage.ui.model.QuizCatalogSerializable
-import com.sparkfusion.quiz.brainvoyage.ui.screen.quiz_item.QuizItemScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.catalog.CatalogScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.catalog_item.CatalogItemScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.catalog_item.QUIZ_ID_KEY
+import com.sparkfusion.quiz.brainvoyage.ui.screen.empty_loading.EmptyLoadingScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.image.ImageSearchScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.image.key.CROP_IMAGE_TYPE_AFTER_SEARCH_KEY
-import com.sparkfusion.quiz.brainvoyage.ui.screen.login.model.LoginRegistrationData
 import com.sparkfusion.quiz.brainvoyage.ui.screen.login.LoginScreen
+import com.sparkfusion.quiz.brainvoyage.ui.screen.login.model.LoginRegistrationData
 import com.sparkfusion.quiz.brainvoyage.ui.screen.play.PlayQuizScreen
+import com.sparkfusion.quiz.brainvoyage.ui.screen.quiz_item.QuizItemScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.registration.RegistrationScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.victory.VictoryQuizScreen
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.victory.VictoryQuizViewModel
@@ -140,7 +146,12 @@ fun NavGraphBuilder.quizItemDirection(navController: NavController) {
                     navController.popBackStack()
                 }
             )
-        }
+        } ?: EmptyLoadingScreen(
+            modifier = Modifier.paint(
+                painter = painterResource(id = R.drawable.play_quiz_background),
+                contentScale = ContentScale.Crop
+            )
+        )
     }
 }
 
@@ -160,7 +171,12 @@ fun NavGraphBuilder.playQuizDirection(navController: NavController) {
                     navController.popBackStack(Destination.CatalogItemDestination, inclusive = false)
                 }
             )
-        }
+        } ?: EmptyLoadingScreen(
+            modifier = Modifier.paint(
+                painter = painterResource(id = R.drawable.play_quiz_background),
+                contentScale = ContentScale.Crop
+            )
+        )
     }
 }
 

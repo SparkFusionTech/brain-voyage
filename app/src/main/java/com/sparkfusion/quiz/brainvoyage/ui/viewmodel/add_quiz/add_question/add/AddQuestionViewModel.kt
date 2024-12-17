@@ -14,6 +14,7 @@ import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.model.di
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.model.question.SendQuestionModel
 import com.sparkfusion.quiz.brainvoyage.utils.common.viewmodel.MultiStateViewModel
 import com.sparkfusion.quiz.brainvoyage.utils.dispatchers.DefaultDispatcher
+import com.sparkfusion.quiz.brainvoyage.utils.image.BitmapSizeReducer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,7 +26,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddQuestionViewModel @Inject constructor(
-    @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher
+    @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
+    private val bitmapSizeReducer: BitmapSizeReducer
 ) : MultiStateViewModel<AddQuestionContract.Intent>() {
 
     val categories: Array<CategoryModel> = initCategories()
@@ -196,7 +198,11 @@ class AddQuestionViewModel @Inject constructor(
 
     private fun changeIcon(icon: Bitmap?) {
         if (icon == null) return
-        _imageState.update { it.copy(bitmap = icon) }
+        viewModelScope.launch(defaultDispatcher) {
+            _imageState.update {
+                it.copy(bitmap = bitmapSizeReducer.reduce(icon))
+            }
+        }
     }
 
     private fun changeQuestion(value: String) {

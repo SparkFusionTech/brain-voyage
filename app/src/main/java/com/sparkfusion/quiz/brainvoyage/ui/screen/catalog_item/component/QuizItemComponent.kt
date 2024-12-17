@@ -57,7 +57,7 @@ fun QuizItemComponent(
         if (isImageLoading) {
             ShimmerAnimationBox(
                 modifier = Modifier.padding(start = 12.dp, top = 6.dp, bottom = 6.dp, end = 12.dp),
-                size = DpSize(90.dp, 90.dp),
+                size = DpSize(90.dp, 100.dp),
                 shape = RoundedCornerShape(16.dp)
             )
         }
@@ -68,7 +68,7 @@ fun QuizItemComponent(
             modifier = Modifier
                 .padding(paddings)
                 .clip(RoundedCornerShape(16.dp))
-                .size(if (isImageLoading) 0.dp else 90.dp),
+                .size(if (isImageLoading) DpSize(0.dp, 0.dp) else DpSize(90.dp, 100.dp)),
             model = ImageRequest.Builder(context)
                 .data(quiz.imageUrl)
                 .crossfade(true)

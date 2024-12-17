@@ -1,8 +1,6 @@
 package com.sparkfusion.quiz.brainvoyage.ui.screen.victory.component
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +10,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -58,15 +57,11 @@ fun VictoryBackgroundBlock(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.Transparent)
+            .paint(
+                painter = painterResource(id = R.drawable.play_quiz_background),
+                contentScale = ContentScale.Crop
+            )
     ) {
-        Image(
-            modifier = Modifier.fillMaxSize(),
-            painter = painterResource(id = R.drawable.play_quiz_background),
-            contentDescription = null,
-            contentScale = ContentScale.Crop
-        )
-
         SFProRoundedText(
             modifier = Modifier
                 .align(Alignment.TopCenter)
@@ -164,7 +159,6 @@ fun VictoryBackgroundBlock(
                 .width(280.dp)
                 .height(276.dp)
                 .offset(y = 106.dp)
-                .background(Color.Transparent)
         ) {
             content()
         }

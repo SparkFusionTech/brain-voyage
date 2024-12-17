@@ -2,18 +2,26 @@ package com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add
 
 import android.graphics.Bitmap
 import androidx.compose.runtime.mutableStateListOf
+import androidx.lifecycle.viewModelScope
 import com.sparkfusion.quiz.brainvoyage.ui.model.QuizCatalogSerializable
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.model.AddQuizInitialModel
 import com.sparkfusion.quiz.brainvoyage.utils.common.viewmodel.MultiStateViewModel
+import com.sparkfusion.quiz.brainvoyage.utils.dispatchers.DefaultDispatcher
+import com.sparkfusion.quiz.brainvoyage.utils.image.BitmapSizeReducer
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddQuizViewModel @Inject constructor() : MultiStateViewModel<AddQuizContract.AddQuizIntent>() {
+class AddQuizViewModel @Inject constructor(
+    @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
+    private val bitmapSizeReducer: BitmapSizeReducer
+) : MultiStateViewModel<AddQuizContract.AddQuizIntent>() {
 
     private val _state = MutableStateFlow(AddQuizContract.AddQuizState())
     val state: StateFlow<AddQuizContract.AddQuizState> get() = _state.asStateFlow()
@@ -28,8 +36,14 @@ class AddQuizViewModel @Inject constructor() : MultiStateViewModel<AddQuizContra
         when (intent) {
             is AddQuizContract.AddQuizIntent.ChangeTitle -> changeTitle(intent.value)
             is AddQuizContract.AddQuizIntent.ChangeDescription -> changeDescription(intent.value)
-            is AddQuizContract.AddQuizIntent.ChangeImageSelectionDialogVisibility -> changeImageSelectionDialogVisibility(intent.value)
-            is AddQuizContract.AddQuizIntent.ChangeTagAddingDialogVisibility -> changeTagAddingDialogVisibility(intent.value)
+            is AddQuizContract.AddQuizIntent.ChangeImageSelectionDialogVisibility -> changeImageSelectionDialogVisibility(
+                intent.value
+            )
+
+            is AddQuizContract.AddQuizIntent.ChangeTagAddingDialogVisibility -> changeTagAddingDialogVisibility(
+                intent.value
+            )
+
             is AddQuizContract.AddQuizIntent.ChangeIcon -> changeIcon(intent.bitmap)
             is AddQuizContract.AddQuizIntent.AddTag -> addTag(intent.tag)
             is AddQuizContract.AddQuizIntent.DeleteTag -> deleteTag(intent.id)
@@ -93,7 +107,15 @@ class AddQuizViewModel @Inject constructor() : MultiStateViewModel<AddQuizContra
     }
 
     private fun changeIcon(bitmap: Bitmap?) {
-        _state.update { it.copy(bitmap = bitmap) }
+        viewModelScope.launch(defaultDispatcher) {
+            _state.update {
+                it.copy(
+                    bitmap = bitmap?.let { value ->
+                        bitmapSizeReducer.reduce(value)
+                    }
+                )
+            }
+        }
     }
 
     private fun changeImageSelectionDialogVisibility(value: Boolean) {

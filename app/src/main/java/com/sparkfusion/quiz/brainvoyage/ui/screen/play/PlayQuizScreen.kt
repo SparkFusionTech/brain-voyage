@@ -1,8 +1,6 @@
 package com.sparkfusion.quiz.brainvoyage.ui.screen.play
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -67,15 +65,11 @@ fun PlayQuizScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Transparent)
+            .paint(
+                painter = painterResource(id = R.drawable.play_quiz_background),
+                contentScale = ContentScale.Crop
+            )
     ) {
-        Image(
-            modifier = Modifier.fillMaxSize(),
-            painter = painterResource(id = R.drawable.play_quiz_background),
-            contentDescription = null,
-            contentScale = ContentScale.Crop
-        )
-
         QuizContent(
             modifier = modifier,
             currentQuestionState = currentQuestionState,
