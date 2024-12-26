@@ -16,8 +16,8 @@ import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.component.CancelButton
 import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.component.ConfirmButton
 import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.component.TitleComponent
-import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.select_image.component.TextComponent
-import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.select_image.item.SelectImageType
+import com.sparkfusion.quiz.brainvoyage.ui.dialog.select_image.TextComponent
+import com.sparkfusion.quiz.brainvoyage.ui.dialog.select_image.item.SelectImageType
 
 @Composable
 fun SelectImageDialog(

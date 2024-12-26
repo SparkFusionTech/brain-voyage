@@ -1,5 +1,6 @@
 package com.sparkfusion.quiz.brainvoyage.ui.screen.quiz_item.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -25,6 +28,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.domain.model.quiz.GetQuizPreviewModel
+import com.sparkfusion.quiz.brainvoyage.ui.theme.buttonDarkColor
+import com.sparkfusion.quiz.brainvoyage.ui.theme.buttonLightColor
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
 import com.sparkfusion.quiz.brainvoyage.ui.widget.shimmer.ShimmerAnimationBox
 import com.sparkfusion.quiz.brainvoyage.utils.descriptionColor
@@ -124,7 +129,18 @@ fun SuccessQuizItemLoadingComponent(
         Button(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(top = 40.dp, bottom = 20.dp),
+                .padding(top = 40.dp, bottom = 20.dp)
+                .padding(horizontal = 64.dp)
+                .fillMaxWidth()
+                .height(60.dp)
+                .background(
+                    brush = Brush.linearGradient(
+                        colors = listOf(buttonLightColor, buttonDarkColor),
+                    ),
+                    shape = RoundedCornerShape(50.dp)
+                )
+                .clip(RoundedCornerShape(50.dp)),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
             onClick = onPlayButtonClick
         ) {
             SFProRoundedText(

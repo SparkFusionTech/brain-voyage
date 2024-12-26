@@ -21,6 +21,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.ui.drawer.component.AccountIconComponent
 import com.sparkfusion.quiz.brainvoyage.ui.drawer.component.AccountNameComponent
+import com.sparkfusion.quiz.brainvoyage.ui.theme.drawerContainerDarkColor
 
 @Composable
 fun NavigationDrawer(
@@ -36,7 +37,10 @@ fun NavigationDrawer(
         modifier = modifier,
         drawerState = drawerState,
         drawerContent = {
-            ModalDrawerSheet(modifier = Modifier.width(330.dp)) {
+            ModalDrawerSheet(
+                modifier = Modifier.width(330.dp),
+                drawerContainerColor = drawerContainerDarkColor
+            ) {
                 AccountIconComponent(
                     modifier = Modifier
                         .padding(start = 12.dp, top = 24.dp)

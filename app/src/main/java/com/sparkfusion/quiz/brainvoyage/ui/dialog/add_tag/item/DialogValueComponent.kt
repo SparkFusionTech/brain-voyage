@@ -1,4 +1,4 @@
-package com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.add_tag.item
+package com.sparkfusion.quiz.brainvoyage.ui.dialog.add_tag.item
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,6 +30,7 @@ fun DialogValueComponent(
 
     Column(modifier = modifier) {
         InputTagComponent(
+            modifier = Modifier.fillMaxWidth(),
             value = enterValue,
             onValueChange = { enterValue = it },
             onButtonClick = {

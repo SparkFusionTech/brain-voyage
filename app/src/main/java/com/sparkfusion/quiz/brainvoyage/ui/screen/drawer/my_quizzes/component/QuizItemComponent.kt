@@ -1,5 +1,6 @@
 package com.sparkfusion.quiz.brainvoyage.ui.screen.drawer.my_quizzes.component
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -20,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -38,6 +40,8 @@ import coil.request.ImageRequest
 import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.domain.model.quiz.QuizStatusModel
 import com.sparkfusion.quiz.brainvoyage.domain.model.quiz.SubmittedQuizModel
+import com.sparkfusion.quiz.brainvoyage.ui.theme.settingsBackgroundDarkColor
+import com.sparkfusion.quiz.brainvoyage.ui.theme.settingsBackgroundLightColor
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
 import com.sparkfusion.quiz.brainvoyage.ui.widget.shimmer.ShimmerAnimationBox
 import com.sparkfusion.quiz.brainvoyage.utils.descriptionColor
@@ -55,19 +59,29 @@ fun QuizItemComponent(
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 3.dp)
+            .background(
+                brush = Brush.linearGradient(
+                    listOf(
+                        settingsBackgroundDarkColor,
+                        settingsBackgroundLightColor
+                    )
+                ),
+                shape = RoundedCornerShape(16.dp)
+            )
             .clip(RoundedCornerShape(16.dp))
             .clickable { onItemClick(quiz.id) }
     ) {
-        if (isImageLoading) {
+        AnimatedVisibility(visible = isImageLoading) {
             ShimmerAnimationBox(
-                modifier = Modifier.padding(start = 12.dp, top = 6.dp, bottom = 6.dp, end = 12.dp),
+                modifier = Modifier.padding(start = 8.dp, top = 9.dp, bottom = 6.dp, end = 12.dp),
                 size = DpSize(90.dp, 100.dp),
                 shape = RoundedCornerShape(16.dp)
             )
         }
 
         val paddings = if (isImageLoading) PaddingValues()
-        else PaddingValues(start = 12.dp, top = 6.dp, bottom = 6.dp, end = 12.dp)
+        else PaddingValues(start = 8.dp, top = 9.dp, bottom = 6.dp, end = 12.dp)
 
         val statusInfoModel = statusInfoModel(status = quiz.status)
         Box(
@@ -87,37 +101,38 @@ fun QuizItemComponent(
                 contentScale = ContentScale.Crop,
                 contentDescription = stringResource(id = R.string.quiz_preview_image_description),
                 onLoading = { isImageLoading = true },
-                onSuccess = { isImageLoading = false }
+                onSuccess = { isImageLoading = false },
+                onError = { isImageLoading = false }
             )
 
-            if (statusInfoModel.color != Color.Transparent) {
+            if (!isImageLoading && statusInfoModel.color != Color.Transparent) {
                 Box(
                     modifier = Modifier
                         .size(DpSize(90.dp, 100.dp))
                         .clip(RoundedCornerShape(16.dp))
-                        .background(Color.Black.copy(alpha = 0.4f))
-                )
-            }
-
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Icon(
-                    modifier = Modifier.size(if (statusInfoModel.color == Color.Transparent) 0.dp else 24.dp),
-                    painter = painterResource(id = statusInfoModel.icon),
-                    contentDescription = null,
-                    tint = statusInfoModel.color
+                        .background(Color.Black.copy(alpha = 0.1f))
                 )
 
-                SFProRoundedText(
-                    modifier = Modifier
-                        .padding(top = 4.dp)
-                        .width(90.dp),
-                    content = statusInfoModel.text,
-                    color = statusInfoModel.color,
-                    fontWeight = FontWeight.Medium,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    textAlign = TextAlign.Center
-                )
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Icon(
+                        modifier = Modifier.size(if (statusInfoModel.color == Color.Transparent) 0.dp else 24.dp),
+                        painter = painterResource(id = statusInfoModel.icon),
+                        contentDescription = null,
+                        tint = statusInfoModel.color
+                    )
+
+                    SFProRoundedText(
+                        modifier = Modifier
+                            .padding(top = 4.dp)
+                            .width(90.dp),
+                        content = statusInfoModel.text,
+                        color = statusInfoModel.color,
+                        fontWeight = FontWeight.Medium,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
 
@@ -129,12 +144,13 @@ fun QuizItemComponent(
             SFProRoundedText(
                 modifier = Modifier
                     .padding(top = 8.dp)
-                    .width(260.dp),
+                    .width(280.dp),
                 content = quiz.title,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.ExtraBold,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                color = Color.White
             )
 
             SFProRoundedText(
@@ -149,13 +165,14 @@ fun QuizItemComponent(
 
             SFProRoundedText(
                 modifier = Modifier
-                    .padding(top = 4.dp)
+                    .padding(top = 4.dp, bottom = 6.dp)
                     .width(260.dp),
                 content = quiz.description,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
                 maxLines = 2,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                color = Color.White
             )
         }
     }

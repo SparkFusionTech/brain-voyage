@@ -41,13 +41,15 @@ fun ListItemComponent(
         SFProRoundedText(
             content = title,
             fontSize = 18.sp,
-            fontWeight = FontWeight.SemiBold
+            fontWeight = FontWeight.SemiBold,
+            color = Color.White
         )
 
         Icon(
             painter = painterResource(id = R.drawable.round_arrow_drop_down),
             contentDescription = null,
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(24.dp),
+            tint = Color.White
         )
     }
 

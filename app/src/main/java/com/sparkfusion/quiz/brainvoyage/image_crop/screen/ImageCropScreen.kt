@@ -1,6 +1,7 @@
 package com.sparkfusion.quiz.brainvoyage.image_crop.screen
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,6 +33,8 @@ import com.sparkfusion.quiz.brainvoyage.image_crop.space.DynamicRectangleCropSpa
 import com.sparkfusion.quiz.brainvoyage.image_crop.space.RectangleCropSpace
 import com.sparkfusion.quiz.brainvoyage.image_crop.view.ActionButton
 import com.sparkfusion.quiz.brainvoyage.ui.theme.backgroundDark
+import com.sparkfusion.quiz.brainvoyage.utils.image.BitmapSizeReducer
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
@@ -56,6 +59,9 @@ fun ImageCropScreen(
 
     LaunchedEffect(croppedImage) {
         croppedImage?.let {
+            Log.d("SOME", "---" + it.asAndroidBitmap().byteCount / 1024)
+            val reducer = BitmapSizeReducer(Dispatchers.Default)
+            reducer.reduce(it.asAndroidBitmap())
             onCropClickHandler(it.asAndroidBitmap())
         }
     }

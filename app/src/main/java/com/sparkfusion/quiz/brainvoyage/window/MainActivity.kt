@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import com.sparkfusion.quiz.brainvoyage.ui.navigation.AppNavHost
 import com.sparkfusion.quiz.brainvoyage.ui.navigation.Destination
 import com.sparkfusion.quiz.brainvoyage.ui.theme.BrainVoyageTheme
+import com.sparkfusion.quiz.brainvoyage.ui.theme.settingsBackgroundLightColor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.serialization.json.Json
 
@@ -28,7 +29,8 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             BrainVoyageTheme {
                 Scaffold(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    containerColor = settingsBackgroundLightColor
                 ) { innerPadding ->
                     AppNavHost(
                         innerPadding = innerPadding,

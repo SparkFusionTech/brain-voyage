@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -47,7 +48,7 @@ fun DifficultyItemComponent(
                 .border(
                     1.dp,
                     if (isCurrent) MaterialTheme.colorScheme.primary
-                    else MaterialTheme.colorScheme.background
+                    else Color.Transparent
                 ),
             contentAlignment = Alignment.Center
         ) {

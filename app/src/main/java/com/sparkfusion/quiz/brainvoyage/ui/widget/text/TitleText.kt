@@ -2,6 +2,7 @@ package com.sparkfusion.quiz.brainvoyage.ui.widget.text
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
@@ -15,6 +16,7 @@ fun TitleText(
         modifier = modifier,
         content = content,
         fontSize = 18.sp,
-        fontWeight = FontWeight.Medium
+        fontWeight = FontWeight.Medium,
+        color = Color.White
     )
 }

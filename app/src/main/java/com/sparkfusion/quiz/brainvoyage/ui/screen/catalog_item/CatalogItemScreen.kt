@@ -14,6 +14,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -82,7 +84,14 @@ fun CatalogItemScreen(
             },
             floatingActionButtonPosition = FabPosition.End
         ) {
-            LazyColumn(modifier = modifier.padding(it)) {
+            LazyColumn(
+                modifier = modifier
+                    .paint(
+                        painter = painterResource(id = R.drawable.background),
+                        contentScale = ContentScale.Crop
+                    )
+                    .padding(it)
+            ) {
                 quizzesLoadingHandlerComponent(
                     quizzesLoadingState = quizzesLoadingState,
                     snackbarHostState = snackbarHostState,

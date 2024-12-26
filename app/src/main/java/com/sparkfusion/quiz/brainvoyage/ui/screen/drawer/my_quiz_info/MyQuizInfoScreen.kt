@@ -1,6 +1,7 @@
 package com.sparkfusion.quiz.brainvoyage.ui.screen.drawer.my_quiz_info
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -19,6 +21,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sparkfusion.quiz.brainvoyage.ui.screen.drawer.my_quiz_info.component.MyQuizInfoTopBar
 import com.sparkfusion.quiz.brainvoyage.ui.screen.drawer.my_quiz_info.component.SuccessQuizReadingComponent
+import com.sparkfusion.quiz.brainvoyage.ui.theme.settingsBackgroundDarkColor
+import com.sparkfusion.quiz.brainvoyage.ui.theme.settingsBackgroundLightColor
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.drawer.my_quiz_info.MyQuizInfoContract
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.drawer.my_quiz_info.MyQuizInfoViewModel
 import com.sparkfusion.quiz.brainvoyage.utils.dp.getStatusBarHeightInDp
@@ -42,7 +46,16 @@ fun MyQuizInfoScreen(
     val context = LocalContext.current
 
     LazyColumn(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
+            .background(
+                Brush.linearGradient(
+                    listOf(
+                        settingsBackgroundLightColor,
+                        settingsBackgroundDarkColor
+                    )
+                )
+            )
     ) {
         item {
             MyQuizInfoTopBar(

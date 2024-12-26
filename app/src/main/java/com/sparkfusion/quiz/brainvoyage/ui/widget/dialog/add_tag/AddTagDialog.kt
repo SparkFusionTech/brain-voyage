@@ -10,7 +10,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import com.sparkfusion.quiz.brainvoyage.R
-import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.add_tag.item.DialogValueComponent
+import com.sparkfusion.quiz.brainvoyage.ui.dialog.add_tag.item.DialogValueComponent
 import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.component.CancelButton
 import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.component.ConfirmButton
 import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.component.TitleComponent

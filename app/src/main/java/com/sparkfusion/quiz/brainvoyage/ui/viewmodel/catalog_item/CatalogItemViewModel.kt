@@ -32,6 +32,7 @@ class CatalogItemViewModel @Inject constructor(
     }
 
     private fun loadQuizzes(catalogId: Long) {
+        if (_quizLoadingState.value is CatalogItemContract.QuizLoadingState.Success) return
         _quizLoadingState.update { CatalogItemContract.QuizLoadingState.Loading }
         viewModelScope.launch(ioDispatcher) {
             quizRepository.readQuizzesByCatalogId(catalogId)

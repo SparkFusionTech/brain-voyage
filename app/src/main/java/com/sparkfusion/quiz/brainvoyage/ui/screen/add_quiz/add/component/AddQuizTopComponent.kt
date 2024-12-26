@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -43,7 +44,8 @@ fun AddQuizTopComponent(
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.arrow_back_icon),
-                contentDescription = stringResource(id = R.string.add_quiz_back_button_description)
+                contentDescription = stringResource(id = R.string.add_quiz_back_button_description),
+                tint = Color.White
             )
         }
 
@@ -52,7 +54,8 @@ fun AddQuizTopComponent(
         SFProRoundedText(
             content = stringResource(id = R.string.new_quiz),
             fontSize = 20.sp,
-            fontWeight = FontWeight.ExtraBold
+            fontWeight = FontWeight.ExtraBold,
+            color = Color.White
         )
 
         Spacer(modifier = Modifier.weight(1f))

@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -39,7 +40,8 @@ fun AddQuizWithQuestionsTopBar(
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.arrow_back_icon),
-                contentDescription = stringResource(id = R.string.add_quiz_with_questions_back_button_icon_description)
+                contentDescription = stringResource(id = R.string.add_quiz_with_questions_back_button_icon_description),
+                tint = Color.White
             )
         }
 
@@ -48,7 +50,8 @@ fun AddQuizWithQuestionsTopBar(
         SFProRoundedText(
             content = stringResource(id = R.string.questions),
             fontSize = 20.sp,
-            fontWeight = FontWeight.ExtraBold
+            fontWeight = FontWeight.ExtraBold,
+            color = Color.White
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -57,7 +60,7 @@ fun AddQuizWithQuestionsTopBar(
             Icon(
                 painter = painterResource(id = R.drawable.round_check),
                 contentDescription = stringResource(id = R.string.publish_icon_description),
-                tint = MaterialTheme.colorScheme.primary
+                tint = Color.White
             )
         }
     }

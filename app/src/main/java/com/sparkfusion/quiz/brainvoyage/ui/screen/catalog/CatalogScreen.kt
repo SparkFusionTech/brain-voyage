@@ -15,6 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,7 +35,6 @@ import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.quiz_catalog.QuizCatalogLoa
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.quiz_catalog.QuizCatalogViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
 import com.sparkfusion.quiz.brainvoyage.ui.widget.shimmer.ShimmerAnimationBox
-import com.sparkfusion.quiz.brainvoyage.utils.descriptionColor
 import com.sparkfusion.quiz.brainvoyage.utils.dp.getStatusBarHeightInDp
 import com.sparkfusion.quiz.brainvoyage.window.StatusBarHeightOwner
 
@@ -52,6 +55,10 @@ fun CatalogScreen(
 
     Column(
         modifier = modifier
+            .paint(
+                painter = painterResource(id = R.drawable.background),
+                contentScale = ContentScale.Crop
+            )
     ) {
         Row(
             modifier = Modifier
@@ -76,14 +83,15 @@ fun CatalogScreen(
                 modifier = Modifier.padding(start = 8.dp, top = 6.dp),
                 content = stringResource(id = R.string.quiz_catalog),
                 fontWeight = FontWeight.Black,
-                fontSize = 26.sp
+                fontSize = 26.sp,
+                color = Color.White
             )
         }
 
         SFProRoundedText(
             modifier = Modifier.padding(start = 24.dp, end = 24.dp),
             content = stringResource(id = R.string.quiz_catalog_preview),
-            color = descriptionColor(),
+            color = Color.White,
             fontSize = 20.sp,
             fontWeight = FontWeight.Medium
         )

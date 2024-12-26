@@ -40,7 +40,7 @@
     <string name="add_a_description_so_users_can">Add a description so users can understand what the quiz is about*</string>
     <string name="description">Description</string>
     <string name="do_not_forget_to_add_search_keywords">Don\'t forget to add search keywords so that users can find your work faster.</string>
-    <string name="max_32">(max 32)</string>
+    <string name="max_128">(max 128)</string>
     <string name="title">Title</string>
     <string name="quiz">Quiz</string>
     <string name="true_false">True/False</string>

@@ -25,7 +25,7 @@ class BitmapSizeReducer @Inject constructor(
             bitmap,
             (bitmap.width / scaleFactor).roundToInt(),
             (bitmap.height / scaleFactor).roundToInt(),
-            false
+            true
         )
 
         val compressedStream = ByteArrayOutputStream()
@@ -46,7 +46,7 @@ class BitmapSizeReducer @Inject constructor(
         val calculatedScaleFactor = when {
             bitmapSizeInKB <= MIN_SIZE_KB * 2 -> 1f
             bitmapSizeInKB <= MAX_SIZE_KB / 2 -> 1f + (bitmapSizeInKB - MIN_SIZE_KB) / (MAX_SIZE_KB / 2 - MIN_SIZE_KB)
-            else -> bitmapSizeInKB / MEDIUM_SIZE_KB / 2f
+            else -> bitmapSizeInKB / 1024f / 2f
         }
 
         min(maxScaleFactor, calculatedScaleFactor)
@@ -54,7 +54,6 @@ class BitmapSizeReducer @Inject constructor(
 
     companion object {
         private const val MIN_SIZE_KB = 350f
-        private const val MEDIUM_SIZE_KB = 2000f
         private const val MAX_SIZE_KB = 6000f
     }
 }

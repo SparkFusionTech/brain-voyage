@@ -206,11 +206,13 @@ class AddQuestionViewModel @Inject constructor(
     }
 
     private fun changeQuestion(value: String) {
-        _commonState.update { it.copy(question = value) }
+        if (value.length < 128) _commonState.update { it.copy(question = value) }
+        else _commonState.update { it.copy(question = value.substring(0, 127)) }
     }
 
     private fun changeDescription(value: String) {
-        _commonState.update { it.copy(description = value) }
+        if (value.length < 1024) _commonState.update { it.copy(description = value) }
+        else _commonState.update { it.copy(description = value.substring(0, 1023)) }
     }
 }
 

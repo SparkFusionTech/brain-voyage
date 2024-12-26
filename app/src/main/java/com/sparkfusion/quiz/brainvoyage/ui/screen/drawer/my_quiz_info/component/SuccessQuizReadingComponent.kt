@@ -103,7 +103,8 @@ fun SuccessQuizReadingComponent(
             content = quiz.title,
             textAlign = TextAlign.Center,
             fontSize = 22.sp,
-            fontWeight = FontWeight.Black
+            fontWeight = FontWeight.Black,
+            color = Color.White
         )
 
         SFProRoundedText(
@@ -121,7 +122,8 @@ fun SuccessQuizReadingComponent(
             modifier = Modifier.padding(top = 24.dp, start = 24.dp, end = 24.dp),
             content = quiz.description,
             fontSize = 18.sp,
-            fontWeight = FontWeight.Medium
+            fontWeight = FontWeight.Medium,
+            color = Color.White
         )
 
         ListItemComponent(
@@ -141,7 +143,8 @@ fun SuccessQuizReadingComponent(
                 top = 24.dp,
                 bottom = 20.dp
             ),
-            content = "Some content"
+            content = "Some content",
+            color = Color.White
         )
     }
 }

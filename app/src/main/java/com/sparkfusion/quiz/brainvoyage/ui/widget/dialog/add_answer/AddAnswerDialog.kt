@@ -73,12 +73,12 @@ fun AddAnswerDialog(
                             .fillMaxWidth(),
                         value = answer,
                         onValueChange = {
-                            if (answer.length > 24) showTooLongSnackbar = true else answer = it
+                            if (answer.length > 64) showTooLongSnackbar = true else answer = it
                         },
                         placeholder = "Enter here..."
                     )
 
-                    DescriptionText(content = "The answer must be very brief (max 24)*")
+                    DescriptionText(content = "The answer must be very brief (max 64)*")
                 }
             },
             dismissButton = {

@@ -17,7 +17,8 @@ fun DefaultTextField(
     onValueChange: (String) -> Unit,
     placeholder: String,
     keyboardType: KeyboardType = KeyboardType.Text,
-    singleLine: Boolean = false
+    singleLine: Boolean = false,
+    trailingIcon: @Composable (() -> Unit)? = null
 ) {
     OutlinedTextField(
         modifier = modifier,
@@ -28,6 +29,7 @@ fun DefaultTextField(
         placeholder = {
             SFProRoundedText(content = placeholder)
         },
+        trailingIcon = trailingIcon,
         colors = getRegistrationTextFieldContainerColors(),
         shape = RoundedCornerShape(12.dp)
     )

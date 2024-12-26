@@ -108,12 +108,11 @@ class AddQuizViewModel @Inject constructor(
 
     private fun changeIcon(bitmap: Bitmap?) {
         viewModelScope.launch(defaultDispatcher) {
+            val reducedBitmap = bitmap?.let { value ->
+                bitmapSizeReducer.reduce(value)
+            }
             _state.update {
-                it.copy(
-                    bitmap = bitmap?.let { value ->
-                        bitmapSizeReducer.reduce(value)
-                    }
-                )
+                it.copy(bitmap = reducedBitmap)
             }
         }
     }
@@ -123,11 +122,13 @@ class AddQuizViewModel @Inject constructor(
     }
 
     private fun changeDescription(value: String) {
-        _state.update { it.copy(description = value) }
+        if (value.length < 512) _state.update { it.copy(description = value) }
+        else _state.update { it.copy(description = value.substring(0, 511)) }
     }
 
     private fun changeTitle(value: String) {
-        _state.update { it.copy(title = value) }
+        if (value.length < 128) _state.update { it.copy(title = value) }
+        else _state.update { it.copy(title = value.substring(0, 127)) }
     }
 }
 

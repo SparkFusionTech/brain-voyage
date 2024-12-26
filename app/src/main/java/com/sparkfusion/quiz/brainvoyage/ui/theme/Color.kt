@@ -2,7 +2,25 @@ package com.sparkfusion.quiz.brainvoyage.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val registrationTextFieldColor = Color(0xFFE5E5E5)
+val dialogueBubbleContainerColor = Color(0xFFB3E5FC)
+
+val drawerContainerDarkColor = Color(0xFF1A0047)
+val drawerContainerLightColor = Color(0xFF21005A)
+
+val registrationTextFieldColor = Color(0xFFFAEBD7)
+
+val settingsBackgroundDarkColor = Color(0xFF26005C)
+val settingsBackgroundLightColor = Color(0xFF3E0099)
+
+val dialogTitleLightColor = Color(0xFFDF8600)
+val dialogTitleDarkColor = Color(0xFFBE6900)
+
+val buttonLightColor = Color(0xFF004BCC)
+val buttonDarkColor = Color(0xFF0077FF)
+val buttonCloseLightColor = Color(0xFFBA1A1A)
+val buttonCloseDarkColor = Color(0xFF8A0303)
+val buttonSuccessLightColor = Color(0xFF249E00)
+val buttonSuccessDarkColor = Color(0xFF135300)
 
 val primaryLight = Color(0xFF465D91)
 val onPrimaryLight = Color(0xFFFFFFFF)

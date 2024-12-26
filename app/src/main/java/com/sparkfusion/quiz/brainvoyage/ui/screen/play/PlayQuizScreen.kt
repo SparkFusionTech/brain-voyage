@@ -4,7 +4,6 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
@@ -16,10 +15,10 @@ import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sparkfusion.quiz.brainvoyage.R
+import com.sparkfusion.quiz.brainvoyage.ui.dialog.close_game.CloseGameBottomSheet
 import com.sparkfusion.quiz.brainvoyage.ui.screen.play.component.AnswerItem
 import com.sparkfusion.quiz.brainvoyage.ui.screen.play.component.ButtonComponent
 import com.sparkfusion.quiz.brainvoyage.ui.screen.play.component.ExplanationComponent
@@ -28,7 +27,6 @@ import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.play.PlayQuizContract
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.play.PlayQuizViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.victory.VictoryQuizContract
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.victory.VictoryQuizViewModel
-import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.close_game.CloseGamePlayingDialog
 
 @Composable
 fun PlayQuizScreen(
@@ -52,21 +50,11 @@ fun PlayQuizScreen(
         viewModel.handleIntent(PlayQuizContract.PlayQuizIntent.ChangeExitDialogVisibility(true))
     }
 
-    CloseGamePlayingDialog(
-        show = dialogsState.isCloseDialogVisible,
-        onDismiss = {
-            viewModel.handleIntent(PlayQuizContract.PlayQuizIntent.ChangeExitDialogVisibility(false))
-        },
-        onConfirm = {
-            onDismiss()
-        }
-    )
-
     Box(
         modifier = Modifier
             .fillMaxSize()
             .paint(
-                painter = painterResource(id = R.drawable.play_quiz_background),
+                painter = painterResource(id = R.drawable.background),
                 contentScale = ContentScale.Crop
             )
     ) {
@@ -105,6 +93,16 @@ fun PlayQuizScreen(
             }
         )
     }
+
+    CloseGameBottomSheet(
+        show = dialogsState.isCloseDialogVisible,
+        onDismiss = {
+            viewModel.handleIntent(PlayQuizContract.PlayQuizIntent.ChangeExitDialogVisibility(false))
+        },
+        onConfirm = {
+            onDismiss()
+        }
+    )
 }
 
 @Composable
@@ -171,7 +169,6 @@ private fun QuizContent(
         }
 
         ButtonComponent(
-            modifier = Modifier.padding(bottom = 8.dp),
             onAnswerButtonClick = onAnswerButtonClick,
             onNextButtonClick = onNextButtonClick,
             answerCheckResult = answerResult

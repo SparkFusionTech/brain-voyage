@@ -8,10 +8,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -41,7 +41,8 @@ fun CatalogItemTopBar(
             Icon(
                 modifier = Modifier.size(28.dp),
                 painter = painterResource(id = R.drawable.round_menu),
-                contentDescription = stringResource(id = R.string.drawer_menu_icon_description)
+                contentDescription = stringResource(id = R.string.drawer_menu_icon_description),
+                tint = Color.White
             )
         }
 
@@ -49,7 +50,8 @@ fun CatalogItemTopBar(
             modifier = Modifier.padding(start = 20.dp),
             content = title,
             fontWeight = FontWeight.Bold,
-            fontSize = 22.sp
+            fontSize = 22.sp,
+            color = Color.White
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -63,7 +65,7 @@ fun CatalogItemTopBar(
             Icon(
                 painter = painterResource(id = R.drawable.filters_icon),
                 contentDescription = stringResource(id = R.string.filters_button_icon_description),
-                tint = MaterialTheme.colorScheme.primary
+                tint = Color.White,
             )
         }
     }

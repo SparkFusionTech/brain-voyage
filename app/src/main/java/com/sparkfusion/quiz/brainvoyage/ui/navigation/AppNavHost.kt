@@ -1,5 +1,8 @@
 package com.sparkfusion.quiz.brainvoyage.ui.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -16,7 +19,27 @@ fun AppNavHost(
     NavHost(
         modifier = Modifier.padding(innerPadding),
         navController = navController,
-        startDestination = startDestination
+        startDestination = startDestination,
+        enterTransition = {
+            fadeIn(
+                animationSpec = tween(durationMillis = 700, delayMillis = 250)
+            )
+        },
+        exitTransition = {
+            fadeOut(
+                animationSpec = tween(durationMillis = 700, delayMillis = 180)
+            )
+        },
+        popEnterTransition = {
+            fadeIn(
+                animationSpec = tween(durationMillis = 700, delayMillis = 250)
+            )
+        },
+        popExitTransition = {
+            fadeOut(
+                animationSpec = tween(durationMillis = 700, delayMillis = 180)
+            )
+        }
     ) {
         loginDirection(navController)
         registrationDirection(navController)

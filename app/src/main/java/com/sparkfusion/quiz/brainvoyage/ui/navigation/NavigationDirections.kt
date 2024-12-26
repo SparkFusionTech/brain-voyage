@@ -16,7 +16,6 @@ import com.sparkfusion.quiz.brainvoyage.image_crop.common.IMAGE_CROP_TYPE_KEY
 import com.sparkfusion.quiz.brainvoyage.image_crop.common.ImageCropType
 import com.sparkfusion.quiz.brainvoyage.image_crop.common.getImageCropType
 import com.sparkfusion.quiz.brainvoyage.image_crop.common.setImageCropType
-import com.sparkfusion.quiz.brainvoyage.image_crop.screen.FailedOpenImageScreen
 import com.sparkfusion.quiz.brainvoyage.image_crop.screen.ImageCropScreen
 import com.sparkfusion.quiz.brainvoyage.ui.model.QUIZ_CATALOG_INFO_KEY
 import com.sparkfusion.quiz.brainvoyage.ui.model.QuizCatalogSerializable
@@ -103,16 +102,9 @@ fun NavGraphBuilder.catalogItemDirection(navController: NavController) {
             ?.savedStateHandle
             ?.get<QuizCatalogSerializable>(QUIZ_CATALOG_INFO_KEY)
 
-        val currentDestination = navController.currentBackStackEntry?.destination
-        if (quizCatalogSerializableNullable == null) {
-            val catalogItemDestinationName =
-                Destination.getDestinationRoute(Destination.CatalogItemDestination)
-            if (currentDestination?.route == catalogItemDestinationName) {
-                navController.popBackStack()
-            }
-        } else {
+        quizCatalogSerializableNullable?.let { it1 ->
             CatalogItemScreen(
-                quizCatalogSerializable = quizCatalogSerializableNullable,
+                quizCatalogSerializable = it1,
                 onNavigateToQuizAddScreen = {
                     navController.currentBackStackEntry?.savedStateHandle?.set(
                         QUIZ_CATALOG_INFO_KEY,
@@ -128,7 +120,12 @@ fun NavGraphBuilder.catalogItemDirection(navController: NavController) {
                     navController.navigate(Destination.MyQuizzesScreenDestination)
                 }
             )
-        }
+        } ?: EmptyLoadingScreen(
+            modifier = Modifier.paint(
+                painter = painterResource(id = R.drawable.background),
+                contentScale = ContentScale.Crop
+            )
+        )
     }
 }
 
@@ -148,7 +145,7 @@ fun NavGraphBuilder.quizItemDirection(navController: NavController) {
             )
         } ?: EmptyLoadingScreen(
             modifier = Modifier.paint(
-                painter = painterResource(id = R.drawable.play_quiz_background),
+                painter = painterResource(id = R.drawable.background),
                 contentScale = ContentScale.Crop
             )
         )
@@ -168,12 +165,15 @@ fun NavGraphBuilder.playQuizDirection(navController: NavController) {
                     navController.navigate(Destination.QuizVictoryDestination)
                 },
                 onDismiss = {
-                    navController.popBackStack(Destination.CatalogItemDestination, inclusive = false)
+                    navController.popBackStack(
+                        Destination.CatalogItemDestination,
+                        inclusive = false
+                    )
                 }
             )
         } ?: EmptyLoadingScreen(
             modifier = Modifier.paint(
-                painter = painterResource(id = R.drawable.play_quiz_background),
+                painter = painterResource(id = R.drawable.background),
                 contentScale = ContentScale.Crop
             )
         )
@@ -210,7 +210,12 @@ fun NavGraphBuilder.imageCropDirection(navController: NavController) {
                 }
             )
         } else {
-            FailedOpenImageScreen()
+            EmptyLoadingScreen(
+                modifier = Modifier.paint(
+                    painter = painterResource(id = R.drawable.background),
+                    contentScale = ContentScale.Crop
+                )
+            )
         }
     }
 }

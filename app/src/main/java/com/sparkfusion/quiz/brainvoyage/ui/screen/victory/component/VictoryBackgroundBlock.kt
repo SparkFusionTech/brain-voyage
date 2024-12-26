@@ -58,7 +58,7 @@ fun VictoryBackgroundBlock(
         modifier = modifier
             .fillMaxSize()
             .paint(
-                painter = painterResource(id = R.drawable.play_quiz_background),
+                painter = painterResource(id = R.drawable.background),
                 contentScale = ContentScale.Crop
             )
     ) {

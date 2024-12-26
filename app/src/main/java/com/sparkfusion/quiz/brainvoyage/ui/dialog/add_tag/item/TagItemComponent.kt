@@ -1,4 +1,4 @@
-package com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.add_tag.item
+package com.sparkfusion.quiz.brainvoyage.ui.dialog.add_tag.item
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

@@ -16,7 +16,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -47,7 +49,12 @@ fun MyQuizzesScreen(
     val context = LocalContext.current
 
     LazyColumn(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
+            .paint(
+                painter = painterResource(id = R.drawable.background),
+                contentScale = ContentScale.Crop
+            )
     ) {
         item {
             Row(
@@ -65,7 +72,8 @@ fun MyQuizzesScreen(
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.arrow_back_icon),
-                        contentDescription = null
+                        contentDescription = null,
+                        tint = Color.White
                     )
                 }
 
@@ -73,7 +81,8 @@ fun MyQuizzesScreen(
                     modifier = Modifier.padding(start = 24.dp),
                     content = "My quizzes",
                     fontSize = 20.sp,
-                    fontWeight = FontWeight.ExtraBold
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color.White
                 )
             }
         }
@@ -107,7 +116,7 @@ fun MyQuizzesScreen(
                                 SFProRoundedText(
                                     modifier = Modifier
                                         .background(
-                                            Color.LightGray.copy(alpha = 0.06f),
+                                            Color.Black.copy(alpha = 0.4f),
                                             RoundedCornerShape(20.dp)
                                         )
                                         .padding(horizontal = 12.dp, vertical = 4.dp),

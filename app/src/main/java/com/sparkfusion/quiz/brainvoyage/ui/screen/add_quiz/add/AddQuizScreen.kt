@@ -1,6 +1,7 @@
 package com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add
 
 import android.graphics.Bitmap
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -10,23 +11,26 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.sparkfusion.quiz.brainvoyage.ui.dialog.add_tag.AddTagBottomSheet
+import com.sparkfusion.quiz.brainvoyage.ui.dialog.select_image.SelectImageBottomSheet
 import com.sparkfusion.quiz.brainvoyage.ui.launcher.rememberLauncherForImageCropping
 import com.sparkfusion.quiz.brainvoyage.ui.model.QuizCatalogSerializable
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add.component.AddQuizContent
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add.component.AddQuizTopComponent
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add.handler.SendModelHandler
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.model.AddQuizInitialModel
+import com.sparkfusion.quiz.brainvoyage.ui.theme.settingsBackgroundDarkColor
+import com.sparkfusion.quiz.brainvoyage.ui.theme.settingsBackgroundLightColor
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add.AddQuizContract
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add.AddQuizViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add.SharedQuizContract
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add.SharedQuizViewModel
-import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.add_tag.AddTagDialog
-import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.select_image.SelectImageDialog
 import com.sparkfusion.quiz.brainvoyage.utils.dp.getStatusBarHeightInDp
 import com.sparkfusion.quiz.brainvoyage.window.StatusBarHeightOwner
 
@@ -42,9 +46,8 @@ fun AddQuizScreen(
     onImageCropNavigate: (Bitmap) -> Unit,
     getCroppedImageBitmap: () -> Bitmap?
 ) {
-    viewModel.handleIntent(AddQuizContract.AddQuizIntent.ChangeIcon(getCroppedImageBitmap()))
-
     LaunchedEffect(Unit) {
+        viewModel.handleIntent(AddQuizContract.AddQuizIntent.ChangeIcon(getCroppedImageBitmap()))
         viewModel.handleIntent(AddQuizContract.AddQuizIntent.SetCatalog(quizCatalogSerializable))
     }
 
@@ -65,35 +68,6 @@ fun AddQuizScreen(
         onImageCropNavigate
     )
     val snackbarHostState = remember { SnackbarHostState() }
-
-    SelectImageDialog(
-        show = state.showImageSelectionDialog,
-        onSearchNavigate = {
-            onSearchImageScreenNavigate()
-            changeImageSelectionDialogVisibility(false)
-        },
-        onGalleryNavigate = {
-            galleryLauncher.launch("image/*")
-            changeImageSelectionDialogVisibility(false)
-        },
-        onDismiss = {
-            changeImageSelectionDialogVisibility(false)
-        }
-    )
-
-    AddTagDialog(
-        show = state.showTagAddingDialog,
-        items = tags,
-        onDismiss = {
-            changeTagAddingDialogVisibility(false)
-        },
-        onAddTag = {
-            viewModel.handleIntent(AddQuizContract.AddQuizIntent.AddTag(it))
-        },
-        onDeleteTag = {
-            viewModel.handleIntent(AddQuizContract.AddQuizIntent.DeleteTag(it))
-        }
-    )
 
     Scaffold(
         topBar = {
@@ -129,7 +103,9 @@ fun AddQuizScreen(
         )
 
         AddQuizContent(
-            modifier = modifier.padding(it),
+            modifier = modifier
+                .background(Brush.linearGradient(listOf(settingsBackgroundLightColor, settingsBackgroundDarkColor)))
+                .padding(it),
             bitmap = state.bitmap,
             onImageAddClick = { changeImageSelectionDialogVisibility(true) },
             title = state.title,
@@ -147,6 +123,35 @@ fun AddQuizScreen(
             onNextButtonClick = { viewModel.handleIntent(AddQuizContract.AddQuizIntent.LoadSendQuizState) }
         )
     }
+
+    SelectImageBottomSheet(
+        show = state.showImageSelectionDialog,
+        onSearchNavigate = {
+            onSearchImageScreenNavigate()
+            changeImageSelectionDialogVisibility(false)
+        },
+        onGalleryNavigate = {
+            galleryLauncher.launch("image/*")
+            changeImageSelectionDialogVisibility(false)
+        },
+        onDismiss = {
+            changeImageSelectionDialogVisibility(false)
+        }
+    )
+
+    AddTagBottomSheet(
+        show = state.showTagAddingDialog,
+        items = tags,
+        onDismiss = {
+            changeTagAddingDialogVisibility(false)
+        },
+        onAddTag = {
+            viewModel.handleIntent(AddQuizContract.AddQuizIntent.AddTag(it))
+        },
+        onDeleteTag = {
+            viewModel.handleIntent(AddQuizContract.AddQuizIntent.DeleteTag(it))
+        }
+    )
 }
 
 @Preview(showBackground = true, showSystemUi = true)

@@ -62,7 +62,7 @@ fun AddQuizContent(
 
             SFProRoundedText(
                 modifier = Modifier.padding(start = 4.dp),
-                content = stringResource(id = R.string.max_32),
+                content = stringResource(id = R.string.max_128),
                 fontWeight = FontWeight.Medium,
                 color = descriptionColor()
             )

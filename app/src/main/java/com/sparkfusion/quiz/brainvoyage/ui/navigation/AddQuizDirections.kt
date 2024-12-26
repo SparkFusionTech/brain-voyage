@@ -1,5 +1,8 @@
 package com.sparkfusion.quiz.brainvoyage.ui.navigation
 
+import androidx.compose.foundation.background
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -15,7 +18,10 @@ import com.sparkfusion.quiz.brainvoyage.ui.model.QuizCatalogSerializable
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add.AddQuizScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.screen.AddQuestionScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.questions.AddQuizWithQuestionScreen
+import com.sparkfusion.quiz.brainvoyage.ui.screen.empty_loading.EmptyLoadingScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.image.key.CROP_IMAGE_TYPE_AFTER_SEARCH_KEY
+import com.sparkfusion.quiz.brainvoyage.ui.theme.settingsBackgroundDarkColor
+import com.sparkfusion.quiz.brainvoyage.ui.theme.settingsBackgroundLightColor
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add.SharedQuizViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add_question.shared.SharedQuestionsViewModel
 
@@ -25,10 +31,10 @@ fun NavGraphBuilder.addQuizDirection(navController: NavController) {
             ?.savedStateHandle?.get<QuizCatalogSerializable>(QUIZ_CATALOG_INFO_KEY)
         val sharedViewModel: SharedQuizViewModel = hiltViewModel(backStackEntry)
 
-        if (quizCatalogSerializable != null) {
+        quizCatalogSerializable?.let {
             AddQuizScreen(
                 onBackClick = navController::popBackStack,
-                quizCatalogSerializable = quizCatalogSerializable,
+                quizCatalogSerializable = it,
                 onNextClick = {
                     navController.navigate(Destination.AddQuizWithQuestionsDestination)
                 },
@@ -55,7 +61,10 @@ fun NavGraphBuilder.addQuizDirection(navController: NavController) {
                 },
                 sharedQuizViewModel = sharedViewModel
             )
-        }
+        } ?: EmptyLoadingScreen(
+            modifier = Modifier
+                .background(Brush.linearGradient(listOf(settingsBackgroundLightColor, settingsBackgroundDarkColor)))
+        )
     }
 }
 

@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -37,7 +38,8 @@ fun QuestionNameInputComponent(
         modifier = Modifier.padding(start = 24.dp, top = 40.dp),
         content = stringResource(id = R.string.question),
         fontSize = 18.sp,
-        fontWeight = FontWeight.SemiBold
+        fontWeight = FontWeight.SemiBold,
+        color = Color.White
     )
 
     DefaultTextField(
@@ -46,7 +48,7 @@ fun QuestionNameInputComponent(
             .fillMaxWidth(),
         value = value,
         onValueChange = {
-            if (it.length == 40) showErrorMessage = true
+            if (it.length == 128) showErrorMessage = true
             else onValueChange(it)
         },
         placeholder = stringResource(id = R.string.enter_here)
