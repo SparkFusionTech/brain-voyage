@@ -1,5 +1,7 @@
 package com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.component.category
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -15,10 +17,12 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -48,6 +52,13 @@ fun CategoryComponent(
 ) {
     val boxSize = remember { mutableStateOf(Size.Zero) }
     val anchor = remember { mutableStateOf(Offset.Zero) }
+
+    val rotationState = if (isListVisible) 180f else 0f
+    val rotationValue by animateFloatAsState(
+        targetValue = rotationState,
+        animationSpec = tween(),
+        label = ""
+    )
 
     Box(
         modifier = modifier
@@ -87,7 +98,10 @@ fun CategoryComponent(
                 }
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.round_arrow_drop_down),
+                    modifier = Modifier.rotate(rotationValue),
+                    painter = painterResource(
+                        id = R.drawable.round_arrow_drop_down
+                    ),
                     contentDescription = stringResource(id = R.string.collapse_or_expand_category_list_icon_description)
                 )
             }

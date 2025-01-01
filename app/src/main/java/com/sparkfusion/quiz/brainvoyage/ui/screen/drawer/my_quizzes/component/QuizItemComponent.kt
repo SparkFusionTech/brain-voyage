@@ -1,6 +1,5 @@
 package com.sparkfusion.quiz.brainvoyage.ui.screen.drawer.my_quizzes.component
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -72,13 +71,12 @@ fun QuizItemComponent(
             .clip(RoundedCornerShape(16.dp))
             .clickable { onItemClick(quiz.id) }
     ) {
-        AnimatedVisibility(visible = isImageLoading) {
+        if (isImageLoading)
             ShimmerAnimationBox(
                 modifier = Modifier.padding(start = 8.dp, top = 9.dp, bottom = 6.dp, end = 12.dp),
                 size = DpSize(90.dp, 100.dp),
                 shape = RoundedCornerShape(16.dp)
             )
-        }
 
         val paddings = if (isImageLoading) PaddingValues()
         else PaddingValues(start = 8.dp, top = 9.dp, bottom = 6.dp, end = 12.dp)

@@ -8,10 +8,11 @@ interface PlayQuizContract {
 
     sealed interface PlayQuizIntent : Intent {
         data class ReadQuestions(val quizId: Long) : PlayQuizIntent
-        data object CheckAnswers : PlayQuizIntent
+        data class CheckAnswers(val quizId: Long) : PlayQuizIntent
         data class SelectAnswer(val answerIdInList: Int) : PlayQuizIntent
         data class NextQuestion(val quizId: Long) : PlayQuizIntent
         data class ChangeExitDialogVisibility(val isVisible: Boolean) : PlayQuizIntent
+        data class UpdateCatalogProgress(val quizId: Long) : PlayQuizIntent
     }
 
     sealed class CurrentQuestionState {
@@ -37,7 +38,8 @@ interface PlayQuizContract {
     }
 
     data class DialogsState(
-        val isCloseDialogVisible: Boolean = false
+        val isCloseDialogVisible: Boolean = false,
+        val isCloseDialogFinished: Boolean = false
     )
 
     data class ErrorState(

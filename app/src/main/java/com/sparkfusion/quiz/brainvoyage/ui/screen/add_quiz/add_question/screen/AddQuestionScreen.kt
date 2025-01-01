@@ -25,6 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.ui.dialog.add_answer.AddAnswerBottomSheet
+import com.sparkfusion.quiz.brainvoyage.ui.dialog.close_adding.CloseQuizAddingBottomSheet
 import com.sparkfusion.quiz.brainvoyage.ui.dialog.select_image.SelectImageBottomSheet
 import com.sparkfusion.quiz.brainvoyage.ui.launcher.rememberLauncherForImageCropping
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.component.button.AddButtonComponent
@@ -46,7 +47,6 @@ import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add_question.add.A
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add_question.shared.SharedQuestionContract
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add_question.shared.SharedQuestionsViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
-import com.sparkfusion.quiz.brainvoyage.ui.widget.dialog.close_adding.CloseQuizAddingDialog
 import com.sparkfusion.quiz.brainvoyage.utils.dp.getStatusBarHeightInDp
 import com.sparkfusion.quiz.brainvoyage.window.StatusBarHeightOwner
 
@@ -86,16 +86,6 @@ fun AddQuestionScreen(
     val changeImageSelectionDialogVisibility = { v: Boolean ->
         viewModel.handleIntent(AddQuestionContract.Intent.ChangeImageSelectionDialogVisibility(v))
     }
-
-    CloseQuizAddingDialog(
-        show = dialogs.showCloseDialog,
-        onDismiss = {
-            changeCloseDialogVisibility(false)
-        },
-        onConfirm = {
-            onDismiss()
-        }
-    )
 
     Scaffold(
         snackbarHost = {
@@ -234,6 +224,16 @@ fun AddQuestionScreen(
             }
         }
     }
+
+    CloseQuizAddingBottomSheet(
+        show = dialogs.showCloseDialog,
+        onDismiss = {
+            changeCloseDialogVisibility(false)
+        },
+        onConfirm = {
+            onDismiss()
+        }
+    )
 
     SelectImageBottomSheet(
         show = dialogs.showImageSelectionDialog,

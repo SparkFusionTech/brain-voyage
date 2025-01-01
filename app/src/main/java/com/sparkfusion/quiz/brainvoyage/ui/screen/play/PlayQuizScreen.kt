@@ -46,6 +46,11 @@ fun PlayQuizScreen(
     val completedValueState by viewModel.completedValueState.collectAsStateWithLifecycle()
     val dialogsState by viewModel.dialogsState.collectAsStateWithLifecycle()
 
+    if (dialogsState.isCloseDialogFinished) {
+        viewModel.handleIntent(PlayQuizContract.PlayQuizIntent.UpdateCatalogProgress(quizId))
+        onDismiss()
+    }
+
     BackHandler {
         viewModel.handleIntent(PlayQuizContract.PlayQuizIntent.ChangeExitDialogVisibility(true))
     }
@@ -65,7 +70,7 @@ fun PlayQuizScreen(
             completedValueState = completedValueState,
             onNavigateToVictoryScreen = onNavigateToVictoryScreen,
             onAnswerButtonClick = {
-                viewModel.handleIntent(PlayQuizContract.PlayQuizIntent.CheckAnswers)
+                viewModel.handleIntent(PlayQuizContract.PlayQuizIntent.CheckAnswers(quizId))
             },
             onCloseButtonClick = {
                 viewModel.handleIntent(
@@ -100,7 +105,7 @@ fun PlayQuizScreen(
             viewModel.handleIntent(PlayQuizContract.PlayQuizIntent.ChangeExitDialogVisibility(false))
         },
         onConfirm = {
-            onDismiss()
+            viewModel.handleIntent(PlayQuizContract.PlayQuizIntent.UpdateCatalogProgress(quizId))
         }
     )
 }

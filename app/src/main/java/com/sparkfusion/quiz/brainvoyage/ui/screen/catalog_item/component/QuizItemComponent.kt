@@ -87,7 +87,8 @@ fun QuizItemComponent(
             contentScale = ContentScale.Crop,
             contentDescription = stringResource(id = R.string.quiz_preview_image_description),
             onLoading = { isImageLoading = true },
-            onSuccess = { isImageLoading = false }
+            onSuccess = { isImageLoading = false },
+            onError = { isImageLoading = false }
         )
 
         Column(

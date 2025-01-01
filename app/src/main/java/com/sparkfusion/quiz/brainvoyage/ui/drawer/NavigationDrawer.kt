@@ -1,5 +1,10 @@
 package com.sparkfusion.quiz.brainvoyage.ui.drawer
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -10,7 +15,9 @@ import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
@@ -21,17 +28,27 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.ui.drawer.component.AccountIconComponent
 import com.sparkfusion.quiz.brainvoyage.ui.drawer.component.AccountNameComponent
+import com.sparkfusion.quiz.brainvoyage.ui.drawer.component.LevelLoadingComponent
 import com.sparkfusion.quiz.brainvoyage.ui.theme.drawerContainerDarkColor
 
 @Composable
 fun NavigationDrawer(
     modifier: Modifier = Modifier,
-    viewModel: DrawerViewModel = hiltViewModel(),
+    viewModel: DrawerViewModel,
     onMyQuizzesClick: () -> Unit,
     content: @Composable (drawerState: DrawerState) -> Unit
 ) {
-    val state by viewModel.initialState().collectAsStateWithLifecycle()
+    val state by viewModel.initialState.collectAsStateWithLifecycle()
+    val levelState by viewModel.levelState.collectAsStateWithLifecycle()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+
+    LaunchedEffect(drawerState) {
+        snapshotFlow { drawerState.isOpen }.collect { isOpen ->
+            if (isOpen) {
+                viewModel.handleIntent(DrawerContract.DrawerIntent.ReloadUserInfo)
+            }
+        }
+    }
 
     ModalNavigationDrawer(
         modifier = modifier,
@@ -41,18 +58,28 @@ fun NavigationDrawer(
                 modifier = Modifier.width(330.dp),
                 drawerContainerColor = drawerContainerDarkColor
             ) {
-                AccountIconComponent(
-                    modifier = Modifier
-                        .padding(start = 12.dp, top = 24.dp)
-                        .size(96.dp)
-                        .clip(CircleShape),
-                    accountInfoState = state.accountInfoState
-                )
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 48.dp)) {
+                    LevelLoadingComponent(levelState = levelState)
 
-                AccountNameComponent(
-                    modifier = Modifier.padding(start = 12.dp, top = 12.dp, bottom = 24.dp),
-                    state = state.accountInfoState
-                )
+                    Column {
+                        Spacer(modifier = Modifier.height(56.dp))
+
+                        AccountIconComponent(
+                            modifier = Modifier
+                                .padding(start = 12.dp, top = 24.dp)
+                                .size(96.dp)
+                                .clip(CircleShape),
+                            accountInfoState = state.accountInfoState
+                        )
+
+                        AccountNameComponent(
+                            modifier = Modifier.padding(start = 12.dp, top = 12.dp, bottom = 24.dp),
+                            state = state.accountInfoState
+                        )
+                    }
+                }
 
                 DrawerItemComponent(
                     label = "My profile",
@@ -82,6 +109,7 @@ fun NavigationDrawer(
 @Composable
 private fun NavigationDrawerPreview() {
     NavigationDrawer(
+        viewModel = hiltViewModel(),
         content = {},
         onMyQuizzesClick = {}
     )

@@ -60,7 +60,8 @@ fun QuizItemScreen(
                     modifier = modifier,
                     onBackClick = onBackClick,
                     onPlayButtonClick = onPlayButtonClick,
-                    quiz = (quizLoadingState as QuizItemContract.QuizReadingState.Success).quiz
+                    quiz = (quizLoadingState as QuizItemContract.QuizReadingState.Success).quiz,
+                    nextTryAt = (quizLoadingState as QuizItemContract.QuizReadingState.Success).nextTryAt
                 )
             }
         }

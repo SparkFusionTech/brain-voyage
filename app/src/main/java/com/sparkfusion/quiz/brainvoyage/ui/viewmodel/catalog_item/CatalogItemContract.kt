@@ -7,6 +7,7 @@ interface CatalogItemContract {
 
     sealed interface Intent : CommonIntent {
         data class LoadQuizzes(val catalogId: Long) : Intent
+        data class SaveScrollState(val scrollPosition: Int) : Intent
     }
 
     sealed interface QuizLoadingState {

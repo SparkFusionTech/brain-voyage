@@ -4,8 +4,9 @@ import androidx.lifecycle.viewModelScope
 import com.sparkfusion.quiz.brainvoyage.domain.mapper.user.AccountInfoDataEntityFactory
 import com.sparkfusion.quiz.brainvoyage.domain.model.AccountInfoModel
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IAccountInfoStore
+import com.sparkfusion.quiz.brainvoyage.domain.repository.ICatalogProgressRepository
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ILoginRepository
-import com.sparkfusion.quiz.brainvoyage.utils.common.viewmodel.SingleStateViewModel
+import com.sparkfusion.quiz.brainvoyage.utils.common.viewmodel.MultiStateViewModel
 import com.sparkfusion.quiz.brainvoyage.utils.dispatchers.IODispatcher
 import com.sparkfusion.quiz.brainvoyage.utils.exception.BrainVoyageException
 import com.sparkfusion.quiz.brainvoyage.utils.exception.network.NetworkException
@@ -24,21 +25,25 @@ class DrawerViewModel @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val accountInfoStore: IAccountInfoStore,
     private val accountInfoDataEntityFactory: AccountInfoDataEntityFactory,
-    private val loginRepository: ILoginRepository
-) : SingleStateViewModel<DrawerContract.DrawerState, DrawerContract.DrawerIntent>() {
+    private val loginRepository: ILoginRepository,
+    private val catalogProgressRepository: ICatalogProgressRepository
+) : MultiStateViewModel<DrawerContract.DrawerIntent>() {
 
-    override fun initialState(): StateFlow<DrawerContract.DrawerState> = state.asStateFlow()
+    private val _initialState = MutableStateFlow(DrawerContract.DrawerState())
+    val initialState: StateFlow<DrawerContract.DrawerState> = _initialState.asStateFlow()
+
+    private val _levelState = MutableStateFlow<DrawerContract.LevelState>(DrawerContract.LevelState.Initial)
+    val levelState: StateFlow<DrawerContract.LevelState> = _levelState.asStateFlow()
 
     override fun handleIntent(intent: DrawerContract.DrawerIntent) {
         when (intent) {
             DrawerContract.DrawerIntent.ReloadUserInfo -> loadAccountInfo()
+            DrawerContract.DrawerIntent.ReloadCatalogLevel -> loadCatalogExperience()
         }
     }
 
-    private val state = MutableStateFlow(DrawerContract.DrawerState())
-
     private fun loadAccountInfo() {
-        state.update { it.copy(accountInfoState = DrawerReadingState.Loading) }
+        _initialState.update { it.copy(accountInfoState = DrawerReadingState.Loading) }
         viewModelScope.launch(ioDispatcher) {
             try {
                 accountInfoStore.readAccountInfo().collectLatest { entity ->
@@ -55,6 +60,18 @@ class DrawerViewModel @Inject constructor(
         }
     }
 
+    private fun loadCatalogExperience() {
+        viewModelScope.launch(ioDispatcher) {
+            catalogProgressRepository.readCatalogExperience()
+                .onSuccess { model ->
+                    _levelState.update { DrawerContract.LevelState.Success(model) }
+                }
+                .onFailure {
+                    _levelState.update { DrawerContract.LevelState.Error }
+                }
+        }
+    }
+
     private suspend fun loadInfoFromNetwork() {
         loginRepository.loadUserInfo()
             .onSuccess(::handleSuccessAccountInfoState)
@@ -62,7 +79,7 @@ class DrawerViewModel @Inject constructor(
     }
 
     private fun handleFailureAccountInfoState(exception: BrainVoyageException) {
-        state.update {
+        _initialState.update {
             it.copy(
                 accountInfoState = when (exception) {
                     is NetworkException -> DrawerReadingState.NetworkError
@@ -73,7 +90,7 @@ class DrawerViewModel @Inject constructor(
     }
 
     private fun handleSuccessAccountInfoState(model: AccountInfoModel) {
-        state.update { it.copy(accountInfoState = DrawerReadingState.Success(model)) }
+        _initialState.update { it.copy(accountInfoState = DrawerReadingState.Success(model)) }
     }
 
     init {

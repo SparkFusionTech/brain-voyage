@@ -17,8 +17,8 @@ class BitmapSizeReducer @Inject constructor(
     suspend fun reduce(
         bitmap: Bitmap,
         maxScaleFactor: Float = Float.MAX_VALUE,
-        format: Bitmap.CompressFormat = Bitmap.CompressFormat.PNG,
-        quality: Int = 100
+        format: Bitmap.CompressFormat = Bitmap.CompressFormat.JPEG,
+        quality: Int = 85
     ): Bitmap = withContext(defaultDispatcher) {
         val scaleFactor = getScaleFactor(bitmap, maxScaleFactor)
         val compressedBitmap = Bitmap.createScaledBitmap(

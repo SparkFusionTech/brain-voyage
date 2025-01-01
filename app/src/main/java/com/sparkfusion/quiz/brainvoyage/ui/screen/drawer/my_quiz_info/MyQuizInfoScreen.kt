@@ -47,7 +47,7 @@ fun MyQuizInfoScreen(
 
     LazyColumn(
         modifier = modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .background(
                 Brush.linearGradient(
                     listOf(

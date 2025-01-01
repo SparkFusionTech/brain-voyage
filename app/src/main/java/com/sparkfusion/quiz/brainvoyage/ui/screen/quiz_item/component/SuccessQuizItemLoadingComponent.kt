@@ -35,13 +35,15 @@ import com.sparkfusion.quiz.brainvoyage.ui.widget.shimmer.ShimmerAnimationBox
 import com.sparkfusion.quiz.brainvoyage.utils.descriptionColor
 import com.sparkfusion.quiz.brainvoyage.utils.dp.getStatusBarHeightInDp
 import com.sparkfusion.quiz.brainvoyage.window.StatusBarHeightOwner
+import java.time.Duration
 
 @Composable
 fun SuccessQuizItemLoadingComponent(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
     onPlayButtonClick: () -> Unit,
-    quiz: GetQuizPreviewModel
+    quiz: GetQuizPreviewModel,
+    nextTryAt: Duration?
 ) {
     var isImageLoading by remember { mutableStateOf(false) }
 
@@ -141,7 +143,8 @@ fun SuccessQuizItemLoadingComponent(
                 )
                 .clip(RoundedCornerShape(50.dp)),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-            onClick = onPlayButtonClick
+            onClick = onPlayButtonClick,
+            enabled = nextTryAt == null
         ) {
             SFProRoundedText(
                 modifier = Modifier.padding(horizontal = 24.dp, vertical = 4.dp),
@@ -150,5 +153,29 @@ fun SuccessQuizItemLoadingComponent(
                 fontWeight = FontWeight.SemiBold
             )
         }
+
+        if (nextTryAt != null) {
+            val hours = nextTryAt.toHours()
+            val minutes = nextTryAt.toMinutes() % 60
+            SFProRoundedText(
+                modifier = Modifier
+                    .padding(top = 24.dp, start = 24.dp, end = 24.dp)
+                    .align(Alignment.CenterHorizontally),
+                content = "Next try in $hours:$minutes",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Medium,
+                color = Color.White
+            )
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+

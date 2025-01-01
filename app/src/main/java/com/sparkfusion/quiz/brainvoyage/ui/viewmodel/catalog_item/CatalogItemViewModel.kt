@@ -20,6 +20,8 @@ class CatalogItemViewModel @Inject constructor(
     private val quizRepository: IQuizRepository
 ) : MultiStateViewModel<CatalogItemContract.Intent>() {
 
+    var scrollPosition = 0
+
     private val _quizLoadingState =
         MutableStateFlow<CatalogItemContract.QuizLoadingState>(CatalogItemContract.QuizLoadingState.Loading)
     val quizLoadingState: StateFlow<CatalogItemContract.QuizLoadingState>
@@ -28,6 +30,7 @@ class CatalogItemViewModel @Inject constructor(
     override fun handleIntent(intent: CatalogItemContract.Intent) {
         when (intent) {
             is CatalogItemContract.Intent.LoadQuizzes -> loadQuizzes(intent.catalogId)
+            is CatalogItemContract.Intent.SaveScrollState -> scrollPosition = intent.scrollPosition
         }
     }
 

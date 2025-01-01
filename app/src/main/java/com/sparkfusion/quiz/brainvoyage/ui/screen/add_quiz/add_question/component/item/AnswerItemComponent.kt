@@ -1,6 +1,7 @@
 package com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.component.item
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -147,6 +148,12 @@ fun AnswerItemComponent(
                         shape = RoundedCornerShape(16.dp)
                     )
                     .fillMaxWidth()
+                    .clickable {
+                        when (categoryType) {
+                            CategoryType.MultiplyChoice -> onCheckButtonClick(index, answer.isCorrect)
+                            CategoryType.Quiz, CategoryType.TrueFalse -> onRadioButtonClick(index)
+                        }
+                    }
             ) {
                 Text(
                     modifier = Modifier.padding(vertical = 12.dp, horizontal = 24.dp),

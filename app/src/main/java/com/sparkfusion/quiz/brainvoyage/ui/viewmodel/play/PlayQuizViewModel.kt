@@ -1,13 +1,17 @@
 package com.sparkfusion.quiz.brainvoyage.ui.viewmodel.play
 
 import android.util.Log
+import androidx.lifecycle.viewModelScope
 import com.sparkfusion.quiz.brainvoyage.domain.model.answer.PlayAnswerModel
+import com.sparkfusion.quiz.brainvoyage.domain.model.catalog_progress.UpdateCatalogProgressQuestionModel
 import com.sparkfusion.quiz.brainvoyage.domain.model.question.QuestionWithAnswersModel
 import com.sparkfusion.quiz.brainvoyage.domain.play_worker.XpCounter
+import com.sparkfusion.quiz.brainvoyage.domain.repository.ICatalogProgressRepository
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IQuestionRepository
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.model.category.CategoryType
 import com.sparkfusion.quiz.brainvoyage.ui.screen.play.model.AnsweredQuestionModel
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.victory.VictoryQuizContract
+import com.sparkfusion.quiz.brainvoyage.ui.widget.star.QuestionDifficulty
 import com.sparkfusion.quiz.brainvoyage.utils.common.viewmodel.MultiStateViewModel
 import com.sparkfusion.quiz.brainvoyage.utils.dispatchers.DefaultDispatcher
 import com.sparkfusion.quiz.brainvoyage.utils.dispatchers.IODispatcher
@@ -29,6 +33,7 @@ class PlayQuizViewModel @Inject constructor(
     @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
     private val answeredQuestionFactory: AnsweredQuestionFactory,
     private val questionRepository: IQuestionRepository,
+    private val catalogProgressRepository: ICatalogProgressRepository,
     private val xpCounter: XpCounter
 ) : MultiStateViewModel<PlayQuizContract.PlayQuizIntent>() {
 
@@ -59,9 +64,22 @@ class PlayQuizViewModel @Inject constructor(
             is PlayQuizContract.PlayQuizIntent.ReadQuestions -> loadQuestions(intent.quizId)
             is PlayQuizContract.PlayQuizIntent.SelectAnswer -> selectAnswer(intent.answerIdInList)
             is PlayQuizContract.PlayQuizIntent.NextQuestion -> handleNextQuestion(intent.quizId)
-            PlayQuizContract.PlayQuizIntent.CheckAnswers -> handleQuestionAnswer()
+            is PlayQuizContract.PlayQuizIntent.CheckAnswers -> handleQuestionAnswer(intent.quizId)
             is PlayQuizContract.PlayQuizIntent.ChangeExitDialogVisibility -> changeExitDialogVisibility(intent.isVisible)
+            is PlayQuizContract.PlayQuizIntent.UpdateCatalogProgress -> updateCatalogProgress(intent.quizId, ::setCatalogProgressUpdating)
         }
+    }
+
+    private fun updateCatalogProgress(quizId: Long, handle: () -> Unit) {
+        viewModelScope.launch(ioDispatcher) {
+            catalogProgressRepository.updateCatalogProgress(quizId)
+                .onSuccess { handle() }
+                .onFailure { handle() }
+        }
+    }
+
+    private fun setCatalogProgressUpdating() {
+        _dialogsState.update { it.copy(isCloseDialogVisible = false, isCloseDialogFinished = true) }
     }
 
     private fun changeExitDialogVisibility(visible: Boolean) {
@@ -127,7 +145,7 @@ class PlayQuizViewModel @Inject constructor(
         }
     }
 
-    private fun handleQuestionAnswer() {
+    private fun handleQuestionAnswer(quizId: Long) {
         coroutineScope.launch(defaultDispatcher) {
             if (currentQuestion.value is PlayQuizContract.CurrentQuestionState.CurrentQuestion) {
                 val currentQuestion =
@@ -150,6 +168,13 @@ class PlayQuizViewModel @Inject constructor(
                 val isCorrect = userAnswersIds.all { it in currentCorrectAnswers }
                 val incorrectAnswers = userAnswersIds.filterNot { it in currentCorrectAnswers }
 
+                updateQuestionProgress(
+                    quizId,
+                    currentQuestion.question.id,
+                    currentQuestion.question.difficulty,
+                    isCorrect
+                )
+
                 answeredQuestions.add(
                     answeredQuestionFactory.mapTo(
                         currentQuestion.question,
@@ -170,21 +195,41 @@ class PlayQuizViewModel @Inject constructor(
         }
     }
 
+    private fun updateQuestionProgress(
+        quizId: Long,
+        questionId: Long,
+        difficulty: QuestionDifficulty,
+        isCorrect: Boolean
+    ) {
+        viewModelScope.launch(ioDispatcher) {
+            catalogProgressRepository.updateCatalogProgressQuestion(
+                UpdateCatalogProgressQuestionModel(
+                    quizId = quizId,
+                    questionId = questionId,
+                    xpGained = xpCounter.countXpForQuestion(difficulty),
+                    correctAnswer = isCorrect
+                )
+            )
+        }
+    }
+
     private fun handleNextQuestion(quizId: Long) {
         val currentVisibleQuestion = currentQuestion.value
         if (currentVisibleQuestion is PlayQuizContract.CurrentQuestionState.CurrentQuestion) {
             if (questions.size == answeredQuestions.size) {
-                _currentQuestion.update {
-                    PlayQuizContract.CurrentQuestionState.Victory(
-                        VictoryQuizContract.InitialState(
-                            quizId = quizId,
-                            questionsCount = questions.size,
-                            correctAnswersCount = answeredQuestions.filter { it.isCorrectAnswer }.size,
-                            xpCount = answeredQuestions.sumOf {
-                                if (it.isCorrectAnswer) xpCounter.countXpForQuestion(it.difficulty) else 0
-                            }
+                updateCatalogProgress(quizId) {
+                    _currentQuestion.update {
+                        PlayQuizContract.CurrentQuestionState.Victory(
+                            VictoryQuizContract.InitialState(
+                                quizId = quizId,
+                                questionsCount = questions.size,
+                                correctAnswersCount = answeredQuestions.filter { it.isCorrectAnswer }.size,
+                                xpCount = answeredQuestions.sumOf {
+                                    if (it.isCorrectAnswer) xpCounter.countXpForQuestion(it.difficulty) else 0
+                                }
+                            )
                         )
-                    )
+                    }
                 }
                 return
             }

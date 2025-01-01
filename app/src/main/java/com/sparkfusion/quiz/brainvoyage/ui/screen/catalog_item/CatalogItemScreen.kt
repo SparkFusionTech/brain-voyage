@@ -2,6 +2,7 @@ package com.sparkfusion.quiz.brainvoyage.ui.screen.catalog_item
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeFloatingActionButton
@@ -13,6 +14,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
@@ -23,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sparkfusion.quiz.brainvoyage.R
+import com.sparkfusion.quiz.brainvoyage.ui.drawer.DrawerContract
+import com.sparkfusion.quiz.brainvoyage.ui.drawer.DrawerViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.drawer.NavigationDrawer
 import com.sparkfusion.quiz.brainvoyage.ui.model.QuizCatalogSerializable
 import com.sparkfusion.quiz.brainvoyage.ui.screen.catalog_item.component.CatalogItemTopBar
@@ -39,6 +43,7 @@ const val QUIZ_ID_KEY = "quiz id key"
 fun CatalogItemScreen(
     modifier: Modifier = Modifier,
     viewModel: CatalogItemViewModel = hiltViewModel(),
+    drawerViewModel: DrawerViewModel = hiltViewModel(),
     quizCatalogSerializable: QuizCatalogSerializable,
     onNavigateToQuizAddScreen: (QuizCatalogSerializable) -> Unit,
     onQuizClick: (Long) -> Unit,
@@ -51,8 +56,17 @@ fun CatalogItemScreen(
 
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+    val listState = rememberLazyListState(initialFirstVisibleItemIndex = viewModel.scrollPosition)
+
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.firstVisibleItemIndex }
+            .collect { index ->
+                viewModel.scrollPosition = index
+            }
+    }
 
     NavigationDrawer(
+        viewModel = drawerViewModel,
         onMyQuizzesClick = onNavigateToMyQuizzesScreen
     ) { drawerState ->
         Scaffold(
@@ -67,7 +81,10 @@ fun CatalogItemScreen(
                     title = quizCatalogSerializable.name,
                     onMenuClick = {
                         coroutineScope.launch {
-                            if (drawerState.isClosed) drawerState.open() else drawerState.close()
+                            if (drawerState.isClosed) {
+                                drawerViewModel.handleIntent(DrawerContract.DrawerIntent.ReloadCatalogLevel)
+                                drawerState.open()
+                            } else drawerState.close()
                         }
                     }
                 )
@@ -85,6 +102,7 @@ fun CatalogItemScreen(
             floatingActionButtonPosition = FabPosition.End
         ) {
             LazyColumn(
+                state = listState,
                 modifier = modifier
                     .paint(
                         painter = painterResource(id = R.drawable.background),

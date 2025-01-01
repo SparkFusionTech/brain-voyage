@@ -5,6 +5,7 @@ import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableFloatState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +33,10 @@ fun CropSpaceBox(
     onTransformChange: ((Offset) -> Unit)? = null
 ) {
     val transform = remember { mutableStateOf(Offset(0f, 0f)) }
+    LaunchedEffect(Unit) {
+        onScaleChange?.invoke(scale.floatValue)
+        onTransformChange?.invoke(transform.value)
+    }
 
     Box(
         modifier = modifier

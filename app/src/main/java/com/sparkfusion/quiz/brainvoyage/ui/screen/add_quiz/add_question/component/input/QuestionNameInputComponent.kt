@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sparkfusion.quiz.brainvoyage.R
@@ -51,6 +52,8 @@ fun QuestionNameInputComponent(
             if (it.length == 128) showErrorMessage = true
             else onValueChange(it)
         },
-        placeholder = stringResource(id = R.string.enter_here)
+        singleLine = true,
+        placeholder = stringResource(id = R.string.enter_here),
+        keyboardType = KeyboardType.Text
     )
 }

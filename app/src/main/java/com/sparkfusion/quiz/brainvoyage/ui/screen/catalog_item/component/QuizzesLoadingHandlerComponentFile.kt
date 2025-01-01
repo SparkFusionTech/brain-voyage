@@ -24,7 +24,7 @@ fun LazyListScope.quizzesLoadingHandlerComponent(
         CatalogItemContract.QuizLoadingState.Error -> {
             item {
                 val errorMessage = stringResource(id = R.string.error)
-                LaunchedEffect(Unit) {
+                LaunchedEffect(errorMessage) {
                     snackbarHostState.showSnackbar(errorMessage)
                 }
                 ReloadComponent(onReloadClick = onReloadClick) {}
@@ -45,7 +45,7 @@ fun LazyListScope.quizzesLoadingHandlerComponent(
         CatalogItemContract.QuizLoadingState.NetworkError -> {
             item {
                 val networkErrorMessage = stringResource(id = R.string.network_error)
-                LaunchedEffect(Unit) {
+                LaunchedEffect(networkErrorMessage) {
                     snackbarHostState.showSnackbar(networkErrorMessage)
                 }
                 ReloadComponent(onReloadClick = onReloadClick) {}

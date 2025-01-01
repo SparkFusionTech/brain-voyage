@@ -4,12 +4,13 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -19,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -29,10 +31,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.ui.screen.drawer.my_quizzes.component.QuizItemComponent
+import com.sparkfusion.quiz.brainvoyage.ui.screen.empty_loading.EmptyLoadingScreen
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.drawer.my_quizzes.MyQuizzesContract
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.drawer.my_quizzes.MyQuizzesViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
-import com.sparkfusion.quiz.brainvoyage.utils.descriptionColor
 import com.sparkfusion.quiz.brainvoyage.utils.dp.getStatusBarHeightInDp
 import com.sparkfusion.quiz.brainvoyage.window.StatusBarHeightOwner
 
@@ -47,10 +49,11 @@ fun MyQuizzesScreen(
     viewModel.handleIntent(MyQuizzesContract.Intent.ReadQuizzes)
 
     val context = LocalContext.current
+    val height = LocalConfiguration.current.screenHeightDp.dp - 72.dp
 
     LazyColumn(
         modifier = modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .paint(
                 painter = painterResource(id = R.drawable.background),
                 contentScale = ContentScale.Crop
@@ -90,12 +93,7 @@ fun MyQuizzesScreen(
         when (quizzesState) {
             MyQuizzesContract.QuizzesReadingState.Loading -> {
                 item {
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator()
-                    }
+                    EmptyLoadingScreen(modifier = Modifier.height(height))
                 }
             }
 
@@ -104,39 +102,37 @@ fun MyQuizzesScreen(
             }
 
             is MyQuizzesContract.QuizzesReadingState.Success -> {
-                (quizzesState as MyQuizzesContract.QuizzesReadingState.Success).map
-                    .forEach { (date, quizzes) ->
-                        item {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 16.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                SFProRoundedText(
-                                    modifier = Modifier
-                                        .background(
-                                            Color.Black.copy(alpha = 0.4f),
-                                            RoundedCornerShape(20.dp)
-                                        )
-                                        .padding(horizontal = 12.dp, vertical = 4.dp),
-                                    content = date,
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 14.sp,
-                                    color = descriptionColor()
+                val successState = quizzesState as MyQuizzesContract.QuizzesReadingState.Success
+                val entries = successState.map.entries.toList()
+                
+                items(entries) { (date, quizzes) ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        SFProRoundedText(
+                            modifier = Modifier
+                                .background(
+                                    Color.Black.copy(alpha = 0.4f),
+                                    RoundedCornerShape(20.dp)
                                 )
-                            }
-                        }
-
-                        quizzes.forEach { quiz ->
-                            item {
-                                QuizItemComponent(
-                                    quiz = quiz,
-                                    onItemClick = onQuizClick
-                                )
-                            }
-                        }
+                                .padding(horizontal = 12.dp, vertical = 4.dp),
+                            content = date,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 14.sp,
+                            color = Color.White
+                        )
                     }
+
+                    quizzes.forEach {
+                        QuizItemComponent(
+                            quiz = it,
+                            onItemClick = onQuizClick
+                        )
+                    }
+                }
             }
         }
     }
