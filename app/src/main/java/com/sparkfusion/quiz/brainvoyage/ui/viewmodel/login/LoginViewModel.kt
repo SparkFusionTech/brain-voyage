@@ -10,6 +10,7 @@ import com.sparkfusion.quiz.brainvoyage.domain.mapper.user.LoginUserDataEntityFa
 import com.sparkfusion.quiz.brainvoyage.domain.model.LoginUserModel
 import com.sparkfusion.quiz.brainvoyage.domain.model.TokenModel
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ILoginRepository
+import com.sparkfusion.quiz.brainvoyage.domain.repository.ISaveAccountSignInStore
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ISession
 import com.sparkfusion.quiz.brainvoyage.utils.common.viewmodel.SingleStateViewModel
 import com.sparkfusion.quiz.brainvoyage.utils.dispatchers.IODispatcher
@@ -21,6 +22,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,6 +33,7 @@ class LoginViewModel @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val loginUserDataEntityFactory: LoginUserDataEntityFactory,
     private val session: ISession,
+    private val saveAccountSignInStore: ISaveAccountSignInStore,
     private val workManager: WorkManager
 ) : SingleStateViewModel<LoginContract.LoginUIState, LoginContract.LoginIntent>() {
 
@@ -71,8 +74,11 @@ class LoginViewModel @Inject constructor(
     private fun onSuccessLoginState(tokenModel: TokenModel) {
         viewModelScope.launch(ioDispatcher) {
             try {
-                session.saveUserToken(tokenModel.token)
-                startWorkManagerToSaveAccountInfo()
+                val save = saveAccountSignInStore.readSaveAccountSignIn().firstOrNull() ?: true
+                if (save) {
+                    session.saveUserToken(tokenModel.token)
+                    startWorkManagerToSaveAccountInfo()
+                }
             } catch (ignore: FailedDataStoreOperationException) {
             } finally {
                 uiState.update { it.copy(loginState = LoginState.Success) }

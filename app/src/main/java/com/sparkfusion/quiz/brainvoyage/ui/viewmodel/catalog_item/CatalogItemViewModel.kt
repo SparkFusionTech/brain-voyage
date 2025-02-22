@@ -23,9 +23,8 @@ class CatalogItemViewModel @Inject constructor(
     var scrollPosition = 0
 
     private val _quizLoadingState =
-        MutableStateFlow<CatalogItemContract.QuizLoadingState>(CatalogItemContract.QuizLoadingState.Loading)
-    val quizLoadingState: StateFlow<CatalogItemContract.QuizLoadingState>
-        get() = _quizLoadingState.asStateFlow()
+        MutableStateFlow<CatalogItemContract.QuizLoadingState>(CatalogItemContract.QuizLoadingState.Initial)
+    val quizLoadingState: StateFlow<CatalogItemContract.QuizLoadingState> = _quizLoadingState.asStateFlow()
 
     override fun handleIntent(intent: CatalogItemContract.Intent) {
         when (intent) {
@@ -35,7 +34,9 @@ class CatalogItemViewModel @Inject constructor(
     }
 
     private fun loadQuizzes(catalogId: Long) {
-        if (_quizLoadingState.value is CatalogItemContract.QuizLoadingState.Success) return
+        if (quizLoadingState.value is CatalogItemContract.QuizLoadingState.Success) return
+        if (quizLoadingState.value == CatalogItemContract.QuizLoadingState.Loading) return
+
         _quizLoadingState.update { CatalogItemContract.QuizLoadingState.Loading }
         viewModelScope.launch(ioDispatcher) {
             quizRepository.readQuizzesByCatalogId(catalogId)

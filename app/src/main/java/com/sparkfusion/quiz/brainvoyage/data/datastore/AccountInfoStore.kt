@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.sparkfusion.quiz.brainvoyage.data.entity.AccountInfoDataEntity
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IAccountInfoStore
+import com.sparkfusion.quiz.brainvoyage.utils.exception.datastore.FailedDataStoreOperationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -17,18 +18,37 @@ class AccountInfoStore @Inject constructor(
 ): IAccountInfoStore {
 
     override suspend fun readAccountInfo(): Flow<AccountInfoDataEntity> {
-        return dataStore.data.map { preferences ->
-            AccountInfoDataEntity(
-                preferences[userNameKey] ?: "",
-                preferences[accountIconKey] ?: ""
-            )
+        try {
+            return dataStore.data.map { preferences ->
+                AccountInfoDataEntity(
+                    preferences[userNameKey] ?: "",
+                    preferences[accountIconKey] ?: ""
+                )
+            }
+        } catch (e: Exception) {
+            throw FailedDataStoreOperationException()
         }
     }
 
     override suspend fun saveAccountInfo(accountInfoDataEntity: AccountInfoDataEntity) {
-        dataStore.edit { preferences ->
-            preferences[userNameKey] = accountInfoDataEntity.name
-            preferences[accountIconKey] = accountInfoDataEntity.iconUrl
+        try {
+            dataStore.edit { preferences ->
+                preferences[userNameKey] = accountInfoDataEntity.name
+                preferences[accountIconKey] = accountInfoDataEntity.iconUrl
+            }
+        } catch (e: Exception) {
+            throw FailedDataStoreOperationException()
+        }
+    }
+
+    override suspend fun clearAccountInfo() {
+        try {
+            dataStore.edit { preferences ->
+                preferences.remove(userNameKey)
+                preferences.remove(accountIconKey)
+            }
+        } catch (e: Exception) {
+            throw FailedDataStoreOperationException()
         }
     }
 

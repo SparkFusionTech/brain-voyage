@@ -47,6 +47,7 @@ fun CatalogItemScreen(
     quizCatalogSerializable: QuizCatalogSerializable,
     onNavigateToQuizAddScreen: (QuizCatalogSerializable) -> Unit,
     onQuizClick: (Long) -> Unit,
+    onSettingsClick: () -> Unit,
     onNavigateToMyQuizzesScreen: () -> Unit
 ) {
     LaunchedEffect(quizCatalogSerializable.id) {
@@ -67,7 +68,8 @@ fun CatalogItemScreen(
 
     NavigationDrawer(
         viewModel = drawerViewModel,
-        onMyQuizzesClick = onNavigateToMyQuizzesScreen
+        onMyQuizzesClick = onNavigateToMyQuizzesScreen,
+        onSettingsClick = onSettingsClick
     ) { drawerState ->
         Scaffold(
             snackbarHost = {
@@ -133,6 +135,7 @@ private fun CatalogItemScreenPreview() {
         quizCatalogSerializable = QuizCatalogSerializable(1, "Music"),
         onNavigateToQuizAddScreen = {},
         onQuizClick = {},
-        onNavigateToMyQuizzesScreen = {}
+        onNavigateToMyQuizzesScreen = {},
+        onSettingsClick = {}
     )
 }

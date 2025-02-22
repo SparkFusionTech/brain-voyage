@@ -12,7 +12,7 @@ val registrationTextFieldColor = Color(0xFFFAEBD7)
 val settingsBackgroundDarkColor = Color(0xFF26005C)
 val settingsBackgroundLightColor = Color(0xFF3E0099)
 
-val dialogTitleLightColor = Color(0xFFDF8600)
+val orangeButtonColor = Color(0xFFDF8600)
 val dialogTitleDarkColor = Color(0xFFBE6900)
 
 val buttonLightColor = Color(0xFF004BCC)

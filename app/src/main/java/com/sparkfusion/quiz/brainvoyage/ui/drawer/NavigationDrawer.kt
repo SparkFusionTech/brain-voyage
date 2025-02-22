@@ -36,6 +36,7 @@ fun NavigationDrawer(
     modifier: Modifier = Modifier,
     viewModel: DrawerViewModel,
     onMyQuizzesClick: () -> Unit,
+    onSettingsClick: () -> Unit,
     content: @Composable (drawerState: DrawerState) -> Unit
 ) {
     val state by viewModel.initialState.collectAsStateWithLifecycle()
@@ -90,7 +91,7 @@ fun NavigationDrawer(
                 DrawerItemComponent(
                     label = "Settings",
                     icon = painterResource(id = R.drawable.round_settings),
-                    onItemClick = {}
+                    onItemClick = onSettingsClick
                 )
 
                 DrawerItemComponent(
@@ -111,7 +112,8 @@ private fun NavigationDrawerPreview() {
     NavigationDrawer(
         viewModel = hiltViewModel(),
         content = {},
-        onMyQuizzesClick = {}
+        onMyQuizzesClick = {},
+        onSettingsClick = {}
     )
 }
 

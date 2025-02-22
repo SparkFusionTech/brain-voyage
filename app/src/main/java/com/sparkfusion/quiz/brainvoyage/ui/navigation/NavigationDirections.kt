@@ -118,6 +118,9 @@ fun NavGraphBuilder.catalogItemDirection(navController: NavController) {
                 },
                 onNavigateToMyQuizzesScreen = {
                     navController.navigate(Destination.MyQuizzesScreenDestination)
+                },
+                onSettingsClick = {
+                    navController.navigate(Destination.SettingsDestination)
                 }
             )
         } ?: EmptyLoadingScreen(

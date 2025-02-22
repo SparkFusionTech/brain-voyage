@@ -8,4 +8,6 @@ interface IAccountInfoStore {
     suspend fun readAccountInfo(): Flow<AccountInfoDataEntity>
 
     suspend fun saveAccountInfo(accountInfoDataEntity: AccountInfoDataEntity)
+
+    suspend fun clearAccountInfo()
 }

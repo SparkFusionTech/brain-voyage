@@ -37,7 +37,7 @@ class Session @Inject constructor(
     override suspend fun clearUserToken() {
         try {
             dataStore.edit { preferences ->
-                preferences[tokenKey] = ""
+                preferences.remove(tokenKey)
             }
         } catch (exception: Exception) {
             throw FailedDataStoreOperationException()

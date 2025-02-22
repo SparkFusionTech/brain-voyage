@@ -57,5 +57,26 @@ fun LazyListScope.quizzesLoadingHandlerComponent(
                 QuizItemComponent(quiz = it, onItemClick = onItemClick)
             }
         }
+
+        CatalogItemContract.QuizLoadingState.Initial -> {}
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

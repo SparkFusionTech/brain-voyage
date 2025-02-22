@@ -56,6 +56,7 @@ fun AppNavHost(
 
         myQuizzesDirection(navController)
         myQuizInfoDirection(navController)
+        settingsDirection(navController)
 
         playQuizDirection(navController)
         quizVictoryDirection(navController)

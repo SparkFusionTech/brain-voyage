@@ -10,6 +10,7 @@ import com.sparkfusion.quiz.brainvoyage.ui.screen.drawer.my_quiz_info.MyQuizInfo
 import com.sparkfusion.quiz.brainvoyage.ui.screen.drawer.my_quiz_info.key.MY_QUIZ_ID_KEY
 import com.sparkfusion.quiz.brainvoyage.ui.screen.drawer.my_quizzes.MyQuizzesScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.empty_loading.EmptyLoadingScreen
+import com.sparkfusion.quiz.brainvoyage.ui.screen.settings.SettingsScreen
 import com.sparkfusion.quiz.brainvoyage.ui.theme.settingsBackgroundDarkColor
 import com.sparkfusion.quiz.brainvoyage.ui.theme.settingsBackgroundLightColor
 
@@ -45,7 +46,18 @@ fun NavGraphBuilder.myQuizInfoDirection(
     }
 }
 
+fun NavGraphBuilder.settingsDirection(
+    navController: NavController
+) {
+    composable<Destination.SettingsDestination> {
+        SettingsScreen(
+            onBackClick = { navController.popBackStack() },
+            onLogoutClick = {
 
+            }
+        )
+    }
+}
 
 
 

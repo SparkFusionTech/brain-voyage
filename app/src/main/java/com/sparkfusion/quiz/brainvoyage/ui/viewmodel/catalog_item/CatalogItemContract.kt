@@ -11,6 +11,7 @@ interface CatalogItemContract {
     }
 
     sealed interface QuizLoadingState {
+        data object Initial : QuizLoadingState
         data object Loading : QuizLoadingState
         data object Error : QuizLoadingState
         data object NetworkError : QuizLoadingState
