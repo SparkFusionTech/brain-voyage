@@ -4,6 +4,7 @@ import com.sparkfusion.quiz.brainvoyage.data.repository.AnswerRepository
 import com.sparkfusion.quiz.brainvoyage.data.repository.CatalogProgressRepository
 import com.sparkfusion.quiz.brainvoyage.data.repository.ImageSearchRepository
 import com.sparkfusion.quiz.brainvoyage.data.repository.LoginRepository
+import com.sparkfusion.quiz.brainvoyage.data.repository.Online2VS2GameRepository
 import com.sparkfusion.quiz.brainvoyage.data.repository.QuestionRepository
 import com.sparkfusion.quiz.brainvoyage.data.repository.QuizRepository
 import com.sparkfusion.quiz.brainvoyage.data.repository.TagRepository
@@ -11,6 +12,7 @@ import com.sparkfusion.quiz.brainvoyage.domain.repository.IAnswerRepository
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ICatalogProgressRepository
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IImageSearchRepository
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ILoginRepository
+import com.sparkfusion.quiz.brainvoyage.domain.repository.IOnline2VS2GameRepository
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IQuestionRepository
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IQuizRepository
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ITagRepository
@@ -53,6 +55,11 @@ interface RepositoryModule {
     fun bindCatalogProgressRepositoryToICatalogProgressRepository(
         catalogProgressRepository: CatalogProgressRepository
     ): ICatalogProgressRepository
+
+    @Binds
+    fun bindOnline2VS2GameRepositoryToIOnline2VS2GameRepository(
+        online2VS2GameRepository: Online2VS2GameRepository
+    ): IOnline2VS2GameRepository
 }
 
 

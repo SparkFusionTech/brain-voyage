@@ -9,6 +9,7 @@ import com.sparkfusion.quiz.brainvoyage.data.datasource.workmanager.UserInfoWork
 import com.sparkfusion.quiz.brainvoyage.domain.mapper.user.LoginUserDataEntityFactory
 import com.sparkfusion.quiz.brainvoyage.domain.model.LoginUserModel
 import com.sparkfusion.quiz.brainvoyage.domain.model.TokenModel
+import com.sparkfusion.quiz.brainvoyage.domain.repository.IAccountEmailStore
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ILoginRepository
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ISaveAccountSignInStore
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ISession
@@ -34,6 +35,7 @@ class LoginViewModel @Inject constructor(
     private val loginUserDataEntityFactory: LoginUserDataEntityFactory,
     private val session: ISession,
     private val saveAccountSignInStore: ISaveAccountSignInStore,
+    private val accountEmailStore: IAccountEmailStore,
     private val workManager: WorkManager
 ) : SingleStateViewModel<LoginContract.LoginUIState, LoginContract.LoginIntent>() {
 
@@ -76,6 +78,7 @@ class LoginViewModel @Inject constructor(
             try {
                 val save = saveAccountSignInStore.readSaveAccountSignIn().firstOrNull() ?: true
                 if (save) {
+                    accountEmailStore.changeAccountEmail(uiState.value.email)
                     session.saveUserToken(tokenModel.token)
                     startWorkManagerToSaveAccountInfo()
                 }

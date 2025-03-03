@@ -1,9 +1,11 @@
 package com.sparkfusion.quiz.brainvoyage.ui.screen.catalog
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -11,11 +13,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -31,6 +38,8 @@ import coil.compose.AsyncImage
 import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.ui.model.QuizCatalogSerializable
 import com.sparkfusion.quiz.brainvoyage.ui.screen.catalog.component.CatalogItem
+import com.sparkfusion.quiz.brainvoyage.ui.theme.buttonDarkColor
+import com.sparkfusion.quiz.brainvoyage.ui.theme.buttonLightColor
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.quiz_catalog.QuizCatalogLoadingState
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.quiz_catalog.QuizCatalogViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
@@ -44,7 +53,8 @@ private const val DEFAULT_CATALOG_ITEMS_COUNT = 5
 fun CatalogScreen(
     modifier: Modifier = Modifier,
     viewModel: QuizCatalogViewModel = hiltViewModel(),
-    onNavigateToCatalogItemScreen: (QuizCatalogSerializable) -> Unit
+    onNavigateToCatalogItemScreen: (QuizCatalogSerializable) -> Unit,
+    onNavigateToOnlineGamesScreen: () -> Unit
 ) {
     val isDarkModeEnabled = isSystemInDarkTheme()
     val state by viewModel.initialState().collectAsStateWithLifecycle()
@@ -123,6 +133,34 @@ fun CatalogScreen(
                 )
             }
         }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Button(
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(bottom = 32.dp)
+                .padding(horizontal = 64.dp)
+                .fillMaxWidth()
+                .height(60.dp)
+                .background(
+                    brush = Brush.linearGradient(
+                        colors = listOf(buttonDarkColor, buttonLightColor),
+                        start = Offset(150f, 0f)
+                    ),
+                    shape = RoundedCornerShape(50.dp)
+                )
+                .clip(RoundedCornerShape(50.dp)),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+            onClick = onNavigateToOnlineGamesScreen
+        ) {
+            SFProRoundedText(
+                modifier = Modifier.padding(horizontal = 24.dp, vertical = 4.dp),
+                content = "Online",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
     }
 }
 
@@ -130,6 +168,7 @@ fun CatalogScreen(
 @Composable
 private fun CatalogScreenPreview() {
     CatalogScreen(
-        onNavigateToCatalogItemScreen = {}
+        onNavigateToCatalogItemScreen = {},
+        onNavigateToOnlineGamesScreen = {}
     )
 }

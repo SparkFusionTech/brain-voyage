@@ -35,7 +35,11 @@ android {
         val urlProperty = localProperties.getProperty(
             "api_url", null
         ) ?: throw GradleException("API_URL is not defined")
+        val websocketProperty = localProperties.getProperty(
+            "websocket_url", null
+        )
         buildConfigField("String", "API_URL", "\"$urlProperty\"")
+        buildConfigField("String", "WEBSOCKET_URL", "\"$websocketProperty\"")
     }
 
     buildTypes {

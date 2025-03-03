@@ -1,5 +1,6 @@
 package com.sparkfusion.quiz.brainvoyage.data.di
 
+import com.google.gson.Gson
 import com.sparkfusion.quiz.brainvoyage.data.common.AuthInterceptor
 import com.sparkfusion.quiz.brainvoyage.data.datasource.AnswerApiService
 import com.sparkfusion.quiz.brainvoyage.data.datasource.image_search.ImageSearchApiService
@@ -95,5 +96,11 @@ object NetworkModule {
     @Provides
     fun provideGsonConverterFactory(): GsonConverterFactory {
         return GsonConverterFactory.create()
+    }
+
+    @Singleton
+    @Provides
+    fun provideGson(): Gson {
+        return Gson()
     }
 }

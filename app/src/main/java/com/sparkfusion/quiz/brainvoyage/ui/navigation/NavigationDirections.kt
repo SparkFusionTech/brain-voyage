@@ -91,6 +91,9 @@ fun NavGraphBuilder.catalogDirection(navController: NavController) {
                     QUIZ_CATALOG_INFO_KEY, it
                 )
                 navController.navigate(Destination.CatalogItemDestination)
+            },
+            onNavigateToOnlineGamesScreen = {
+                navController.navigate(OnlineGamesDestination)
             }
         )
     }

@@ -112,7 +112,7 @@ fun TopComponent(
 }
 
 @Composable
-private fun ColumnScope.AnimatedLinearProgressIndicator(
+fun ColumnScope.AnimatedLinearProgressIndicator(
     modifier: Modifier = Modifier,
     completedValueState: PlayQuizContract.CompletedValueState
 ) {

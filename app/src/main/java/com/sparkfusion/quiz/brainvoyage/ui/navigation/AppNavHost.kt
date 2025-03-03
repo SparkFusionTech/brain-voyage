@@ -60,5 +60,24 @@ fun AppNavHost(
 
         playQuizDirection(navController)
         quizVictoryDirection(navController)
+
+        onlineGamesDirection(navController)
+        onlineSelectionDirection(navController)
+        onlineQuestionDirection(navController)
+        onlineVictoryDirection(navController)
+        onlineWaitingOpponentAnswerDirection(navController)
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

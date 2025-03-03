@@ -37,3 +37,20 @@ interface LoginApiService {
     @GET("/users/check-token")
     suspend fun checkTokenValidation(): Response<TokenValidationDataEntity>
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
