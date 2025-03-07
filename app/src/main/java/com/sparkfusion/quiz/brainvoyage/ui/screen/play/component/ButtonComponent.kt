@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,9 +18,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,7 +32,6 @@ import coil.compose.AsyncImage
 import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.ui.theme.buttonDarkColor
 import com.sparkfusion.quiz.brainvoyage.ui.theme.buttonLightColor
-import com.sparkfusion.quiz.brainvoyage.ui.theme.settingsBackgroundDarkColor
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.play.PlayQuizContract
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
 
@@ -43,7 +45,7 @@ fun ButtonComponent(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(settingsBackgroundDarkColor.copy(alpha = 0.95f))
+            .background(Color.Black.copy(alpha = 0.6f))
     ) {
         AnimatedVisibility(visible = answerCheckResult is PlayQuizContract.AnswerCheckState.AnswerCheckResult) {
             if (answerCheckResult is PlayQuizContract.AnswerCheckState.AnswerCheckResult) {
@@ -130,11 +132,20 @@ private fun ColumnScope.ActionButton(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun ButtonComponentPreview() {
-    ButtonComponent(
-        answerCheckResult = PlayQuizContract.AnswerCheckState.Empty,
-        onAnswerButtonClick = {},
-        onNextButtonClick = {}
-    )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .paint(
+                painter = painterResource(id = R.drawable.background),
+                contentScale = ContentScale.Crop
+            )
+    ) {
+        ButtonComponent(
+            answerCheckResult = PlayQuizContract.AnswerCheckState.Empty,
+            onAnswerButtonClick = {},
+            onNextButtonClick = {}
+        )
+    }
 }
 
 

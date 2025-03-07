@@ -1,6 +1,7 @@
 package com.sparkfusion.quiz.brainvoyage.ui.dialog.common
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -58,19 +59,25 @@ fun CommonBottomSheet(
         }
     }
 
-    if (show) {
+    AnimatedVisibility(
+        visible = show,
+        enter = fadeIn(animationSpec = tween(durationMillis = 300)),
+        exit = fadeOut(animationSpec = tween(durationMillis = 300))
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.Black.copy(alpha = 0.4f))
-                .clickable(onClick = { onDismiss() })
+                .clickable(onClick = {
+                    onDismiss()
+                })
         )
     }
 
     AnimatedVisibility(
         visible = show,
-        enter = fadeIn() + slideInVertically(initialOffsetY = { it }),
-        exit = fadeOut() + slideOutVertically(targetOffsetY = { it }),
+        enter = fadeIn(tween(durationMillis = 300)) + slideInVertically(initialOffsetY = { it }),
+        exit = fadeOut(tween(durationMillis = 300)) + slideOutVertically(targetOffsetY = { it }),
     ) {
         Box(
             modifier = modifier
@@ -83,7 +90,14 @@ fun CommonBottomSheet(
                     .fillMaxWidth()
                     .offset { IntOffset(x = 0, offsetY.toInt()) }
                     .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
-                    .background(Brush.verticalGradient(listOf(drawerContainerLightColor, drawerContainerDarkColor)))
+                    .background(
+                        Brush.verticalGradient(
+                            listOf(
+                                drawerContainerLightColor,
+                                drawerContainerDarkColor
+                            )
+                        )
+                    )
                     .padding(horizontal = 24.dp)
                     .padding(vertical = 20.dp)
                     .onGloballyPositioned { layoutCoordinates ->
@@ -119,7 +133,7 @@ fun CommonBottomSheet(
     }
 
     LaunchedEffect(!show) {
-        delay(200L)
+        delay(300L)
         offsetY = 0f
     }
 }

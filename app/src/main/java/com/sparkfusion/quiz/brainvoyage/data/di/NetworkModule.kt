@@ -7,6 +7,7 @@ import com.sparkfusion.quiz.brainvoyage.data.datasource.image_search.ImageSearch
 import com.sparkfusion.quiz.brainvoyage.data.datasource.LoginApiService
 import com.sparkfusion.quiz.brainvoyage.data.datasource.QuestionApiService
 import com.sparkfusion.quiz.brainvoyage.data.datasource.QuizApiService
+import com.sparkfusion.quiz.brainvoyage.data.datasource.QuizRatingApiService
 import com.sparkfusion.quiz.brainvoyage.data.datasource.TagApiService
 import com.sparkfusion.quiz.brainvoyage.data.datasource.catalog_progress.CatalogProgressApiService
 import com.sparkfusion.quiz.brainvoyage.data.utils.BASE_URL
@@ -90,6 +91,12 @@ object NetworkModule {
     @Provides
     fun provideCatalogProgressApiService(retrofit: Retrofit): CatalogProgressApiService {
         return retrofit.create(CatalogProgressApiService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideQuizRatingApiService(retrofit: Retrofit): QuizRatingApiService {
+        return retrofit.create(QuizRatingApiService::class.java)
     }
 
     @Singleton

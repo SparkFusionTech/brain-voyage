@@ -6,6 +6,7 @@ import com.sparkfusion.quiz.brainvoyage.data.repository.ImageSearchRepository
 import com.sparkfusion.quiz.brainvoyage.data.repository.LoginRepository
 import com.sparkfusion.quiz.brainvoyage.data.repository.Online2VS2GameRepository
 import com.sparkfusion.quiz.brainvoyage.data.repository.QuestionRepository
+import com.sparkfusion.quiz.brainvoyage.data.repository.QuizRatingRepository
 import com.sparkfusion.quiz.brainvoyage.data.repository.QuizRepository
 import com.sparkfusion.quiz.brainvoyage.data.repository.TagRepository
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IAnswerRepository
@@ -14,6 +15,7 @@ import com.sparkfusion.quiz.brainvoyage.domain.repository.IImageSearchRepository
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ILoginRepository
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IOnline2VS2GameRepository
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IQuestionRepository
+import com.sparkfusion.quiz.brainvoyage.domain.repository.IQuizRatingRepository
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IQuizRepository
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ITagRepository
 import dagger.Binds
@@ -60,6 +62,11 @@ interface RepositoryModule {
     fun bindOnline2VS2GameRepositoryToIOnline2VS2GameRepository(
         online2VS2GameRepository: Online2VS2GameRepository
     ): IOnline2VS2GameRepository
+
+    @Binds
+    fun bindQuizRatingRepositoryToIQuizRatingRepository(
+        quizRatingRepository: QuizRatingRepository
+    ): IQuizRatingRepository
 }
 
 

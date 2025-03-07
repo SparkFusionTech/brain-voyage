@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.sparkfusion.quiz.brainvoyage.domain.model.LoginUserModel
 import com.sparkfusion.quiz.brainvoyage.domain.model.UserExistsModel
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ILoginRepository
-import com.sparkfusion.quiz.brainvoyage.utils.common.viewmodel.SingleStateViewModel
 import com.sparkfusion.quiz.brainvoyage.utils.common.StringToMultipartWorker
+import com.sparkfusion.quiz.brainvoyage.utils.common.viewmodel.SingleStateViewModel
 import com.sparkfusion.quiz.brainvoyage.utils.dispatchers.IODispatcher
 import com.sparkfusion.quiz.brainvoyage.utils.exception.BrainVoyageException
 import com.sparkfusion.quiz.brainvoyage.utils.exception.network.AlreadyExistsException
@@ -37,7 +37,8 @@ class RegistrationViewModel @Inject constructor(
     private val bitmapSizeReducer: BitmapSizeReducer
 ) : SingleStateViewModel<RegistrationContract.RegistrationUIState, RegistrationContract.RegistrationIntent>() {
 
-    override fun initialState(): StateFlow<RegistrationContract.RegistrationUIState> = uiState.asStateFlow()
+    override fun initialState(): StateFlow<RegistrationContract.RegistrationUIState> =
+        uiState.asStateFlow()
 
     override fun handleIntent(intent: RegistrationContract.RegistrationIntent) {
         when (intent) {
@@ -82,7 +83,12 @@ class RegistrationViewModel @Inject constructor(
 
     private suspend fun getImageMultipart(bitmap: Bitmap?): MultipartBody.Part? {
         if (bitmap == null) return null
-        val file = bitmapToFileWorker(bitmapSizeReducer.reduce(bitmap, maxScaleFactor = 1.5f), ImageChildren.PROFILE_ICON)
+        val file = bitmapToFileWorker(
+//            bitmapSizeReducer.reduce(
+            bitmap
+//            , maxScaleFactor = 1.5f)
+            , ImageChildren.PROFILE_ICON
+        )
         return imageFileToMultipartWorker(file, ApiImageSerializeNames.ACCOUNT_ICON.value)
     }
 

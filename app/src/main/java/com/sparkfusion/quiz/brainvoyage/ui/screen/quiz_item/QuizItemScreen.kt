@@ -32,6 +32,7 @@ fun QuizItemScreen(
     LaunchedEffect(Unit) {
         viewModel.handleIntent(QuizItemContract.Intent.ReadQuiz(quizId))
     }
+
     val quizLoadingState by viewModel.quizLoadingState.collectAsStateWithLifecycle()
 
     Box(
@@ -61,6 +62,7 @@ fun QuizItemScreen(
                     onBackClick = onBackClick,
                     onPlayButtonClick = onPlayButtonClick,
                     quiz = (quizLoadingState as QuizItemContract.QuizReadingState.Success).quiz,
+                    rating = (quizLoadingState as QuizItemContract.QuizReadingState.Success).rating,
                     nextTryAt = (quizLoadingState as QuizItemContract.QuizReadingState.Success).nextTryAt
                 )
             }

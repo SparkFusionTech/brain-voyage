@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.lastOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,13 +33,31 @@ class DrawerViewModel @Inject constructor(
     private val _initialState = MutableStateFlow(DrawerContract.DrawerState())
     val initialState: StateFlow<DrawerContract.DrawerState> = _initialState.asStateFlow()
 
-    private val _levelState = MutableStateFlow<DrawerContract.LevelState>(DrawerContract.LevelState.Initial)
+    private val _levelState =
+        MutableStateFlow<DrawerContract.LevelState>(DrawerContract.LevelState.Initial)
     val levelState: StateFlow<DrawerContract.LevelState> = _levelState.asStateFlow()
 
     override fun handleIntent(intent: DrawerContract.DrawerIntent) {
         when (intent) {
-            DrawerContract.DrawerIntent.ReloadUserInfo -> loadAccountInfo()
+            DrawerContract.DrawerIntent.ReloadUserInfo -> reloadAccountInfo()
             DrawerContract.DrawerIntent.ReloadCatalogLevel -> loadCatalogExperience()
+        }
+    }
+
+    private fun reloadAccountInfo() {
+        viewModelScope.launch {
+            try {
+                val value = accountInfoDataEntityFactory.mapTo(
+                    accountInfoStore.readAccountInfo().lastOrNull() ?: return@launch
+                )
+
+                val oldState = initialState.value.accountInfoState
+                if (oldState is DrawerReadingState.Success) {
+                    if (oldState.accountInfoModel == value) return@launch
+                    loadInfoFromNetwork()
+                }
+            } catch (_: Exception) {
+            }
         }
     }
 
@@ -74,7 +93,10 @@ class DrawerViewModel @Inject constructor(
 
     private suspend fun loadInfoFromNetwork() {
         loginRepository.loadUserInfo()
-            .onSuccess(::handleSuccessAccountInfoState)
+            .onSuccess {
+                accountInfoStore.saveAccountInfo(accountInfoDataEntityFactory.mapFrom(it))
+                handleSuccessAccountInfoState(it)
+            }
             .onFailure(::handleFailureAccountInfoState)
     }
 

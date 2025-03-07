@@ -1,5 +1,6 @@
 package com.sparkfusion.quiz.brainvoyage.data.datastore
 
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -20,12 +21,15 @@ class AccountInfoStore @Inject constructor(
     override suspend fun readAccountInfo(): Flow<AccountInfoDataEntity> {
         try {
             return dataStore.data.map { preferences ->
-                AccountInfoDataEntity(
+                val model = AccountInfoDataEntity(
                     preferences[userNameKey] ?: "",
                     preferences[accountIconKey] ?: ""
                 )
+                Log.d("TAGTAG", "NAME _ " + model.name)
+                model
             }
         } catch (e: Exception) {
+            Log.d("TAGTAG", e.message.toString())
             throw FailedDataStoreOperationException()
         }
     }

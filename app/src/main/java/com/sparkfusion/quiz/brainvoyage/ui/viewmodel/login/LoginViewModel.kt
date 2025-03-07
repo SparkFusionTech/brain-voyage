@@ -6,10 +6,12 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.sparkfusion.quiz.brainvoyage.data.datasource.workmanager.UserInfoWorker
+import com.sparkfusion.quiz.brainvoyage.domain.mapper.user.AccountInfoDataEntityFactory
 import com.sparkfusion.quiz.brainvoyage.domain.mapper.user.LoginUserDataEntityFactory
 import com.sparkfusion.quiz.brainvoyage.domain.model.LoginUserModel
 import com.sparkfusion.quiz.brainvoyage.domain.model.TokenModel
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IAccountEmailStore
+import com.sparkfusion.quiz.brainvoyage.domain.repository.IAccountInfoStore
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ILoginRepository
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ISaveAccountSignInStore
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ISession
@@ -36,6 +38,8 @@ class LoginViewModel @Inject constructor(
     private val session: ISession,
     private val saveAccountSignInStore: ISaveAccountSignInStore,
     private val accountEmailStore: IAccountEmailStore,
+    private val accountInfoStore: IAccountInfoStore,
+    private val accountInfoDataEntityFactory: AccountInfoDataEntityFactory,
     private val workManager: WorkManager
 ) : SingleStateViewModel<LoginContract.LoginUIState, LoginContract.LoginIntent>() {
 
@@ -80,12 +84,22 @@ class LoginViewModel @Inject constructor(
                 if (save) {
                     accountEmailStore.changeAccountEmail(uiState.value.email)
                     session.saveUserToken(tokenModel.token)
-                    startWorkManagerToSaveAccountInfo()
+                    saveAccountInfo()
+//                    startWorkManagerToSaveAccountInfo()
                 }
             } catch (ignore: FailedDataStoreOperationException) {
             } finally {
                 uiState.update { it.copy(loginState = LoginState.Success) }
             }
+        }
+    }
+
+    private fun saveAccountInfo() {
+        viewModelScope.launch {
+            loginRepository.loadUserInfo()
+                .onSuccess { entity ->
+                    accountInfoStore.saveAccountInfo(accountInfoDataEntityFactory.mapFrom(entity))
+                }
         }
     }
 

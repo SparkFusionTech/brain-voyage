@@ -15,7 +15,7 @@ val settingsBackgroundLightColor = Color(0xFF3E0099)
 val orangeButtonColor = Color(0xFFDF8600)
 val dialogTitleDarkColor = Color(0xFFBE6900)
 
-val buttonLightColor = Color(0xFF003789)
+val buttonLightColor = Color(0xFF002F75)
 val buttonDarkColor = Color(0xFF000E23)
 val buttonCloseLightColor = Color(0xFFBA1A1A)
 val buttonCloseDarkColor = Color(0xFF8A0303)

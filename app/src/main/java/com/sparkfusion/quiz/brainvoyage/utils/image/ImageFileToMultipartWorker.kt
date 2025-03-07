@@ -19,7 +19,7 @@ class ImageFileToMultipartWorker @Inject constructor(
         file: File,
         requestName: String
     ): MultipartBody.Part = withContext(ioDispatcher) {
-        val requestFile = file.asRequestBody("image/png".toMediaTypeOrNull())
+        val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
         MultipartBody.Part.createFormData(requestName, file.name, requestFile)
     }
 }

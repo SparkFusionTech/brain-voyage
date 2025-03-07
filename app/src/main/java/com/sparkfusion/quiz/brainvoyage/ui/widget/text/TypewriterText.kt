@@ -40,10 +40,10 @@ fun TypewriterText(
                 textToDisplay = textCharsList[textIndex]
                     .take(charIndex + 1)
                     .joinToString("")
-                delay(100L)
+                delay(30L)
             }
-            textIndex = (textIndex + 1) % texts.size
-            delay(1000)
+
+            if (++textIndex == texts.size) break else delay(1000)
         }
     }
 

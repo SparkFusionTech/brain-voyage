@@ -42,6 +42,8 @@ import com.sparkfusion.quiz.brainvoyage.ui.theme.settingsBackgroundLightColor
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.settings.SettingsContract
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.settings.SettingsViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
+import com.sparkfusion.quiz.brainvoyage.utils.dp.getStatusBarHeightInDp
+import com.sparkfusion.quiz.brainvoyage.window.StatusBarHeightOwner
 
 @Composable
 fun SettingsScreen(
@@ -100,6 +102,7 @@ fun SettingsScreen(
                     )
                 )
                 .padding(paddings)
+                .padding(top = if (StatusBarHeightOwner.hasCutout) getStatusBarHeightInDp().dp else 0.dp)
         ) {
             item {
                 IconButton(
@@ -312,30 +315,39 @@ private fun ShowMessages(
             readSignInState == SettingsContract.ReadSaveSignInState.Error -> {
                 snackbarHostState.showSnackbar("Error reading sign-in state")
             }
+
             updateSignInAccountState == SettingsContract.UpdateSaveSignInState.Error -> {
                 snackbarHostState.showSnackbar("Error updating sign-in account")
             }
+
             clearLoginState is SettingsContract.ClearLoginState.Success -> {
                 onLogoutClick()
             }
+
             clearLoginState is SettingsContract.ClearLoginState.Error -> {
                 snackbarHostState.showSnackbar("Error clearing login state")
             }
+
             changePasswordState == SettingsContract.ChangePasswordState.EmptyValue -> {
                 snackbarHostState.showSnackbar("Password value cannot be empty")
             }
+
             changePasswordState == SettingsContract.ChangePasswordState.Error -> {
                 snackbarHostState.showSnackbar("Error changing password")
             }
+
             changePasswordState == SettingsContract.ChangePasswordState.Success -> {
                 snackbarHostState.showSnackbar("Password changed successfully")
             }
+
             deleteAccountState == SettingsContract.DeleteAccountState.Error -> {
                 snackbarHostState.showSnackbar("Error deleting account")
             }
+
             deleteAccountState == SettingsContract.DeleteAccountState.IncorrectPassword -> {
                 snackbarHostState.showSnackbar("Incorrect password provided")
             }
+
             deleteAccountState == SettingsContract.DeleteAccountState.Success -> {
                 onLogoutClick()
             }

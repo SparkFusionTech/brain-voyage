@@ -8,6 +8,10 @@ interface VictoryQuizContract {
 
     sealed interface VictoryQuizIntent : Intent {
         data class InitVictoryScreen(val state: InitialState) : VictoryQuizIntent
+        data object ReadAccountInfo : VictoryQuizIntent
+        data class ReadUserQuizRating(val quizId: Long) : VictoryQuizIntent
+        data class UpdateRating(val rating: Int) : VictoryQuizIntent
+        data object ClearRatingUpdatingState : VictoryQuizIntent
     }
 
     data class InitialState(

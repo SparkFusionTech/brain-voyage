@@ -7,6 +7,7 @@ import com.sparkfusion.quiz.brainvoyage.utils.dispatchers.IODispatcher
 import com.sparkfusion.quiz.brainvoyage.utils.exception.network.NetworkException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -39,6 +40,7 @@ class CatalogItemViewModel @Inject constructor(
 
         _quizLoadingState.update { CatalogItemContract.QuizLoadingState.Loading }
         viewModelScope.launch(ioDispatcher) {
+            delay(300L)
             quizRepository.readQuizzesByCatalogId(catalogId)
                 .onSuccess { quizzes ->
                     _quizLoadingState.update { CatalogItemContract.QuizLoadingState.Success(quizzes) }

@@ -45,24 +45,48 @@ class AddQuestionViewModel @Inject constructor(
     private val _dialogsState = MutableStateFlow(AddQuestionContract.DialogsState())
     val dialogsState: StateFlow<AddQuestionContract.DialogsState> get() = _dialogsState.asStateFlow()
 
-    private val _errorState = MutableStateFlow<AddQuestionContract.ErrorState>(AddQuestionContract.ErrorState.Empty)
+    private val _errorState =
+        MutableStateFlow<AddQuestionContract.ErrorState>(AddQuestionContract.ErrorState.Empty)
     val errorState: StateFlow<AddQuestionContract.ErrorState> get() = _errorState.asStateFlow()
 
     override fun handleIntent(intent: AddQuestionContract.Intent) {
         when (intent) {
-            is AddQuestionContract.Intent.ChangeCategory -> changeCategory(intent.id, intent.trueFalseValues)
+            is AddQuestionContract.Intent.ChangeCategory -> changeCategory(
+                intent.id,
+                intent.trueFalseValues
+            )
+
             is AddQuestionContract.Intent.ChangeDescription -> changeDescription(intent.value)
             is AddQuestionContract.Intent.ChangeDifficulty -> changeDifficulty(intent.id)
             is AddQuestionContract.Intent.ChangeIcon -> changeIcon(intent.icon)
             is AddQuestionContract.Intent.ChangeQuestion -> changeQuestion(intent.value)
             is AddQuestionContract.Intent.AddAnswer -> addAnswer(intent.answer)
             is AddQuestionContract.Intent.DeleteAnswer -> deleteAnswer(intent.id)
-            is AddQuestionContract.Intent.ChangeNewAnswerDialogVisibility -> changeNewAnswerDialogVisibility(intent.value)
-            is AddQuestionContract.Intent.ChangeCloseDialogVisibility -> changeCloseDialogVisibility(intent.value)
-            is AddQuestionContract.Intent.ChangeImageSelectionDialogVisibility -> changeImageSelectionDialogVisibility(intent.value)
-            is AddQuestionContract.Intent.ChangeSelectedRadioButton -> changeSelectedRadioButton(intent.id)
-            is AddQuestionContract.Intent.ChangeSelectedCheckButton -> changeSelectedCheckButton(intent.id, intent.value)
-            is AddQuestionContract.Intent.ChangeCategoryListVisibility -> changeCategoryListVisibility(intent.value)
+            is AddQuestionContract.Intent.ChangeNewAnswerDialogVisibility -> changeNewAnswerDialogVisibility(
+                intent.value
+            )
+
+            is AddQuestionContract.Intent.ChangeCloseDialogVisibility -> changeCloseDialogVisibility(
+                intent.value
+            )
+
+            is AddQuestionContract.Intent.ChangeImageSelectionDialogVisibility -> changeImageSelectionDialogVisibility(
+                intent.value
+            )
+
+            is AddQuestionContract.Intent.ChangeSelectedRadioButton -> changeSelectedRadioButton(
+                intent.id
+            )
+
+            is AddQuestionContract.Intent.ChangeSelectedCheckButton -> changeSelectedCheckButton(
+                intent.id,
+                intent.value
+            )
+
+            is AddQuestionContract.Intent.ChangeCategoryListVisibility -> changeCategoryListVisibility(
+                intent.value
+            )
+
             AddQuestionContract.Intent.HandleQuestionAdding -> handleQuestionAdding()
             AddQuestionContract.Intent.ClearQuestionAddingState -> clearQuestionAddingState()
         }
@@ -181,7 +205,8 @@ class AddQuestionViewModel @Inject constructor(
 
             if (currentCategoryType == CategoryType.TrueFalse) _answersState.value.clear()
             if (currentCategoryType == CategoryType.MultiplyChoice) {
-                _answersState.value = _answersState.value.map { it.copy(isCorrect = false) }.toMutableStateList()
+                _answersState.value =
+                    _answersState.value.map { it.copy(isCorrect = false) }.toMutableStateList()
                 if (answersState.value.size > 1) {
                     _answersState.value[0] = answersState.value[0].copy(isCorrect = true)
                 }
@@ -200,7 +225,12 @@ class AddQuestionViewModel @Inject constructor(
         if (icon == null) return
         viewModelScope.launch(defaultDispatcher) {
             _imageState.update {
-                it.copy(bitmap = bitmapSizeReducer.reduce(icon))
+                it.copy(
+                    bitmap =
+//                bitmapSizeReducer.reduce(
+                    icon
+//                )
+                )
             }
         }
     }

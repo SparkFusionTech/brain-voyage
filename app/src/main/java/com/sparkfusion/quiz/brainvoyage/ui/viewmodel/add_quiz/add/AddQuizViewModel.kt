@@ -108,11 +108,11 @@ class AddQuizViewModel @Inject constructor(
 
     private fun changeIcon(bitmap: Bitmap?) {
         viewModelScope.launch(defaultDispatcher) {
-            val reducedBitmap = bitmap?.let { value ->
-                bitmapSizeReducer.reduce(value)
-            }
+//            val reducedBitmap = bitmap?.let { value ->
+//                bitmapSizeReducer.reduce(value)
+//            }
             _state.update {
-                it.copy(bitmap = reducedBitmap)
+                it.copy(bitmap = bitmap)
             }
         }
     }

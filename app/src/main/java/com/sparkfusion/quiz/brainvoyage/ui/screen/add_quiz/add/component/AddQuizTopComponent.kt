@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sparkfusion.quiz.brainvoyage.R
+import com.sparkfusion.quiz.brainvoyage.ui.screen.online.games.BackIcon
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
 
 @Composable
@@ -38,15 +37,8 @@ fun AddQuizTopComponent(
             .height(72.dp)
             .fillMaxWidth()
     ) {
-        IconButton(
-            modifier = Modifier.padding(start = 8.dp),
-            onClick = onBackClick
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.arrow_back_icon),
-                contentDescription = stringResource(id = R.string.add_quiz_back_button_description),
-                tint = Color.White
-            )
+        BackIcon {
+            onBackClick()
         }
 
         Spacer(modifier = Modifier.weight(1f))
@@ -58,11 +50,15 @@ fun AddQuizTopComponent(
             color = Color.White
         )
 
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 8.dp)
+        )
 
         Image(
             modifier = Modifier
-                .padding(end = 12.dp)
+                .padding(end = 16.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .clickable { onTagSearchClick() }
                 .size(24.dp),
@@ -71,3 +67,16 @@ fun AddQuizTopComponent(
         )
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

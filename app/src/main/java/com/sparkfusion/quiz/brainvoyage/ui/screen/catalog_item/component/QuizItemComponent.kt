@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -40,7 +39,7 @@ import com.sparkfusion.quiz.brainvoyage.domain.model.quiz.GetQuizPreviewModel
 import com.sparkfusion.quiz.brainvoyage.ui.theme.settingsBackgroundDarkColor
 import com.sparkfusion.quiz.brainvoyage.ui.theme.settingsBackgroundLightColor
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
-import com.sparkfusion.quiz.brainvoyage.ui.widget.shimmer.ShimmerAnimationBox
+import com.sparkfusion.quiz.brainvoyage.ui.widget.animation.shimmerBrush
 import com.sparkfusion.quiz.brainvoyage.utils.descriptionColor
 
 @Composable
@@ -57,27 +56,23 @@ fun QuizItemComponent(
             .fillMaxWidth()
             .padding(horizontal = 8.dp, vertical = 3.dp)
             .background(
-                brush = Brush.linearGradient(listOf(settingsBackgroundDarkColor, settingsBackgroundLightColor)),
+                brush = Brush.linearGradient(
+                    listOf(
+                        settingsBackgroundDarkColor,
+                        settingsBackgroundLightColor
+                    )
+                ),
                 shape = RoundedCornerShape(16.dp)
             )
             .clip(RoundedCornerShape(16.dp))
             .clickable { onItemClick(quiz.id) }
     ) {
-        if (isImageLoading) {
-            ShimmerAnimationBox(
-                modifier = Modifier.padding(start = 6.dp, top = 9.dp, bottom = 6.dp, end = 12.dp),
-                size = DpSize(90.dp, 100.dp),
-                shape = RoundedCornerShape(16.dp)
-            )
-        }
-
-        val paddings = if (isImageLoading) PaddingValues()
-        else PaddingValues(start = 6.dp, top = 9.dp, bottom = 6.dp, end = 12.dp)
         AsyncImage(
             modifier = Modifier
-                .padding(paddings)
+                .padding(start = 6.dp, top = 9.dp, bottom = 6.dp, end = 12.dp)
                 .clip(RoundedCornerShape(16.dp))
-                .size(if (isImageLoading) DpSize(0.dp, 0.dp) else DpSize(90.dp, 100.dp)),
+                .size(DpSize(90.dp, 100.dp))
+                .background(shimmerBrush(targetValue = 1300f, showShimmer = isImageLoading)),
             model = ImageRequest.Builder(context)
                 .data(quiz.imageUrl)
                 .crossfade(true)

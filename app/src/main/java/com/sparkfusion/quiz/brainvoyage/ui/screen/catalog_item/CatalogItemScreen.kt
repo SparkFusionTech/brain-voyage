@@ -1,5 +1,6 @@
 package com.sparkfusion.quiz.brainvoyage.ui.screen.catalog_item
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -106,6 +107,7 @@ fun CatalogItemScreen(
             LazyColumn(
                 state = listState,
                 modifier = modifier
+                    .fillMaxSize()
                     .paint(
                         painter = painterResource(id = R.drawable.background),
                         contentScale = ContentScale.Crop

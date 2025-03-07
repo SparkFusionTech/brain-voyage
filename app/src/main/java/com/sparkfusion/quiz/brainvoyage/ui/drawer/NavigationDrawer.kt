@@ -59,9 +59,11 @@ fun NavigationDrawer(
                 modifier = Modifier.width(330.dp),
                 drawerContainerColor = drawerContainerDarkColor
             ) {
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 48.dp)) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 48.dp)
+                ) {
                     LevelLoadingComponent(levelState = levelState)
 
                     Column {

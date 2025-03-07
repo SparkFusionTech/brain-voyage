@@ -49,7 +49,7 @@ import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-private val xpColor = Color(0xFFFCD71D)
+val xpColor = Color(0xFFFCD71D)
 
 @Composable
 fun OnlineVictoryScreen(
