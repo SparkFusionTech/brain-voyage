@@ -1,7 +1,6 @@
 package com.sparkfusion.quiz.brainvoyage.ui.screen.online.selection
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,14 +17,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.draw.paint
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.domain.model.online.OnlineGameEvent
 import com.sparkfusion.quiz.brainvoyage.ui.screen.online.games.BackIcon
-import com.sparkfusion.quiz.brainvoyage.ui.theme.settingsBackgroundDarkColor
-import com.sparkfusion.quiz.brainvoyage.ui.theme.settingsBackgroundLightColor
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.online.Online2VS2GameViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.online.OnlineSelectionViewModel
 import com.sparkfusion.quiz.brainvoyage.utils.dp.getStatusBarHeightInDp
@@ -100,13 +100,9 @@ fun OnlineSelectionScreen(
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .background(
-                    Brush.linearGradient(
-                        listOf(
-                            settingsBackgroundLightColor,
-                            settingsBackgroundDarkColor
-                        )
-                    )
+                .paint(
+                    painter = painterResource(id = R.drawable.background),
+                    contentScale = ContentScale.Crop
                 )
                 .padding(padding)
                 .padding(top = if (StatusBarHeightOwner.hasCutout) getStatusBarHeightInDp().dp else 0.dp),

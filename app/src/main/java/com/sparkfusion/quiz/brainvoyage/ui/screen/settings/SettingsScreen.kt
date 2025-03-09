@@ -1,5 +1,6 @@
 package com.sparkfusion.quiz.brainvoyage.ui.screen.settings
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -24,8 +25,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,8 +39,6 @@ import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.ui.dialog.delete_account.DeleteAccountBottomSheet
 import com.sparkfusion.quiz.brainvoyage.ui.dialog.new_pass.NewPasswordBottomSheet
 import com.sparkfusion.quiz.brainvoyage.ui.theme.orangeButtonColor
-import com.sparkfusion.quiz.brainvoyage.ui.theme.settingsBackgroundDarkColor
-import com.sparkfusion.quiz.brainvoyage.ui.theme.settingsBackgroundLightColor
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.settings.SettingsContract
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.settings.SettingsViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
@@ -93,13 +93,9 @@ fun SettingsScreen(
         LazyColumn(
             modifier = modifier
                 .fillMaxSize()
-                .background(
-                    Brush.linearGradient(
-                        listOf(
-                            settingsBackgroundLightColor,
-                            settingsBackgroundDarkColor
-                        )
-                    )
+                .paint(
+                    painter = painterResource(id = R.drawable.background),
+                    contentScale = ContentScale.Crop
                 )
                 .padding(paddings)
                 .padding(top = if (StatusBarHeightOwner.hasCutout) getStatusBarHeightInDp().dp else 0.dp)
@@ -310,47 +306,76 @@ private fun ShowMessages(
     snackbarHostState: SnackbarHostState,
     onLogoutClick: () -> Unit
 ) {
-    LaunchedEffect(Unit) {
-        when {
-            readSignInState == SettingsContract.ReadSaveSignInState.Error -> {
-                snackbarHostState.showSnackbar("Error reading sign-in state")
-            }
-
-            updateSignInAccountState == SettingsContract.UpdateSaveSignInState.Error -> {
-                snackbarHostState.showSnackbar("Error updating sign-in account")
-            }
-
-            clearLoginState is SettingsContract.ClearLoginState.Success -> {
-                onLogoutClick()
-            }
-
-            clearLoginState is SettingsContract.ClearLoginState.Error -> {
+    LaunchedEffect(clearLoginState) {
+        when (clearLoginState) {
+            is SettingsContract.ClearLoginState.Error -> {
                 snackbarHostState.showSnackbar("Error clearing login state")
             }
 
-            changePasswordState == SettingsContract.ChangePasswordState.EmptyValue -> {
+            SettingsContract.ClearLoginState.Initial -> {}
+            SettingsContract.ClearLoginState.Progress -> {}
+            is SettingsContract.ClearLoginState.Success -> {
+                Log.d("TAGTAG", "o my god")
+                onLogoutClick()
+            }
+        }
+    }
+
+    LaunchedEffect(changePasswordState) {
+        when (changePasswordState) {
+            SettingsContract.ChangePasswordState.EmptyValue -> {
                 snackbarHostState.showSnackbar("Password value cannot be empty")
             }
 
-            changePasswordState == SettingsContract.ChangePasswordState.Error -> {
+            SettingsContract.ChangePasswordState.Error -> {
                 snackbarHostState.showSnackbar("Error changing password")
             }
 
-            changePasswordState == SettingsContract.ChangePasswordState.Success -> {
+            SettingsContract.ChangePasswordState.Success -> {
                 snackbarHostState.showSnackbar("Password changed successfully")
             }
 
-            deleteAccountState == SettingsContract.DeleteAccountState.Error -> {
+            SettingsContract.ChangePasswordState.Initial -> {}
+        }
+    }
+
+    LaunchedEffect(deleteAccountState) {
+        when (deleteAccountState) {
+            SettingsContract.DeleteAccountState.Error -> {
                 snackbarHostState.showSnackbar("Error deleting account")
             }
 
-            deleteAccountState == SettingsContract.DeleteAccountState.IncorrectPassword -> {
+            SettingsContract.DeleteAccountState.IncorrectPassword -> {
                 snackbarHostState.showSnackbar("Incorrect password provided")
             }
 
-            deleteAccountState == SettingsContract.DeleteAccountState.Success -> {
+            SettingsContract.DeleteAccountState.Success -> {
                 onLogoutClick()
             }
+
+            SettingsContract.DeleteAccountState.Initial -> {}
+            SettingsContract.DeleteAccountState.Progress -> {}
+        }
+    }
+
+    LaunchedEffect(readSignInState) {
+        when (readSignInState) {
+            SettingsContract.ReadSaveSignInState.Error -> {
+                snackbarHostState.showSnackbar("Error reading sign-in state")
+            }
+
+            SettingsContract.ReadSaveSignInState.Initial -> {}
+            is SettingsContract.ReadSaveSignInState.Success -> {}
+        }
+    }
+
+    LaunchedEffect(updateSignInAccountState) {
+        when (updateSignInAccountState) {
+            SettingsContract.UpdateSaveSignInState.Error -> {
+                snackbarHostState.showSnackbar("Error updating sign-in account")
+            }
+
+            SettingsContract.UpdateSaveSignInState.Initial -> {}
         }
     }
 }

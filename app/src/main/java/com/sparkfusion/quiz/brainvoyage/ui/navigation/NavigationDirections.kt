@@ -1,6 +1,7 @@
 package com.sparkfusion.quiz.brainvoyage.ui.navigation
 
 import android.graphics.Bitmap
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
@@ -127,10 +128,12 @@ fun NavGraphBuilder.catalogItemDirection(navController: NavController) {
                 }
             )
         } ?: EmptyLoadingScreen(
-            modifier = Modifier.paint(
-                painter = painterResource(id = R.drawable.background),
-                contentScale = ContentScale.Crop
-            )
+            modifier = Modifier
+                .fillMaxSize()
+                .paint(
+                    painter = painterResource(id = R.drawable.background),
+                    contentScale = ContentScale.Crop
+                )
         )
     }
 }
@@ -150,10 +153,12 @@ fun NavGraphBuilder.quizItemDirection(navController: NavController) {
                 }
             )
         } ?: EmptyLoadingScreen(
-            modifier = Modifier.paint(
-                painter = painterResource(id = R.drawable.background),
-                contentScale = ContentScale.Crop
-            )
+            modifier = Modifier
+                .fillMaxSize()
+                .paint(
+                    painter = painterResource(id = R.drawable.background),
+                    contentScale = ContentScale.Crop
+                )
         )
     }
 }
@@ -178,10 +183,12 @@ fun NavGraphBuilder.playQuizDirection(navController: NavController) {
                 }
             )
         } ?: EmptyLoadingScreen(
-            modifier = Modifier.paint(
-                painter = painterResource(id = R.drawable.background),
-                contentScale = ContentScale.Crop
-            )
+            modifier = Modifier
+                .fillMaxSize()
+                .paint(
+                    painter = painterResource(id = R.drawable.background),
+                    contentScale = ContentScale.Crop
+                )
         )
     }
 }
@@ -217,10 +224,12 @@ fun NavGraphBuilder.imageCropDirection(navController: NavController) {
             )
         } else {
             EmptyLoadingScreen(
-                modifier = Modifier.paint(
-                    painter = painterResource(id = R.drawable.background),
-                    contentScale = ContentScale.Crop
-                )
+                modifier = Modifier
+                    .fillMaxSize()
+                    .paint(
+                        painter = painterResource(id = R.drawable.background),
+                        contentScale = ContentScale.Crop
+                    )
             )
         }
     }

@@ -1,5 +1,6 @@
 package com.sparkfusion.quiz.brainvoyage.data.common
 
+import android.util.Log
 import com.sparkfusion.quiz.brainvoyage.data.datastore.TokenCache
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -22,6 +23,7 @@ class AuthInterceptor @Inject constructor(
         }
 
         val token = runBlocking { tokenCache.getToken() }
+        Log.d("TAGTAG", "TOKEN - $token")
         if (token.isNullOrBlank()) {
             return chain.proceed(originalRequest)
         }

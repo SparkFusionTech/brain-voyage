@@ -58,7 +58,9 @@ private fun NewPasswordContent(
             .fillMaxWidth()
             .padding(top = 6.dp),
         value = newPassword,
-        onValueChange = { newPassword = it },
+        onValueChange = {
+            newPassword = it
+        },
         placeholder = "Enter password here..."
     )
 

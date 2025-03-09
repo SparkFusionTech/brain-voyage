@@ -22,6 +22,8 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.domain.model.ImageSearchModel
+import com.sparkfusion.quiz.brainvoyage.ui.screen.online.questions.BouncingDots
+import com.sparkfusion.quiz.brainvoyage.ui.theme.bouncingDotsLoading
 
 @Composable
 fun SuccessImageSearchScreenContent(
@@ -61,10 +63,10 @@ fun SuccessImageSearchScreenContent(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .padding(top = 20.dp)
-                        .height(60.dp)
+                        .height(80.dp)
                         .fillMaxWidth()
                 ) {
-                    CircularProgressIndicator()
+                    BouncingDots(color = bouncingDotsLoading)
                 }
             }
         }

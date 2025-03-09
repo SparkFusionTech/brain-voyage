@@ -1,7 +1,9 @@
 package com.sparkfusion.quiz.brainvoyage.ui.viewmodel.settings
 
 import androidx.lifecycle.viewModelScope
+import com.sparkfusion.quiz.brainvoyage.domain.repository.IAccountEmailStore
 import com.sparkfusion.quiz.brainvoyage.domain.repository.IAccountInfoStore
+import com.sparkfusion.quiz.brainvoyage.domain.repository.ILoginRepository
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ISaveAccountSignInStore
 import com.sparkfusion.quiz.brainvoyage.domain.repository.ISession
 import com.sparkfusion.quiz.brainvoyage.utils.common.viewmodel.MultiStateViewModel
@@ -12,6 +14,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -20,9 +23,11 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
+    private val loginRepository: ILoginRepository,
     private val session: ISession,
     private val accountInfoStore: IAccountInfoStore,
-    private val saveAccountSignInStore: ISaveAccountSignInStore
+    private val saveAccountSignInStore: ISaveAccountSignInStore,
+    private val accountEmailStore: IAccountEmailStore
 ) : MultiStateViewModel<SettingsContract.SettingsInterface>() {
 
     private val _clearLoginState =
@@ -82,8 +87,19 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun deleteAccount(pass: String) {
-        viewModelScope.launch(ioDispatcher) {
-
+        _deleteAccountState.update { SettingsContract.DeleteAccountState.Progress }
+        viewModelScope.launch {
+            loginRepository.deleteAccount(pass)
+                .onSuccess {
+                    accountInfoStore.clearAccountInfo()
+                    accountEmailStore.clearAccountEmail()
+                    saveAccountSignInStore.clearSaveAccountSingIn()
+                    session.clearUserToken()
+                    _deleteAccountState.update { SettingsContract.DeleteAccountState.Success }
+                }
+                .onFailure {
+                    _deleteAccountState.update { SettingsContract.DeleteAccountState.Error }
+                }
         }
     }
 
@@ -91,8 +107,10 @@ class SettingsViewModel @Inject constructor(
         _updateSignInState.update { SettingsContract.UpdateSaveSignInState.Initial }
         viewModelScope.launch(ioDispatcher) {
             try {
-                val v = saveAccountSignInStore.changeSaveAccountSignIn(value).firstOrNull() ?: true
-                _readSignInState.update { SettingsContract.ReadSaveSignInState.Success(v) }
+                saveAccountSignInStore.changeSaveAccountSignIn(value)
+                    .collectLatest { v ->
+                        _readSignInState.update { SettingsContract.ReadSaveSignInState.Success(v) }
+                    }
             } catch (e: FailedDataStoreOperationException) {
                 _updateSignInState.update { SettingsContract.UpdateSaveSignInState.Error }
             }
@@ -100,6 +118,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun readAccountSignInState() {
+        _readSignInState.update { SettingsContract.ReadSaveSignInState.Initial }
         viewModelScope.launch(ioDispatcher) {
             try {
                 val value = saveAccountSignInStore.readSaveAccountSignIn().firstOrNull() ?: true
@@ -111,23 +130,30 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun changePassword(pass: String) {
-        viewModelScope.launch(ioDispatcher) {
-
+        _changePasswordState.update { SettingsContract.ChangePasswordState.Initial }
+        viewModelScope.launch {
+            loginRepository.changePassword(pass)
+                .onSuccess {
+                    _changePasswordState.update { SettingsContract.ChangePasswordState.Success }
+                }
+                .onFailure {
+                    _changePasswordState.update { SettingsContract.ChangePasswordState.Error }
+                }
         }
     }
 
     private fun clearLoginSettings() {
-        _clearLoginState.update { SettingsContract.ClearLoginState.Initial }
+        _clearLoginState.update { SettingsContract.ClearLoginState.Progress }
         viewModelScope.launch(ioDispatcher) {
             try {
                 accountInfoStore.clearAccountInfo()
+                accountEmailStore.clearAccountEmail()
                 saveAccountSignInStore.clearSaveAccountSingIn()
                 session.clearUserToken()
                 _clearLoginState.update { SettingsContract.ClearLoginState.Success }
             } catch (e: FailedDataStoreOperationException) {
                 _clearLoginState.update { SettingsContract.ClearLoginState.Error }
             }
-
         }
     }
 }

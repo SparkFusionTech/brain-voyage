@@ -7,16 +7,19 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.sparkfusion.quiz.brainvoyage.ui.screen.online.questions.BouncingDots
+import com.sparkfusion.quiz.brainvoyage.ui.theme.bouncingDotsLoading
 
 @Composable
 fun LoadingImageSearchScreenContent(
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
-        CircularProgressIndicator(modifier = modifier.size(48.dp))
+        BouncingDots(color = bouncingDotsLoading)
     }
 }

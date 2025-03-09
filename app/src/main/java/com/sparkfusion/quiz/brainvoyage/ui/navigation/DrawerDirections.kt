@@ -1,5 +1,6 @@
 package com.sparkfusion.quiz.brainvoyage.ui.navigation
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -53,7 +54,8 @@ fun NavGraphBuilder.settingsDirection(
         SettingsScreen(
             onBackClick = { navController.popBackStack() },
             onLogoutClick = {
-
+                navController.popBackStack(Destination.CatalogDestination, inclusive = true)
+                navController.navigate(Destination.LoginDestination)
             }
         )
     }

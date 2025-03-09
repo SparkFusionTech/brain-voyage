@@ -2,6 +2,8 @@ package com.sparkfusion.quiz.brainvoyage.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+val bouncingDotsLoading = Color(0xFFBABD03)
+
 val dialogueBubbleContainerColor = Color(0xFFB3E5FC)
 
 val drawerContainerDarkColor = Color(0xFF1A0047)

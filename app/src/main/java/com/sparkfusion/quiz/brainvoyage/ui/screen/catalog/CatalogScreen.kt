@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,6 +41,7 @@ import com.sparkfusion.quiz.brainvoyage.ui.model.QuizCatalogSerializable
 import com.sparkfusion.quiz.brainvoyage.ui.screen.catalog.component.CatalogItem
 import com.sparkfusion.quiz.brainvoyage.ui.theme.buttonDarkColor
 import com.sparkfusion.quiz.brainvoyage.ui.theme.buttonLightColor
+import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.quiz_catalog.QuizCatalogContract
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.quiz_catalog.QuizCatalogLoadingState
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.quiz_catalog.QuizCatalogViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.widget.SFProRoundedText
@@ -56,12 +58,31 @@ fun CatalogScreen(
     onNavigateToCatalogItemScreen: (QuizCatalogSerializable) -> Unit,
     onNavigateToOnlineGamesScreen: () -> Unit
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.handleIntent(QuizCatalogContract.QuizCatalogIntent.LoadQuizCatalog)
+    }
+
     val isDarkModeEnabled = isSystemInDarkTheme()
-    val state by viewModel.initialState().collectAsStateWithLifecycle()
-    val quizCatalog = if (state.catalogLoadingState is QuizCatalogLoadingState.Success) {
-        val success = state.catalogLoadingState as QuizCatalogLoadingState.Success
+
+    val readingState by viewModel.readingState.collectAsStateWithLifecycle()
+    val quizCatalog = if (readingState is QuizCatalogLoadingState.Success) {
+        val success = readingState as QuizCatalogLoadingState.Success
         success.data
     } else emptyList()
+
+    when (readingState) {
+        QuizCatalogLoadingState.Error -> {
+            viewModel.handleIntent(QuizCatalogContract.QuizCatalogIntent.ClearReadingState)
+        }
+
+        QuizCatalogLoadingState.Initial -> {}
+        QuizCatalogLoadingState.Loading -> {}
+        QuizCatalogLoadingState.NetworkError -> {
+            viewModel.handleIntent(QuizCatalogContract.QuizCatalogIntent.ClearReadingState)
+        }
+
+        is QuizCatalogLoadingState.Success -> {}
+    }
 
     Column(
         modifier = modifier
@@ -113,8 +134,7 @@ fun CatalogScreen(
             horizontalArrangement = Arrangement.SpaceBetween,
             columns = GridCells.Fixed(3)
         ) {
-            val isLoading = state.catalogLoadingState == QuizCatalogLoadingState.Loading
-            if (isLoading) {
+            if (readingState == QuizCatalogLoadingState.Loading) {
                 items(DEFAULT_CATALOG_ITEMS_COUNT) {
                     ShimmerAnimationBox(
                         modifier = Modifier.padding(4.dp),
@@ -123,14 +143,14 @@ fun CatalogScreen(
                         isDarkModeEnabled = isDarkModeEnabled
                     )
                 }
-            }
-
-            items(quizCatalog.size) { index ->
-                CatalogItem(
-                    modifier = Modifier.padding(top = 4.dp),
-                    quizCatalogModel = quizCatalog[index],
-                    onNavigateToCatalogItemScreen = onNavigateToCatalogItemScreen
-                )
+            } else {
+                items(quizCatalog.size) { index ->
+                    CatalogItem(
+                        modifier = Modifier.padding(top = 4.dp),
+                        quizCatalogModel = quizCatalog[index],
+                        onNavigateToCatalogItemScreen = onNavigateToCatalogItemScreen
+                    )
+                }
             }
         }
 

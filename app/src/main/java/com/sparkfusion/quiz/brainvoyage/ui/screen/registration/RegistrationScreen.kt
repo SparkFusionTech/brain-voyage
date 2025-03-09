@@ -1,14 +1,16 @@
 package com.sparkfusion.quiz.brainvoyage.ui.screen.registration
 
 import android.graphics.Bitmap
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -55,7 +57,11 @@ fun RegistrationScreen(
     HandleUserExistenceMessageShowing(context = context, userExistsState = uiState.userExistsState)
     RegistrationErrorStateHandler(state = uiState.registrationState, context = context)
 
-    Column(modifier = modifier.fillMaxWidth()) {
+    Column(
+        modifier = modifier
+        .fillMaxSize()
+        .background(Color.White)
+    ) {
         TopBar(
             modifier = Modifier.padding(
                 top = if (StatusBarHeightOwner.hasCutout) getStatusBarHeightInDp().dp else 0.dp

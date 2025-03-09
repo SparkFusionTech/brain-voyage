@@ -2,6 +2,7 @@ package com.sparkfusion.quiz.brainvoyage.domain.repository
 
 import com.sparkfusion.quiz.brainvoyage.data.entity.LoginUserDataEntity
 import com.sparkfusion.quiz.brainvoyage.domain.model.AccountInfoModel
+import com.sparkfusion.quiz.brainvoyage.domain.model.AccountModel
 import com.sparkfusion.quiz.brainvoyage.domain.model.LoginUserModel
 import com.sparkfusion.quiz.brainvoyage.domain.model.TokenModel
 import com.sparkfusion.quiz.brainvoyage.domain.model.UserExistsModel
@@ -26,4 +27,28 @@ interface ILoginRepository {
     suspend fun exists(email: String): Answer<UserExistsModel>
 
     suspend fun checkTokenValidation(): Answer<Unit>
+
+    suspend fun changePassword(password: String): Answer<AccountModel>
+
+    suspend fun deleteAccount(password: String): Answer<Unit>
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -5,11 +5,13 @@ import com.sparkfusion.quiz.brainvoyage.data.common.handleExceptionCode
 import com.sparkfusion.quiz.brainvoyage.data.common.safeApiCall
 import com.sparkfusion.quiz.brainvoyage.data.datasource.LoginApiService
 import com.sparkfusion.quiz.brainvoyage.data.entity.LoginUserDataEntity
+import com.sparkfusion.quiz.brainvoyage.domain.mapper.user.AccountDataEntityFactory
 import com.sparkfusion.quiz.brainvoyage.domain.mapper.user.AccountInfoDataEntityFactory
 import com.sparkfusion.quiz.brainvoyage.domain.mapper.user.LoginUserDataEntityFactory
 import com.sparkfusion.quiz.brainvoyage.domain.mapper.user.TokenDataEntityFactory
 import com.sparkfusion.quiz.brainvoyage.domain.mapper.user.UserExistsDataEntityFactory
 import com.sparkfusion.quiz.brainvoyage.domain.model.AccountInfoModel
+import com.sparkfusion.quiz.brainvoyage.domain.model.AccountModel
 import com.sparkfusion.quiz.brainvoyage.domain.model.LoginUserModel
 import com.sparkfusion.quiz.brainvoyage.domain.model.TokenModel
 import com.sparkfusion.quiz.brainvoyage.domain.model.UserExistsModel
@@ -19,6 +21,7 @@ import com.sparkfusion.quiz.brainvoyage.utils.dispatchers.IODispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -29,7 +32,8 @@ class LoginRepository @Inject constructor(
     private val loginUserDataEntityFactory: LoginUserDataEntityFactory,
     private val tokenDataEntityFactory: TokenDataEntityFactory,
     private val userExistsDataEntityFactory: UserExistsDataEntityFactory,
-    private val accountInfoDataEntityFactory: AccountInfoDataEntityFactory
+    private val accountInfoDataEntityFactory: AccountInfoDataEntityFactory,
+    private val accountDataEntityFactory: AccountDataEntityFactory
 ) : ILoginRepository {
 
     override suspend fun registerAccount(
@@ -78,6 +82,17 @@ class LoginRepository @Inject constructor(
         )
             .handleFetchedData()
             .suspendMap { }
+    }
+
+    override suspend fun changePassword(password: String): Answer<AccountModel> = safeApiCall(ioDispatcher) {
+        ApiResponseHandler(loginApiService.changePassword(password))
+            .handleFetchedData()
+            .suspendMap { accountDataEntityFactory.mapTo(it) }
+    }
+
+    override suspend fun deleteAccount(password: String): Answer<Unit> = safeApiCall(ioDispatcher) {
+        ApiResponseHandler(loginApiService.deleteAccount(password))
+            .handleFetchedData()
     }
 }
 

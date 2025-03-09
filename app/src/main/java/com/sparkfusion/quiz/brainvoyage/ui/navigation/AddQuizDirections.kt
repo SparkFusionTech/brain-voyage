@@ -1,13 +1,16 @@
 package com.sparkfusion.quiz.brainvoyage.ui.navigation
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.draw.paint
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.sparkfusion.quiz.brainvoyage.R
 import com.sparkfusion.quiz.brainvoyage.image_crop.common.CROPPED_KEY
 import com.sparkfusion.quiz.brainvoyage.image_crop.common.IMAGE_CROP_KEY
 import com.sparkfusion.quiz.brainvoyage.image_crop.common.IMAGE_CROP_TYPE_KEY
@@ -20,8 +23,6 @@ import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.add_question.screen.A
 import com.sparkfusion.quiz.brainvoyage.ui.screen.add_quiz.questions.AddQuizWithQuestionScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.empty_loading.EmptyLoadingScreen
 import com.sparkfusion.quiz.brainvoyage.ui.screen.image.key.CROP_IMAGE_TYPE_AFTER_SEARCH_KEY
-import com.sparkfusion.quiz.brainvoyage.ui.theme.settingsBackgroundDarkColor
-import com.sparkfusion.quiz.brainvoyage.ui.theme.settingsBackgroundLightColor
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add.SharedQuizViewModel
 import com.sparkfusion.quiz.brainvoyage.ui.viewmodel.add_quiz.add_question.shared.SharedQuestionsViewModel
 
@@ -63,7 +64,11 @@ fun NavGraphBuilder.addQuizDirection(navController: NavController) {
             )
         } ?: EmptyLoadingScreen(
             modifier = Modifier
-                .background(Brush.linearGradient(listOf(settingsBackgroundLightColor, settingsBackgroundDarkColor)))
+                .fillMaxSize()
+                .paint(
+                    painter = painterResource(id = R.drawable.background),
+                    contentScale = ContentScale.Crop
+                )
         )
     }
 }

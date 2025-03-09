@@ -19,6 +19,7 @@ interface SettingsContract {
         data object Initial : ClearLoginState
         data object Error : ClearLoginState
         data object Success : ClearLoginState
+        data object Progress : ClearLoginState
     }
 
     sealed interface ReadSaveSignInState : UIState {
@@ -41,6 +42,7 @@ interface SettingsContract {
 
     sealed interface DeleteAccountState : UIState {
         data object Initial : DeleteAccountState
+        data object Progress : DeleteAccountState
         data object IncorrectPassword : DeleteAccountState
         data object Success : DeleteAccountState
         data object Error : DeleteAccountState
